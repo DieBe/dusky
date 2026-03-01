@@ -21,7 +21,7 @@ declare -r HYPR_DIR="${HOME}/.config/hypr"
 declare -r EDIT_DIR="${HYPR_DIR}/edit_here/source"
 declare -r CONFIG_FILE="${EDIT_DIR}/workspace_rules.conf"
 
-declare -r APP_TITLE="Workspace Rules Editor"
+declare -r APP_TITLE="Dusky Workspace Manager"
 declare -r APP_VERSION="v4.3.0 (Production)"
 
 # Dimensions & Layout
