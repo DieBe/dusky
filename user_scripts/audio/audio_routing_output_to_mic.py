@@ -1276,31 +1276,35 @@ def cli_stop() -> None:
 
 def cli_waybar() -> None:
     """Output JSON formatted for a Waybar custom module."""
+    payload = {}
+    
     if not daemon_is_running():
-        print(json.dumps({
+        payload = {
             "text": "󰍭",
             "tooltip": "Routing daemon stopped",
             "class": "inactive"
-        }))
-        return
-
-    resp = ipc_send({"action": "status"})
-    if resp and resp.get("ok"):
-        data = resp.get("data", {})
-        target = data.get("target", "Unknown")
-        links = data.get("active_links", 0)
-        print(json.dumps({
-            "text": "󰍬",
-            "tooltip": f"Routing: {target}\nActive Links: {links}",
-            "class": "active"
-        }))
+        }
     else:
-        # Fallback if IPC fails but daemon exists
-        print(json.dumps({
-            "text": "󰍬",
-            "tooltip": "Routing daemon running (status unknown)",
-            "class": "active"
-        }))
+        resp = ipc_send({"action": "status"})
+        if resp and resp.get("ok"):
+            data = resp.get("data", {})
+            target = data.get("target", "Unknown")
+            links = data.get("active_links", 0)
+            payload = {
+                "text": "󰍬",
+                "tooltip": f"Routing: {target}\nActive Links: {links}",
+                "class": "active"
+            }
+        else:
+            # Fallback if IPC fails but daemon exists
+            payload = {
+                "text": "󰍬",
+                "tooltip": "Routing daemon running (status unknown)",
+                "class": "active"
+            }
+            
+    # ensure_ascii=False forces the literal UTF-8 character instead of \uXXXX escapes
+    print(json.dumps(payload, ensure_ascii=False))
 
 
 # ──────────────────────────────────────────────────────────────────
