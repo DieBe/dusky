@@ -55,7 +55,15 @@ configure_sync_daemon() {
         echo "ROOT_SNAPSHOTS_PATH=\"/${snapshots_subvol}\"" | sudo tee -a "$conf_file" >/dev/null
     fi
     
-    echo "Configuration updated to target isolated subvolumes: /${root_subvol} and /${snapshots_subvol}"
+    # Disable CachyOS Secure Boot hooks that don't exist on standard Arch
+    if grep -q "^COMMANDS_BEFORE_SAVE=" "$conf_file"; then
+        sudo sed -i 's/^COMMANDS_BEFORE_SAVE=.*/COMMANDS_BEFORE_SAVE=""/' "$conf_file"
+    fi
+    if grep -q "^COMMANDS_AFTER_SAVE=" "$conf_file"; then
+        sudo sed -i 's/^COMMANDS_AFTER_SAVE=.*/COMMANDS_AFTER_SAVE=""/' "$conf_file"
+    fi
+    
+    echo "Configuration updated to target isolated subvolumes and standard Arch defaults."
 }
 execute "Configure limine-snapper-sync paths for top-level subvolumes" configure_sync_daemon
 
