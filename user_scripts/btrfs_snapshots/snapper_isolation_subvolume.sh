@@ -124,9 +124,11 @@ clean_mount_opts() {
     fi
 }
 
+# FIXED: Replaced destructive rmdir check with a read-only find command
 dir_is_empty() {
-    sudo rmdir "$1" 2>/dev/null && { sudo mkdir "$1"; return 0; }
-    return 1
+    local entries
+    entries="$(sudo find "$1" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null || true)"
+    [[ -z "$entries" ]]
 }
 
 path_is_btrfs_subvolume() { sudo btrfs subvolume show "$1" >/dev/null 2>&1; }
@@ -220,11 +222,20 @@ ensure_fstab_entry_for_snapshots() {
     tmp="$(mktemp)"
     ACTIVE_TEMP_FILES+=("$tmp")
 
+    # FIXED: Extract and isolate field 2 locally to prevent awk from rebuilding and corrupting $0
     awk -v mp="$canonical_target" -v newline="$newline" '
         BEGIN { done = 0 }
-        /^[[:space:]]*#/ { print; next }
-        NF >= 2 { sub(/\/+$/, "", $2); if ($2 == mp) { if (!done) { print newline; done = 1 }; next } }
-        { print }
+        /^[[:space:]]*#/ || NF < 2 { print $0; next }
+        {
+            curr_mp = $2
+            if (curr_mp != "/") sub(/\/+$/, "", curr_mp)
+            
+            if (curr_mp == mp) {
+                if (!done) { print newline; done = 1 }
+                next
+            }
+            print $0
+        }
         END { if (!done) print newline }
     ' /etc/fstab > "$tmp"
 
