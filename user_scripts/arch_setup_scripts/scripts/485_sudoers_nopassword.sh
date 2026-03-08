@@ -629,10 +629,10 @@ main() {
             rc=$?
             case "${rc}" in
                 "${RC_SKIP}")
-                    (( skipped_count++ ))
+                    (( skipped_count++ )) || true
                     ;;
                 *)
-                    (( failure_count++ ))
+                    (( failure_count++ )) || true
                     ;;
             esac
         fi
