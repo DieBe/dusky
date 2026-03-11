@@ -235,7 +235,7 @@ logs() {
     local journal_log="" error_dump="" snapshot_path="" env_prelude="" fifo_out="" fifo_err=""
     local syntax_log="" shellcheck_log="" resource_log="" strace_prefix="" io_events_log=""
     local child_events_log="" child_status_file="" child_set_o_log="" child_shopt_log="" child_traps_log=""
-    local child_first_err_log="" child_info="" drain_diag="" lingering_log=""
+    local child_first_err_log="" child_info="" drain_diag="" lingering_log="" lingering_survivors_log=""
     local timeout_flag="" forced_out_flag="" forced_err_flag="" launcher_path="" collector_path=""
     local stdout_eof_flag="" stderr_eof_flag=""
 
@@ -243,7 +243,7 @@ logs() {
     local bash_version_line="" host_name="unknown" child_pgid="" verdict="SUCCESS" child_signal=""
 
     local -i child_pid=0 timeout_pid=0 collector_pid=0
-    local -i exit_code=0 return_code=0 timed_out=0 lingering_pgroup=0 forced_out=0 forced_err=0
+    local -i exit_code=0 return_code=0 timed_out=0 had_lingering_descendants=0 surviving_lingering_descendants=0 forced_out=0 forced_err=0
     local -i child_prelude_loaded=0 child_err_seen=0 child_opt_errexit=0 child_opt_nounset=0
     local -i child_opt_pipefail=0 child_opt_xtrace=0 child_xtrace_active=0
 
@@ -289,6 +289,7 @@ logs() {
         child_info="${session_dir}/child_process.txt"
         drain_diag="${session_dir}/forced_drain_diagnostics.txt"
         lingering_log="${session_dir}/lingering_processes.log"
+        lingering_survivors_log="${session_dir}/lingering_survivors.log"
         timeout_flag="${session_dir}/.timed_out"
         forced_out_flag="${session_dir}/.forced_stdout"
         forced_err_flag="${session_dir}/.forced_stderr"
@@ -301,7 +302,8 @@ logs() {
         for f in \
             "$stdout_log" "$stderr_log" "$combined_log" "$meta_log" "$sys_log" "$syntax_log" "$io_events_log" \
             "$child_events_log" "$child_status_file" "$child_set_o_log" "$child_shopt_log" \
-            "$child_traps_log" "$child_first_err_log" "$child_info" "$drain_diag" "$error_dump"
+            "$child_traps_log" "$child_first_err_log" "$child_info" "$drain_diag" \
+            "$lingering_log" "$lingering_survivors_log" "$error_dump"
         do
             : >| "$f" || {
                 printf '%sError:%s failed to create log file: %s\n' "$c_red" "$c_reset" "$f" >&2
@@ -533,7 +535,7 @@ __dl_note_first_error() {
     {
         builtin printf 'timestamp=%s\n' "${EPOCHREALTIME}"
         builtin printf 'status=%s\n' "${_status}"
-        builtin printf 'command=%q\n' "${_cmd}"
+        builtin printf 'trap_command=%q\n' "${_cmd}"
         builtin printf 'source=%q\n' "${_src}"
         builtin printf 'line=%s\n' "${_lin}"
         builtin printf 'pipestatus=%q\n' "${_pipe_status[*]-}"
@@ -647,7 +649,8 @@ __dl_on_err() {
         {
             builtin printf '\nSCRIPT ERROR DETECTED\n'
             builtin printf 'status=%s\n' "${_status}"
-            builtin printf 'command=%q\n' "${BASH_COMMAND-unknown}"
+            builtin printf 'trap_command=%q\n' "${BASH_COMMAND-unknown}"
+            [[ -n "${DL_FIRST_ERR_LOG:-}" ]] && builtin printf 'first_error=%q\n' "${DL_FIRST_ERR_LOG}"
             [[ -n "${DL_ERROR_DUMP:-}" ]] && builtin printf 'error_dump=%q\n' "${DL_ERROR_DUMP}"
             builtin printf '\n'
         } >&2
@@ -749,6 +752,12 @@ EOF
                 exit_code=1
                 return 1
             fi
+        fi
+
+        if ! "$chmod_bin" 600 -- "$snapshot_path"; then
+            printf '%sError:%s failed to secure script snapshot permissions\n' "$c_red" "$c_reset" >&2
+            exit_code=1
+            return 1
         fi
 
         if [[ -n "$sha256sum_bin" ]]; then
@@ -940,21 +949,35 @@ EOF
         if [[ -n "$child_pgid" ]]; then
             local deadline=$(( EPOCHSECONDS + 2 ))
             while (( EPOCHSECONDS < deadline )); do
-                if ! "$ps_bin" -e -o pid=,pgid= 2>/dev/null | "$awk_bin" -v pgid="$child_pgid" '$2 == pgid { found = 1; exit } END { exit(found ? 0 : 1) }'; then
+                if ! "$ps_bin" -e -o pid=,pgid= 2>/dev/null | \
+                     "$awk_bin" -v pgid="$child_pgid" '$2 == pgid { found = 1; exit } END { exit(found ? 0 : 1) }'
+                then
                     break
                 fi
                 "$sleep_bin" 0.1
             done
 
-            if "$ps_bin" -e -o pid=,ppid=,pgid=,sid=,stat=,comm=,args= 2>/dev/null | "$awk_bin" -v pgid="$child_pgid" '$3 == pgid' >"$lingering_log"; then
-                if [[ -s "$lingering_log" ]]; then
-                    lingering_pgroup=1
-                    kill -TERM -- "-$child_pgid" 2>/dev/null || :
-                    "$sleep_bin" 1
-                    kill -KILL -- "-$child_pgid" 2>/dev/null || :
+            "$ps_bin" -e -o pid=,ppid=,pgid=,sid=,stat=,comm=,args= 2>/dev/null | \
+                "$awk_bin" -v pgid="$child_pgid" '$3 == pgid' >"$lingering_log"
+
+            if [[ -s "$lingering_log" ]]; then
+                had_lingering_descendants=1
+
+                kill -TERM -- "-$child_pgid" 2>/dev/null || :
+                "$sleep_bin" 1
+                kill -KILL -- "-$child_pgid" 2>/dev/null || :
+                "$sleep_bin" 0.2
+
+                "$ps_bin" -e -o pid=,ppid=,pgid=,sid=,stat=,comm=,args= 2>/dev/null | \
+                    "$awk_bin" -v pgid="$child_pgid" '$3 == pgid' >"$lingering_survivors_log"
+
+                if [[ -s "$lingering_survivors_log" ]]; then
+                    surviving_lingering_descendants=1
                 else
-                    "$rm_bin" -f -- "$lingering_log" 2>/dev/null || :
+                    "$rm_bin" -f -- "$lingering_survivors_log" 2>/dev/null || :
                 fi
+            else
+                "$rm_bin" -f -- "$lingering_log" 2>/dev/null || :
             fi
         fi
 
@@ -997,6 +1020,10 @@ EOF
         wait "$collector_pid" 2>/dev/null || :
         [[ -e "$forced_out_flag" ]] && forced_out=1
         [[ -e "$forced_err_flag" ]] && forced_err=1
+
+        [[ -s "$drain_diag" ]] || "$rm_bin" -f -- "$drain_diag" 2>/dev/null || :
+        [[ -s "$lingering_log" ]] || "$rm_bin" -f -- "$lingering_log" 2>/dev/null || :
+        [[ -s "$lingering_survivors_log" ]] || "$rm_bin" -f -- "$lingering_survivors_log" 2>/dev/null || :
 
         if [[ -n "$sha256sum_bin" ]]; then
             source_sha256_after="$("$sha256sum_bin" -- "$script_real_path" 2>/dev/null | "$awk_bin" '{print $1}')" || source_sha256_after="unavailable"
@@ -1066,11 +1093,11 @@ EOF
             verdict="FAILED"
         fi
 
-        if (( lingering_pgroup )); then
+        if (( surviving_lingering_descendants )); then
             if [[ "$verdict" == "SUCCESS" ]]; then
-                verdict="SUCCESS_WITH_LINGERING"
+                verdict="SUCCESS_WITH_SURVIVORS"
             elif [[ "$verdict" == "FAILED" ]]; then
-                verdict="FAILED_WITH_LINGERING"
+                verdict="FAILED_WITH_SURVIVORS"
             fi
         fi
 
@@ -1090,7 +1117,8 @@ EOF
             printf 'child_err_seen=%d\n' "$child_err_seen"
             printf 'child_signal=%q\n' "$child_signal"
             printf 'timed_out=%d\n' "$timed_out"
-            printf 'lingering_pgroup=%d\n' "$lingering_pgroup"
+            printf 'had_lingering_descendants=%d\n' "$had_lingering_descendants"
+            printf 'surviving_lingering_descendants=%d\n' "$surviving_lingering_descendants"
             printf 'forced_stdout=%d\n' "$forced_out"
             printf 'forced_stderr=%d\n' "$forced_err"
         } >>"$meta_log" 2>/dev/null || :
@@ -1104,14 +1132,14 @@ EOF
             printf 'logs: verdict=%s return=%d child_exit=%d session=%s\n' "$verdict" "$return_code" "$exit_code" "$session_dir" >&2
         else
             local result_color="$c_green"
-            [[ "$verdict" != "SUCCESS" && "$verdict" != "SUCCESS_WITH_LINGERING" ]] && result_color="$c_red"
-            [[ "$verdict" == "TIMED_OUT" || "$verdict" == "INTERRUPTED" || "$verdict" == "SUCCESS_WITH_ERRORS" || "$verdict" == "SUCCESS_WITH_LINGERING" || "$verdict" == "FAILED_WITH_LINGERING" ]] && result_color="$c_yellow"
+            [[ "$verdict" != "SUCCESS" ]] && result_color="$c_red"
+            [[ "$verdict" == "TIMED_OUT" || "$verdict" == "INTERRUPTED" || "$verdict" == "SUCCESS_WITH_ERRORS" || "$verdict" == "SUCCESS_WITH_SURVIVORS" ]] && result_color="$c_yellow"
 
             printf '\nResult: %s%s%s (%d)\n' "$result_color" "$verdict" "$c_reset" "$return_code" >&2
-            printf '  child_exit=%d  prelude=%d  strict[e=%d u=%d p=%d]  xtrace=%d  err_seen=%d  timeout=%d  lingering_pgroup=%d  forced_stdout=%d  forced_stderr=%d\n' \
+            printf '  child_exit=%d  prelude=%d  strict[e=%d u=%d p=%d]  xtrace=%d  err_seen=%d  timeout=%d  had_lingering=%d  lingering_survivors=%d  forced_stdout=%d  forced_stderr=%d\n' \
                 "$exit_code" "$child_prelude_loaded" "$child_opt_errexit" "$child_opt_nounset" \
                 "$child_opt_pipefail" "$child_xtrace_active" "$child_err_seen" "$timed_out" \
-                "$lingering_pgroup" "$forced_out" "$forced_err" >&2
+                "$had_lingering_descendants" "$surviving_lingering_descendants" "$forced_out" "$forced_err" >&2
             [[ -n "$child_signal" ]] && printf '  signal=%s\n' "$child_signal" >&2
             [[ -s "$child_first_err_log" ]] && printf '  first_error=%s\n' "$child_first_err_log" >&2
             [[ "$source_sha256_before" != "$source_sha256_after" ]] && printf '  source_changed_during_run=true\n' >&2
@@ -1135,7 +1163,8 @@ EOF
             [[ -f "$resource_log" ]] && printf '  ├─ resource_usage.log\n' >&2
             [[ -f "$shellcheck_log" ]] && printf '  ├─ shellcheck_preflight.log\n' >&2
             [[ -f "$journal_log" ]] && printf '  ├─ systemd_journal.log\n' >&2
-            (( lingering_pgroup )) && printf '  ├─ lingering_processes.log\n' >&2
+            (( had_lingering_descendants )) && printf '  ├─ lingering_processes.log\n' >&2
+            (( surviving_lingering_descendants )) && printf '  ├─ lingering_survivors.log\n' >&2
             [[ -s "$drain_diag" ]] && printf '  └─ forced_drain_diagnostics.txt\n' >&2
         fi
 
