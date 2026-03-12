@@ -54,6 +54,11 @@ SUNSET_READY_TIMEOUT = 3.0
 SUNSET_FALLBACK_READY_TIMEOUT = 1.5
 LIVE_REFRESH_INTERVAL_SECONDS = 2
 
+# Prevent a freshly user-set value from being stomped by an in-flight/stale read.
+# This especially matters for brightness, where the UI can otherwise snap back
+# momentarily if a refresh races the backend update.
+BRIGHTNESS_POST_SUBMIT_REFRESH_GRACE_SECONDS = max(1.5, QUERY_TIMEOUT + 0.5)
+
 
 def clamp(value: float, lower: float, upper: float) -> float:
     return max(lower, min(upper, value))
@@ -317,7 +322,9 @@ def _read_sysfs_brightness() -> float | None:
     if current is None or maximum is None or maximum <= 0:
         return None
 
-    return clamp((current / maximum) * 100.0, 0.0, 100.0)
+    value = clamp((current / maximum) * 100.0, 0.0, 100.0)
+    LOG.debug("Brightness read via sysfs (%s): %.3f%%", brightness_path.parent.name, value)
+    return value
 
 
 def _write_sysfs_brightness(value: float) -> bool:
@@ -344,31 +351,57 @@ def _write_sysfs_brightness(value: float) -> bool:
     except OSError:
         return False
 
+    LOG.debug(
+        "Brightness written via sysfs (%s): %s%% -> raw=%s/%s",
+        brightness_path.parent.name,
+        percent,
+        raw_value,
+        maximum,
+    )
     return True
 
 
 def get_brightness() -> float | None:
-    if (base_cmd := _brightnessctl_command_base()) is not None:
-        result = run_command(
-            [*base_cmd, "-m"],
-            timeout=QUERY_TIMEOUT,
-            capture_stdout=True,
-        )
-        if result is not None and result.returncode == 0:
-            lines = result.stdout.splitlines()
-            if lines:
-                parts = lines[0].split(",")
-                if len(parts) >= 5:
-                    percent_text = parts[4].rstrip("%")
-                    value = parse_float(percent_text)
-                    if value is not None:
-                        return clamp(value, 0.0, 100.0)
+    # Prefer direct sysfs reads: lower overhead, no subprocess parsing,
+    # and tied to the exact selected backlight device.
+    if (value := _read_sysfs_brightness()) is not None:
+        return value
 
-    return _read_sysfs_brightness()
+    if (base_cmd := _brightnessctl_command_base()) is None:
+        return None
+
+    result = run_command(
+        [*base_cmd, "-m"],
+        timeout=QUERY_TIMEOUT,
+        capture_stdout=True,
+    )
+    if result is None or result.returncode != 0:
+        return None
+
+    lines = result.stdout.splitlines()
+    if not lines:
+        return None
+
+    parts = lines[0].split(",")
+    if len(parts) < 5:
+        return None
+
+    percent_text = parts[4].rstrip("%")
+    value = parse_float(percent_text)
+    if value is None:
+        return None
+
+    value = clamp(value, 0.0, 100.0)
+    LOG.debug("Brightness read via brightnessctl: %.3f%%", value)
+    return value
 
 
 def apply_brightness(value: float) -> None:
     brightness = int(clamp(round(value), 1, 100))
+
+    # Prefer direct sysfs writes when available for consistency and lower latency.
+    if _write_sysfs_brightness(brightness):
+        return
 
     if (base_cmd := _brightnessctl_command_base()) is not None:
         result = run_command(
@@ -376,10 +409,8 @@ def apply_brightness(value: float) -> None:
             timeout=CONTROL_TIMEOUT,
         )
         if result is not None and result.returncode == 0:
+            LOG.debug("Brightness written via brightnessctl: %s%%", brightness)
             return
-
-    if _write_sysfs_brightness(brightness):
-        return
 
     LOG.warning("Failed to set brightness to %s%%", brightness)
 
@@ -744,6 +775,8 @@ class CompactSliderRow(Gtk.Box):
         step: float,
         fetch_cb: Callable[[], float | None],
         submit_cb: Callable[[float], None],
+        *,
+        post_submit_refresh_grace_seconds: float = 0.0,
     ) -> None:
         super().__init__(orientation=Gtk.Orientation.HORIZONTAL, spacing=16)
 
@@ -753,6 +786,10 @@ class CompactSliderRow(Gtk.Box):
         self._refresh_token = 0
         self._user_revision = 0
         self._has_value = False
+
+        self._post_submit_refresh_grace_seconds = max(0.0, post_submit_refresh_grace_seconds)
+        self._pending_local_value: float | None = None
+        self._pending_local_deadline = 0.0
 
         self.add_css_class("slider-row")
 
@@ -787,7 +824,20 @@ class CompactSliderRow(Gtk.Box):
         self.value_label.add_css_class("value-label")
         self.append(self.value_label)
 
+    def _clear_pending_local(self) -> None:
+        self._pending_local_value = None
+        self._pending_local_deadline = 0.0
+
+    def _pending_local_tolerance(self) -> float:
+        return max(self.adjustment.get_step_increment() * 0.5, 1e-9)
+
     def refresh_async(self) -> None:
+        if (
+            self._pending_local_value is not None
+            and time.monotonic() < self._pending_local_deadline
+        ):
+            return
+
         self._refresh_token += 1
         token = self._refresh_token
         user_revision = self._user_revision
@@ -820,6 +870,7 @@ class CompactSliderRow(Gtk.Box):
             self.scale.set_sensitive(False)
             self.value_label.set_label("…")
             self._has_value = False
+            self._clear_pending_local()
             return GLib.SOURCE_REMOVE
 
         clamped = snap_to_step(
@@ -828,6 +879,22 @@ class CompactSliderRow(Gtk.Box):
             self.adjustment.get_upper(),
             self.adjustment.get_step_increment(),
         )
+
+        if self._pending_local_value is not None:
+            tolerance = self._pending_local_tolerance()
+            now = time.monotonic()
+
+            if math.isclose(
+                clamped,
+                self._pending_local_value,
+                rel_tol=0.0,
+                abs_tol=tolerance,
+            ):
+                self._clear_pending_local()
+            elif now < self._pending_local_deadline:
+                return GLib.SOURCE_REMOVE
+            else:
+                self._clear_pending_local()
 
         self._suppress_apply = True
         try:
@@ -861,6 +928,14 @@ class CompactSliderRow(Gtk.Box):
 
         if self._suppress_apply:
             return
+
+        if self._post_submit_refresh_grace_seconds > 0.0:
+            self._pending_local_value = value
+            self._pending_local_deadline = (
+                time.monotonic() + self._post_submit_refresh_grace_seconds
+            )
+        else:
+            self._clear_pending_local()
 
         self._user_revision += 1
         self._submit_cb(value)
@@ -906,17 +981,42 @@ class SliderWindow(Adw.ApplicationWindow):
         main_box.append(card_box)
 
         if HAS_VOLUME and volume_submit is not None:
-            row = CompactSliderRow("", "volume", 0, 100, 1, get_volume, volume_submit)
+            row = CompactSliderRow(
+                "",
+                "volume",
+                0,
+                100,
+                1,
+                get_volume,
+                volume_submit,
+            )
             self._rows.append(row)
             card_box.append(row)
 
         if HAS_BRIGHTNESS and brightness_submit is not None:
-            row = CompactSliderRow("󰃠", "brightness", 1, 100, 1, get_brightness, brightness_submit)
+            row = CompactSliderRow(
+                "󰃠",
+                "brightness",
+                1,
+                100,
+                1,
+                get_brightness,
+                brightness_submit,
+                post_submit_refresh_grace_seconds=BRIGHTNESS_POST_SUBMIT_REFRESH_GRACE_SECONDS,
+            )
             self._rows.append(row)
             card_box.append(row)
 
         if HAS_SUNSET and sunset_submit is not None:
-            row = CompactSliderRow("󰡬", "sunset", 1000, 6000, 50, get_hyprsunset_state, sunset_submit)
+            row = CompactSliderRow(
+                "󰡬",
+                "sunset",
+                1000,
+                6000,
+                50,
+                get_hyprsunset_state,
+                sunset_submit,
+            )
             self._rows.append(row)
             card_box.append(row)
 
@@ -979,13 +1079,21 @@ class SliderApp(Adw.Application):
         super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.FLAGS_NONE)
 
         self._window: SliderWindow | None = None
-        self._volume_executor = LatestValueExecutor("volume", apply_volume) if HAS_VOLUME else None
-        self._brightness_executor = LatestValueExecutor("brightness", apply_brightness) if HAS_BRIGHTNESS else None
+        self._volume_executor = (
+            LatestValueExecutor("volume", apply_volume) if HAS_VOLUME else None
+        )
+        self._brightness_executor = (
+            LatestValueExecutor("brightness", apply_brightness) if HAS_BRIGHTNESS else None
+        )
         self._sunset_controller = HyprsunsetController() if HAS_SUNSET else None
 
     def do_startup(self) -> None:
         Adw.Application.do_startup(self)
         self.hold()
+
+        if LOG.isEnabledFor(logging.DEBUG):
+            if (name := _preferred_backlight_name()) is not None:
+                LOG.debug("Selected backlight device: %s", name)
 
         quit_action = Gio.SimpleAction.new("quit", None)
         quit_action.connect("activate", lambda *_args: self.quit())
