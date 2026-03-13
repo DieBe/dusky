@@ -312,7 +312,7 @@ declare -ra UPDATE_SEQUENCE=(
     "U | append_gaps_line_in_appearance.sh"
     "U | dusky_commands_after.sh"
     "U | ignore-fail | dusky_matugen_tui.sh --smart"
-    "U | ignore-fail | dusky_firefox_tui.sh --sync --all"
+#    "U | ignore-fail | dusky_firefox_tui.sh --sync --all"
 )
 
 # ==============================================================================
