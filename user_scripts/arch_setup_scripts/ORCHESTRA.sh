@@ -71,7 +71,7 @@ INSTALL_SEQUENCE=(
     "U | 145_matugen_directories.sh"
     "U | 150_wallpapers_download.sh"
     "U | 155_blur_shadow_opacity.sh"
-    "U | 160_theme_ctl.sh set --defaults"
+    "U | 160_theme_ctl.sh"
     "U | 165_qtct_config.sh"
     "U | 170_waypaper_config_reset.sh"
     "U | 175_animation_default.sh"
