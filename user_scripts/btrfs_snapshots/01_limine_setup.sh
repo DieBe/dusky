@@ -306,7 +306,7 @@ has_loader_entry_on_esp() {
     ((${#entries[@]} > 0))
 }
 
-get_named_limine_fallback_entries_on_esp() {
+get_limine_fallback_entries_on_esp() {
     local esp_partuuid="${1:-}" line entry_code line_lc partuuid_lc fallback_loader
     fallback_loader='\efi\boot\bootx64.efi'
     partuuid_lc="${esp_partuuid,,}"
@@ -323,53 +323,48 @@ get_named_limine_fallback_entries_on_esp() {
     done <<< "$CACHE_EFIBOOTMGR_OUTPUT"
 }
 
-has_named_limine_fallback_entry_on_esp() {
-    local -a entries=()
-    mapfile -t entries < <(get_named_limine_fallback_entries_on_esp "${1:-}")
-    ((${#entries[@]} > 0))
-}
-
 delete_boot_entries() {
-    local entry deleted=false
+    local entry rc=0 deleted=0
     for entry in "$@"; do
         [[ -n "$entry" ]] || continue
-        sudo efibootmgr -b "$entry" -B >/dev/null 2>&1 || true
-        deleted=true
+        deleted=1
+        if ! sudo efibootmgr -b "$entry" -B >/dev/null 2>&1; then
+            warn "Could not delete Boot${entry}."
+            rc=1
+        fi
     done
-    [[ "$deleted" == true ]] && CACHE_EFIBOOTMGR_OUTPUT=""
+    (( deleted == 1 )) && CACHE_EFIBOOTMGR_OUTPUT=""
+    return "$rc"
 }
 
-rename_named_limine_fallback_entries() {
-    local esp_partuuid="${1:-}" entry renamed=false
-    local -a entries=()
-    mapfile -t entries < <(get_named_limine_fallback_entries_on_esp "$esp_partuuid")
+purge_limine_fallback_entries() {
+    local esp_partuuid="${1:-}"
+    local -a entries=() remaining=()
+
+    mapfile -t entries < <(get_limine_fallback_entries_on_esp "$esp_partuuid")
     ((${#entries[@]} == 0)) && return 0
 
-    warn "Renaming existing Limine fallback NVRAM entries to avoid duplicate-label warnings."
-    for entry in "${entries[@]}"; do
-        sudo efibootmgr -b "$entry" -L 'Limine (fallback)' >/dev/null 2>&1 || true
-        renamed=true
-    done
-    [[ "$renamed" == true ]] && CACHE_EFIBOOTMGR_OUTPUT=""
+    warn "Deleting existing Limine fallback NVRAM entries to avoid duplicate-label warnings."
+    delete_boot_entries "${entries[@]}" || true
+
+    mapfile -t remaining < <(get_limine_fallback_entries_on_esp "$esp_partuuid")
+    if ((${#remaining[@]} == 0)); then
+        info "Removed Limine fallback NVRAM entries."
+    else
+        warn "One or more Limine fallback NVRAM entries remain; duplicate-label warnings may persist on this firmware."
+    fi
 }
 
-dedupe_limine_entries() {
+dedupe_canonical_limine_entries() {
     local esp_partuuid="${1:-}" keep
-    local -a canonical_entries=() fallback_entries=()
+    local -a entries=()
 
-    mapfile -t canonical_entries < <(get_boot_entries_for_loader_on_esp '\EFI\limine\limine_x64.efi' "$esp_partuuid")
-    if ((${#canonical_entries[@]} > 1)); then
-        keep="${canonical_entries[0]}"
-        warn "Multiple canonical Limine NVRAM entries found. Keeping Boot${keep} and deleting extras."
-        delete_boot_entries "${canonical_entries[@]:1}"
-    fi
+    mapfile -t entries < <(get_boot_entries_for_loader_on_esp '\EFI\limine\limine_x64.efi' "$esp_partuuid")
+    ((${#entries[@]} > 1)) || return 0
 
-    mapfile -t fallback_entries < <(get_named_limine_fallback_entries_on_esp "$esp_partuuid")
-    if ((${#fallback_entries[@]} > 1)); then
-        keep="${fallback_entries[0]}"
-        warn "Multiple Limine fallback NVRAM entries found. Keeping Boot${keep} and deleting extras."
-        delete_boot_entries "${fallback_entries[@]:1}"
-    fi
+    keep="${entries[0]}"
+    warn "Multiple canonical Limine NVRAM entries found. Keeping Boot${keep} and deleting extras."
+    delete_boot_entries "${entries[@]:1}" || true
 }
 
 prepare_limine_nvram_for_install() {
@@ -377,7 +372,23 @@ prepare_limine_nvram_for_install() {
     esp_target="$(detect_esp_mountpoint 2>/dev/null || true)"
     [[ -n "$esp_target" ]] || return 0
     esp_partuuid="$(get_mount_partuuid "$esp_target" || true)"
-    rename_named_limine_fallback_entries "$esp_partuuid"
+    purge_limine_fallback_entries "$esp_partuuid"
+}
+
+limine_state_appears_current() {
+    local esp_target loader_path
+
+    esp_target="$(detect_esp_mountpoint 2>/dev/null || true)"
+    [[ -n "$esp_target" ]] || return 1
+    loader_path="${esp_target}/EFI/limine/limine_x64.efi"
+
+    [[ -f /boot/limine.conf ]] || return 1
+    [[ -f "$loader_path" ]] || return 1
+
+    [[ ! -f /etc/kernel/cmdline || /boot/limine.conf -nt /etc/kernel/cmdline ]] || return 1
+    [[ ! -f /etc/default/limine || /boot/limine.conf -nt /etc/default/limine ]] || return 1
+
+    return 0
 }
 
 install_aur_packages() {
@@ -396,7 +407,10 @@ install_aur_packages() {
     fi
 
     CACHE_EFIBOOTMGR_OUTPUT=""
-    NEEDS_LIMINE_UPDATE=false
+
+    if limine_state_appears_current; then
+        NEEDS_LIMINE_UPDATE=false
+    fi
 }
 
 get_crypt_ancestor() {
@@ -520,12 +534,14 @@ deploy_limine() {
     esp_target="$(detect_esp_mountpoint)" || fatal "Could not detect ESP mount."
     esp_partuuid="$(get_mount_partuuid "$esp_target" || true)"
 
+    purge_limine_fallback_entries "$esp_partuuid"
+
     if has_loader_entry_on_esp '\EFI\limine\limine_x64.efi' "$esp_partuuid"; then
         canonical_present=true
     fi
 
     if [[ ! -f "${esp_target}/EFI/limine/limine_x64.efi" || "$canonical_present" == false ]]; then
-        rename_named_limine_fallback_entries "$esp_partuuid"
+        purge_limine_fallback_entries "$esp_partuuid"
         info "Installing Limine EFI entry."
         sudo limine-install
         CACHE_EFIBOOTMGR_OUTPUT=""
@@ -537,8 +553,8 @@ deploy_limine() {
         sudo limine-update
     fi
 
-    rename_named_limine_fallback_entries "$esp_partuuid"
-    dedupe_limine_entries "$esp_partuuid"
+    purge_limine_fallback_entries "$esp_partuuid"
+    dedupe_canonical_limine_entries "$esp_partuuid"
 
     [[ -f /boot/limine.conf ]] || fatal "/boot/limine.conf was not created."
     info "Limine deployment completed."

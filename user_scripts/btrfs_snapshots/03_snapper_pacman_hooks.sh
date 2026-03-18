@@ -19,6 +19,7 @@ declare -A CACHE_MNT_OPTS=()
 declare -a ACTIVE_TEMP_FILES=()
 
 SUDO_PID=""
+SNAP_PAC_INSTALLED_NOW=false
 
 cleanup() {
     local f
@@ -182,7 +183,14 @@ install_aur_packages() {
     fi
 }
 
-install_snap_pac() { sudo pacman -S --needed --noconfirm snap-pac; }
+install_snap_pac() {
+    if pacman -Q snap-pac >/dev/null 2>&1; then
+        info "snap-pac is already installed."
+        return 0
+    fi
+    sudo pacman -S --needed --noconfirm snap-pac
+    SNAP_PAC_INSTALLED_NOW=true
+}
 
 verify_previous_setup() {
     local root_opts home_opts
@@ -298,17 +306,30 @@ configure_snap_pac() {
     rm -f "$tmp"; ACTIVE_TEMP_FILES=("${ACTIVE_TEMP_FILES[@]/$tmp}")
 }
 
-baseline_snapshot_exists() {
+snapshot_with_description_exists() {
     sudo snapper --csv -c "$1" list 2>/dev/null | awk -F',' -v desc="$2" '$7 == desc { found=1; exit } END { exit(found ? 0 : 1) }'
+}
+
+ensure_initial_home_snap_pac_snapshot() {
+    [[ "$SNAP_PAC_INSTALLED_NOW" == true ]] || return 0
+    snapshot_with_description_exists root "snap-pac" || return 0
+
+    if snapshot_with_description_exists home "snap-pac"; then
+        info "Home already has a snap-pac snapshot."
+        return 0
+    fi
+
+    sudo snapper -c home create -t single -c number -d "snap-pac"
+    info "Created initial home snapshot to match the snap-pac transaction."
 }
 
 create_post_config_baseline_snapshot() {
     local desc="Baseline after Limine + Snapper integration"
-    if ! baseline_snapshot_exists "root" "$desc"; then
+    if ! snapshot_with_description_exists "root" "$desc"; then
         sudo snapper -c root create -t single -c important -d "$desc"
         info "Created baseline root snapshot."
     fi
-    if ! baseline_snapshot_exists "home" "$desc"; then
+    if ! snapshot_with_description_exists "home" "$desc"; then
         sudo snapper -c home create -t single -c important -d "$desc"
         info "Created baseline home snapshot."
     fi
@@ -343,5 +364,6 @@ execute "Rebuild initramfs" rebuild_initramfs
 execute "Configure sync daemon" configure_sync_daemon
 execute "Install snap-pac" install_snap_pac
 execute "Configure snap-pac" configure_snap_pac
+execute "Backfill initial home snap-pac snapshot" ensure_initial_home_snap_pac_snapshot
 execute "Create baseline snapshot" create_post_config_baseline_snapshot
 execute "Enable services" enable_services_and_sync
