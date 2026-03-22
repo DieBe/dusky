@@ -827,21 +827,6 @@ pages:
         type: exec
         command: $HOME/user_scripts/music/music_recognition.sh
         terminal: false
-    - type: toggle_card
-      properties:
-        title: Wayclick
-        icon: input-keyboard-symbolic
-        key: wayclick
-      on_toggle:
-        enabled:
-          type: exec
-          command: $HOME/user_scripts/wayclick/dusky_wayclick.sh
-          terminal: false
-        disabled:
-          type: exec
-          command: $HOME/user_scripts/wayclick/dusky_wayclick.sh
-          terminal: false
-
   - type: section
     properties:
       title: Controls
@@ -1941,43 +1926,6 @@ pages:
     items:
     - type: button
       properties:
-        title: Dusky TTS (Kokoro)
-        description: Supports Nvidia, AMD, CPU
-        icon: audio-speakers-symbolic
-        button_text: "Install"
-      on_press:
-        type: exec
-        command: kitty --class kokoro_installer.sh --hold sh -c "$HOME/user_scripts/tts_stt/dusky_kokoro/kokoro_installer.sh"
-        terminal: false
-  - type: section
-    properties:
-      title: Speech to Text (SST)
-      icon: ''
-      description: ''
-    items:
-    - type: button
-      properties:
-        title: Dusky STT (Parakeet)
-        description: Supports Nvidia, AMD, CPU
-        icon: microphone-sensitivity-high-symbolic
-        button_text: "Install"
-      on_press:
-        type: exec
-        command: kitty --class parakeet_installer.sh --hold sh -c "$HOME/user_scripts/tts_stt/dusky_parakeet/parakeet_installer.sh"
-        terminal: false
-
-- id: setup_features
-  title: Setup
-  icon: system-software-install-symbolic
-  layout:
-  - type: section
-    properties:
-      title: Core Installers
-      icon: ''
-      description: Essential tools
-    items:
-    - type: button
-      properties:
         title: Install AUR Helper
         description: Setup Paru (with Yay fallback)
         icon: package-x-generic-symbolic
@@ -2168,55 +2116,6 @@ pages:
 
     - type: navigation
       properties:
-        title: Wayclick Setup
-        description: Mechanical keyboard sounds
-        icon: input-keyboard-symbolic
-      layout:
-        - type: section
-          properties:
-            title: Wayclick Configuration
-          items:
-            - type: button
-              properties:
-                title: "Step 1: Reset"
-                description: Clean existing configuration
-                icon: edit-delete-symbolic
-                style: destructive
-                button_text: "Reset"
-              on_press:
-                type: exec
-                command: kitty --class dusky_wayclick.sh --hold sh -c "$HOME/user_scripts/wayclick/dusky_wayclick.sh --reset"
-                terminal: false
-            - type: button
-              properties:
-                title: "Step 2: Install"
-                description: Setup Dusky Wayclick
-                icon: system-software-install-symbolic
-                button_text: "Install"
-              on_press:
-                type: exec
-                command: kitty --class dusky_wayclick.sh --hold sh -c "$HOME/user_scripts/wayclick/dusky_wayclick.sh --setup"
-                terminal: false
-            - type: button
-              properties:
-                title: "Step 3: Configuration"
-                description: Manage Wayclick sounds and logic
-                icon: preferences-desktop-keyboard-shortcuts-symbolic
-                buttons:
-                  - icon: text-x-script-symbolic
-                    button_text: "File"
-                    on_press:
-                      type: exec
-                      command: gnome-text-editor "$HOME/user_scripts/wayclick/dusky_wayclick.sh"
-                  - icon: input-keyboard-symbolic
-                    button_text: "TUI"
-                    style: suggested
-                    on_press:
-                      type: exec
-                      command: kitty --class dusky_tui_wayclick.sh --hold sh -c "$HOME/user_scripts/wayclick/dusky_tui_wayclick.sh"
-                      terminal: false
-    - type: navigation
-      properties:
         title: Neovim Setup & Maintenance
         description: Manage configuration and repair plugins
         icon: text-editor-symbolic
@@ -2327,46 +2226,6 @@ pages:
       icon: ''
       description: GPU and Drivers
     items:
-    - type: navigation
-      properties:
-        title: GPU Drivers
-        description: Nvidia, AMD, Intel configuration
-        icon: video-display-symbolic
-      layout:
-        - type: section
-          properties:
-            title: Nvidia Drivers
-            icon: ''
-            description: Open source drivers
-          items:
-            - type: button
-              properties:
-                title: Nvidia Open Source
-                description: Drivers for 11 series to 60 series
-                icon: video-display-symbolic
-                button_text: "Install"
-              on_press:
-                type: exec
-                command: kitty --class 380_nvidia_open_source.sh --hold sh -c "$HOME/user_scripts/arch_setup_scripts/scripts/380_nvidia_open_source.sh"
-                terminal: false
-
-  - type: section
-    properties:
-      title: Virtualization
-      icon: ''
-      description: Waydroid
-    items:
-    - type: button
-      properties:
-        title: Setup Waydroid
-        description: Install Android KVM container
-        icon: phone-symbolic
-        button_text: "Install"
-      on_press:
-        type: exec
-        command: kitty --class 385_waydroid_setup.sh --hold sh -c "$HOME/user_scripts/arch_setup_scripts/scripts/385_waydroid_setup.sh"
-        terminal: false
-
 - id: troubleshoot
   title: Troubleshoot
   icon: tools-check-spelling-symbolic

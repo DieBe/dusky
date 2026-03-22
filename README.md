@@ -35,7 +35,7 @@ here's what it looks like.
 
 ![Dusky Control Center](Pictures/readme_assets/dusky_control_center.webp)
 
-This repository is the result of 8 months of tinkering/breaking/fixing and polishing. Its a labor of love designed to feel as easy to install as a "standard" distribution but with the raw power and minimalism of arch. **please consider starring ⭐ this repo** as a token of support.
+This repository is the result of 8 months of tinkering/breaking/fixing and polishing. Its a labor of love designed to feel as easy to install as a "standard" distribution but with the raw power and minimalism of Fedora KDE Plasma. **please consider starring ⭐ this repo** as a token of support.
 
 ## ⚠️ Prerequisites & Hardware
 
@@ -62,8 +62,6 @@ The setup scripts are written to auto detect your hardware and set the appropria
 
 ### Dual Booting
 
-- Compatible with Windows or other Linux distros.
-
 - **Bootloader:** Defaults to `systemd-boot` for UEFI (boots up to 5s faster). Defaults to `GRUB` for BIOS.
 
 
@@ -74,9 +72,9 @@ The setup scripts are written to auto detect your hardware and set the appropria
 
 [Watch Video Tutorial]: https://youtu.be/OzeFAY_8T8Y
 
-**Best for:** Users who already have a fresh, unconfigured Arch Linux installation with Hyprland, set up either via the archinstall script or through a manual install. If you have not installed yet, use the Arch ISO and ensure you select Btrfs as the filesystem and Hyprland as the window manager.
+**Best for:** Users who already have a fresh Fedora KDE Plasma installation with Hyprland support. If you have not installed yet, use the Fedora KDE Plasma ISO and select Btrfs as the filesystem.
 
-after installing arch, boot into the os and then run this in the terminal. 
+after installing Fedora KDE Plasma, boot into the os and then run this in the terminal. 
 
 ### Step 1: Clone Dotfiles (Bare Repo Method)
 
@@ -85,7 +83,7 @@ i use a bare git repository method to drop files exactly where they belong in yo
 make sure your connected to the internet and git is installed, 
 
 ```
-sudo pacman -Syu --needed git
+sudo dnf install -y git
 ```
 
 
@@ -110,7 +108,7 @@ git --git-dir=$HOME/dusky/ --work-tree=$HOME checkout -f
 Run the master script to install dependencies, themes, and services, this will take a while. because it sets up everything. You'll be promted to say yes/no during setup, so dont leave it running unattended.
 
 ```bash
-~/user_scripts/arch_setup_scripts/ORCHESTRA.sh
+~/user_scripts/fedora_setup_scripts/FEDORA_ORCHESTRA.sh
 ```
 
 ## The Orchestra Script
@@ -121,7 +119,7 @@ The `ORCHESTRA.sh` is a "conductor" that manages ~80 subscripts.
 
 - **Safe:** You can re-run it as many times as you like without breaking things.
 
-- **Time:** Expect 30–60 minutes. We use `paru` to install a few AUR packages, and compiling from source takes time. Grab a coffee!
+- **Time:** Expect 30–60 minutes. The script uses `dnf` (and optional COPR packages when available). Grab a coffee!
 
 
 ## ⌨️ Usage & Keybinds
@@ -133,7 +131,7 @@ The steepest learning curve will be the keybinds. I have designed them to be int
 > Press CTRL + SHIFT + SPACE to open the Keybinds Cheatsheet. You can click commands in this menu to run them directly!
 
 
-It's been tested to work on other arch based distros with hyprland installed (fresh installed) like catchyOS
+It's intended for Fedora-based setups with Hyprland installed.
 
 
 ## 🔧 Troubleshooting
@@ -238,17 +236,6 @@ GUI keybind invokable sliders for:
 - Nightlight/hyprsunset intensity. 
 
 
-Speech to text 
-- Whisper - for cpu 
-or 
-- Parakeet - for nvidia gpus. might also work on Amd (not sure)
-
-text to speech 
-- kokoro for both cpu and gpu
-
-- mechanical keypress sounds
-togglalble with a keybind or from rofi. 
-
 - Wlogout is drawn using a dynamic script that respects your frational scaling. 
 
 
@@ -272,7 +259,6 @@ togglalble with a keybind or from rofi.
     
 - **Instant Shaders:** Switch visual shaders instantly via Rofi.
     
-- **Android Support:** Automated Waydroid installer script.
     
 
 **Usability & Theming**
@@ -281,7 +267,6 @@ togglalble with a keybind or from rofi.
     
 - **Dual Workflow:** Designed for both GUI-centric (mouse) and Terminal-centric (keyboard) users.
     
-- **Accessibility:** Text-to-Speech (TTS) and Speech-to-Text (STT) capabilities (hardware dependent).
     
 - **Keybind Cheatsheet:** Press `CTRL` + `SHIFT` + `SPACE` anytime to see your controls.
     
