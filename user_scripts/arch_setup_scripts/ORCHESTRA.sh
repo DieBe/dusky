@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-#  ARCH LINUX MASTER ORCHESTRATOR
+#  FEDORA KDE PLASMA MASTER ORCHESTRATOR
 # ==============================================================================
 #  INSTRUCTIONS:
 #  1. Configure SCRIPT_SEARCH_DIRS below with directories containing your scripts.
@@ -46,17 +46,14 @@ INSTALL_SEQUENCE=(
     "U | 035_configure_uwsm_gpu.sh --auto"
     "U | 040_long_sleep_timeout.sh --auto"
 #    "S | 045_battery_limiter.sh"
-    "S | 050_pacman_config.sh --auto"
-    "S | 055_pacman_reflector.sh"
-    "S | 060_package_installation.sh"
+            "S | 060_package_installation.sh"
     "U | 065_enabling_user_services.sh"
     "S | 070_openssh_setup.sh --auto"
     "U | 075_changing_shell_zsh.sh"
-    "S | 080_aur_paru_fallback_yay.sh --paru"
-#    "S | 085_warp.sh"
+    #    "S | 085_warp.sh"
 #    "U | 090_paru_packages_optional.sh"
 #    "S | 095_battery_limiter_again_dusk.sh"
-    "U | 100_paru_packages.sh"
+    "U | 100_fedora_optional_packages.sh"
     "S | 110_aur_packages_sudo_services.sh"
     "U | 115_aur_packages_user_services.sh"
 #    "S | 120_create_mount_directories.sh"
@@ -95,7 +92,7 @@ INSTALL_SEQUENCE=(
     "U | 238_terminal_switcher.sh --kitty"
     "U | 240_swaync_dgpu_fix.sh --disable"
 #    "S | 245_asusd_service_fix.sh"
-#    "S | 250_ftp_arch.sh"
+#    "S | 250_ftp_fedora.sh"
 #    "U | 255_tldr_update.sh"
 #    "U | 260_spotify.sh"
 #    "U | 265_mouse_button_reverse.sh --right"
@@ -118,12 +115,11 @@ INSTALL_SEQUENCE=(
 #    "U | 356_dusky_plugin_manager.sh"
     "U | 360_obsidian_pensive_vault_configure.sh"
     "U | 365_cache_purge.sh"
-    "S | 370_arch_install_scripts_cleanup.sh"
+    "S | 370_fedora_install_scripts_cleanup.sh"
     "U | 375_cursor_theme_bibata_classic_modern.sh"
     "U | 376_generate_colorfiles_for_current_wallpaer.sh"
     "U | 380_nvidia_open_source.sh --auto"
     "S | 381_nvidia_services.sh"
-#    "S | 385_waydroid_setup.sh"
     "U | 390_clipboard_persistance.sh --ram"
     "S | 395_intel_media_sdk_check.sh"
     "U | 400_firefox_matugen_pywalfox.sh"
@@ -133,7 +129,6 @@ INSTALL_SEQUENCE=(
 #    "U | 420_kokoro_gpu_setup.sh" #requires nvidia gpu with at least 4gb vram
 #    "U | 425_parakeet_gpu_setup.sh" #requires nvidia gpu with at least 4gb vram
 #    "S | 430_btrfs_zstd_compression_stats.sh"
-#    "U | 435_key_sound_wayclick_setup.sh --setup"
     "U | 440_config_bat_notify.sh --default"
     "U | 455_hyprctl_reload.sh"
     "U | 460_switch_clipboard.sh --terminal"
@@ -384,7 +379,7 @@ preflight_check() {
 
 show_help() {
     cat << EOF
-Arch Linux Master Orchestrator
+Fedora KDE Plasma Master Orchestrator
 
 Usage: $(basename "$0") [OPTIONS]
 
@@ -395,7 +390,7 @@ Options:
 
 Description:
     This script orchestrates the execution of multiple setup scripts
-    for Arch Linux with Hyprland. It tracks completed scripts and
+    for Fedora KDE Plasma with Hyprland. It tracks completed scripts and
     can resume from where it left off if interrupted.
 
     Scripts are searched in the directories listed in SCRIPT_SEARCH_DIRS

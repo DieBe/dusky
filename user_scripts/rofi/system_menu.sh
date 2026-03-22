@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # -----------------------------------------------------------------------------
-# ARCH / HYPRLAND ROFI MENU SYSTEM
+# FEDORA / HYPRLAND ROFI MENU SYSTEM
 # Dependencies: rofi-wayland, uwsm, kitty, fd, file, xdg-utils
 # -----------------------------------------------------------------------------
 
@@ -39,15 +39,11 @@ declare -agr MAIN_MENU=(
 
 declare -agr LEARN_MENU=(
     '󰌌  Keybindings (List)'
-    '󰣇  Arch Wiki'
+    '󰣇  Fedora Docs'
     '  Hyprland Wiki'
 )
 
 declare -agr AI_MENU=(
-    '󰔊  TTS - Kokoro (GPU)'
-    '󰔊  TTS - Kokoro (CPU)'
-    '󰍬  STT - Faster Whisper'
-    '󰍬  STT - Parakeet (GPU)'
     '󰍉  OCR Selection'
 )
 
@@ -61,7 +57,6 @@ declare -agr UTILS_MENU=(
     '󰅇  Clipboard Persistence'
     '󰉋  File Manager Switch'
     '󰍽  Mouse Handedness'
-    '󰌌  Wayclick (Key Sounds)'
 )
 
 declare -agr VISUALS_MENU=(
@@ -297,8 +292,8 @@ show_learn_menu() {
             '󰌌  Keybindings (List)')
                 run_app "$SCRIPTS_DIR/rofi/keybindings.sh"
                 ;;
-            '󰣇  Arch Wiki')
-                run_app xdg-open "https://wiki.archlinux.org/"
+            '󰣇  Fedora Docs')
+                run_app xdg-open "https://docs.fedoraproject.org/"
                 ;;
             '  Hyprland Wiki')
                 run_app xdg-open "https://wiki.hypr.land/"
@@ -318,18 +313,6 @@ show_ai_menu() {
         choice=$(menu_select "AI Tools" AI_MENU) || return 0
 
         case "$choice" in
-            '󰔊  TTS - Kokoro (GPU)')
-                run_app "$SCRIPTS_DIR/tts_stt/kokoro_gpu/speak.sh"
-                ;;
-            '󰔊  TTS - Kokoro (CPU)')
-                run_app "$SCRIPTS_DIR/tts_stt/kokoro_cpu/kokoro.sh"
-                ;;
-            '󰍬  STT - Faster Whisper')
-                run_app "$SCRIPTS_DIR/tts_stt/faster_whisper/faster_whisper_stt.sh"
-                ;;
-            '󰍬  STT - Parakeet (GPU)')
-                run_app "$SCRIPTS_DIR/tts_stt/parakeet/parakeet.sh"
-                ;;
             '󰍉  OCR Selection')
                 require_commands slurp grim tesseract wl-copy || continue
                 region=$(slurp) || exit 0
@@ -382,9 +365,6 @@ show_utils_menu() {
                 ;;
             '󰍽  Mouse Handedness')
                 run_term_hold "mouse_button_reverse.sh" "$SCRIPTS_DIR/desktop_apps/mouse_button_reverse.sh"
-                ;;
-            '󰌌  Wayclick (Key Sounds)')
-                run_app "$SCRIPTS_DIR/wayclick/wayclick.sh"
                 ;;
             *)
                 return 0
