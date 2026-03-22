@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Removes installation scripts (*.sh) and the git repository from root (/) after using dusky fedora installation method
+# Removes installation scripts (*.sh) and the git repository from root (/) after using dusky arch iso installation method
 # ==============================================================================
-#  FEDORA POST-INSTALL CLEANUP (ROOT ARTIFACTS)
+#  ARCH LINUX POST-INSTALL CLEANUP (ROOT ARTIFACTS)
 # ==============================================================================
 #  Removes installation scripts (*.sh) and the git repository from the root (/)
 #  directory after a successful install.
