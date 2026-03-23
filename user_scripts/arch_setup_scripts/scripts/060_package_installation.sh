@@ -44,11 +44,24 @@ declare -a FAILED_PACKAGES=()
 for package in "${PACKAGES[@]}"; do
   fedora_package="$(normalize_package_name "$package")"
   if ! dnf -y install "$fedora_package"; then
-    FAILED_PACKAGES+=("$package")
+    if [[ "$fedora_package" == "$package" ]]; then
+      FAILED_PACKAGES+=("$fedora_package")
+      printf 'Failed to install package via dnf: %s\n' "$fedora_package" >&2
+    else
+      FAILED_PACKAGES+=("$fedora_package (from $package)")
+      printf 'Failed to install package via dnf: %s (normalized from %s)\n' "$fedora_package" "$package" >&2
+    fi
   fi
 done
 
 if (( ${#FAILED_PACKAGES[@]} > 0 )); then
   printf 'Some packages could not be installed with dnf: %s\n' "${FAILED_PACKAGES[*]}" >&2
-  printf 'See %s for Fedora alternatives/COPR guidance.\n' "/FEDORA_PACKAGE_GAPS.md" >&2
+  SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+  REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../../.." && pwd)"
+  GAP_FILE="${REPO_ROOT}/FEDORA_PACKAGE_GAPS.md"
+  if [[ -f "$GAP_FILE" ]]; then
+    printf 'See %s for Fedora alternatives/COPR guidance.\n' "$GAP_FILE" >&2
+  else
+    printf 'See FEDORA_PACKAGE_GAPS.md in the Dusky repository for Fedora alternatives/COPR guidance.\n' >&2
+  fi
 fi

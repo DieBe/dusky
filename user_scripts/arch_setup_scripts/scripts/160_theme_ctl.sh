@@ -8,4 +8,7 @@ if [[ ! -x "$THEME_CTL" ]]; then
   exit 1
 fi
 
-"$THEME_CTL" refresh
+if ! "$THEME_CTL" refresh; then
+  echo "theme_ctl refresh failed." >&2
+  exit 1
+fi
