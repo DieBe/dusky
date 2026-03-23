@@ -18,6 +18,39 @@ normalize_package_name() {
   esac
 }
 
+# Required commands used by active Fedora orchestrator scripts.
+ensure_required_commands() {
+  local -a requirements=(
+    "hyprctl:hyprland"
+    "brightnessctl:brightnessctl"
+    "notify-send:libnotify"
+    "uwsm:uwsm"
+    "swww:swww"
+    "swww-daemon:swww"
+    "matugen:matugen"
+    "xdg-mime:xdg-utils"
+  )
+  local req command package fedora_package
+  local -a missing_commands=()
+
+  for req in "${requirements[@]}"; do
+    command="${req%%:*}"
+    package="${req#*:}"
+    if ! command -v "$command" >/dev/null 2>&1; then
+      missing_commands+=("$command")
+      fedora_package="$(normalize_package_name "$package")"
+      if ! dnf -y install "$fedora_package"; then
+        FAILED_PACKAGES+=("$fedora_package (required by command '$command')")
+        printf "Failed to install required Fedora package '%s' for command '%s'.\n" "$fedora_package" "$command" >&2
+      fi
+    fi
+  done
+
+  if (( ${#missing_commands[@]} > 0 )); then
+    printf 'Missing commands detected and install attempted: %s\n' "${missing_commands[*]}" >&2
+  fi
+}
+
 PACKAGES=(
   intel-media-driver mesa mesa-vulkan-drivers mesa-dri-drivers vulkan-loader vulkan-tools
   sof-firmware linux-firmware
@@ -53,6 +86,8 @@ for package in "${PACKAGES[@]}"; do
     fi
   fi
 done
+
+ensure_required_commands
 
 if (( ${#FAILED_PACKAGES[@]} > 0 )); then
   printf 'Some packages could not be installed with dnf: %s\n' "${FAILED_PACKAGES[*]}" >&2
