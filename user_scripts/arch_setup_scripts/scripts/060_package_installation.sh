@@ -31,23 +31,32 @@ ensure_required_commands() {
     "xdg-mime:xdg-utils"
   )
   local req command package fedora_package
-  local -a missing_commands=()
+  local -a attempted_commands=()
+  local -a still_missing_commands=()
 
   for req in "${requirements[@]}"; do
     command="${req%%:*}"
     package="${req#*:}"
     if ! command -v "$command" >/dev/null 2>&1; then
-      missing_commands+=("$command")
+      attempted_commands+=("$command")
       fedora_package="$(normalize_package_name "$package")"
       if ! dnf -y install "$fedora_package"; then
         FAILED_PACKAGES+=("$fedora_package (required by command '$command')")
         printf "Failed to install required Fedora package '%s' for command '%s'.\n" "$fedora_package" "$command" >&2
       fi
+
+      if ! command -v "$command" >/dev/null 2>&1; then
+        still_missing_commands+=("$command")
+      fi
     fi
   done
 
-  if (( ${#missing_commands[@]} > 0 )); then
-    printf 'Missing commands detected and install attempted: %s\n' "${missing_commands[*]}" >&2
+  if (( ${#attempted_commands[@]} > 0 )); then
+    printf 'Attempted to install providers for missing commands: %s\n' "${attempted_commands[*]}" >&2
+  fi
+
+  if (( ${#still_missing_commands[@]} > 0 )); then
+    printf 'Commands still missing after installation attempt: %s\n' "${still_missing_commands[*]}" >&2
   fi
 }
 
