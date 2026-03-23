@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # -----------------------------------------------------------------------------
-# Arch / Hyprland / UWSM GPU Configurator (v2026.08-Golden)
+# Fedora / Hyprland / UWSM GPU Configurator (v2026.08-Golden)
 # -----------------------------------------------------------------------------
 # Role:       System Architect
 # Objective:  Topology selection + Active Dependency Management + Safe AQ mapping.
@@ -95,7 +95,7 @@ install_packages() {
     (( ${#packages[@]} > 0 )) || return 0
 
     if (( EUID == 0 )); then
-        pacman -S --needed --noconfirm "${packages[@]}"
+        dnf -y install "${packages[@]}"
         return
     fi
 
@@ -104,7 +104,7 @@ install_packages() {
         return 1
     fi
 
-    sudo pacman -S --needed --noconfirm "${packages[@]}"
+    sudo dnf -y install "${packages[@]}"
 }
 
 check_deps() {
@@ -117,7 +117,7 @@ check_deps() {
     (( ${#missing[@]} == 0 )) && return 0
 
     log_warn "Missing dependencies detected: ${missing[*]}"
-    log_info "Attempting to install via pacman..."
+    log_info "Attempting to install via dnf..."
 
     if ! install_packages "${missing[@]}"; then
         log_err "Failed to install required dependencies. Aborting."

@@ -5,7 +5,7 @@
 # Role:       System Architect
 # Objective:  Hardware Detection & Driver Installation ONLY.
 #             (No config modification, no mkinitcpio touches).
-# Context:    Arch Linux (Rolling) / Wayland / Hyprland.
+# Context:    Fedora / Wayland / Hyprland.
 # Logic:      Sysfs Topology -> Strict lspci Fallback -> Ordered Classification.
 # -----------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ fi
 check_deps() {
     local missing=()
     if ! command -v lspci &>/dev/null; then missing+=("pciutils"); fi
-    if ! command -v pacman &>/dev/null; then missing+=("pacman"); fi
+    if ! command -v dnf &>/dev/null; then missing+=("dnf"); fi
     if ! command -v grep &>/dev/null; then missing+=("grep"); fi
     if ! command -v sudo &>/dev/null; then missing+=("sudo"); fi
     
@@ -218,7 +218,7 @@ classify_nvidia() {
             detected_arch="legacy"
         elif echo "$gpu_info" | grep -qEi "($kepler_regex)"; then
             log_err "  -> Kepler/Fermi GPU detected ($gpu_info)."
-            log_err "  -> This architecture requires 'nvidia-470xx-dkms' (AUR)."
+            log_err "  -> This architecture requires legacy NVIDIA packages not provided in the default Fedora repos."
             detected_arch="ancient"
             break
         else
@@ -227,7 +227,7 @@ classify_nvidia() {
     done
 
     if [[ "$detected_arch" == "ancient" ]]; then
-        die "Unsupported Legacy GPU detected. Please install drivers manually via AUR."
+        die "Unsupported legacy GPU detected. Please install drivers manually from Fedora-compatible sources."
     elif [[ "$detected_arch" == "legacy" ]]; then
         FINAL_NVIDIA_DRIVER="nvidia-dkms" 
         FINAL_NVIDIA_UTILS="nvidia-utils"
@@ -247,7 +247,7 @@ get_kernel_headers() {
     # Regex scan for standard headers, explicitly excluding API headers
     while read -r pkg; do
         headers+=("$pkg")
-    done < <(pacman -Qq | grep -E '^linux.*-headers$' | grep -v 'api')
+    done < <(rpm -qa --qf '%{NAME}\n' 'kernel*-devel' 2>/dev/null || true)
 
     if [[ ${#headers[@]} -eq 0 ]]; then
         log_warn "No kernel header packages found. DKMS will fail!" >&2
@@ -257,9 +257,7 @@ get_kernel_headers() {
     echo "${headers[*]}"
 }
 
-get_multilib_state() {
-    if grep -qE '^\s*\[multilib\]' /etc/pacman.conf; then echo "1"; else echo "0"; fi
-}
+get_multilib_state() { echo "0"; }
 
 install_routine() {
     local vendor="$1"
@@ -280,7 +278,7 @@ install_routine() {
         esac
     fi
 
-    local cmd=(sudo pacman -S --needed --noconfirm)
+    local cmd=(sudo dnf -y install)
     "${cmd[@]}" "${pkg_list[@]}"
     log_ok "$vendor drivers installed."
 }

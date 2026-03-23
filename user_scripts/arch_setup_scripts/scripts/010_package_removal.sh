@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# package removal pacman and aur
-#              Supports Repo (pacman) and AUR (yay/paru).
+# package removal for Fedora
+#              Supports repo packages via dnf.
 #              Safe execution: Strict literal matching to avoid virtual providers.
-# System:      Arch Linux / UWSM / Hyprland
-# Requires:    Bash 5.0+, pacman, sudo
+# System:      Fedora / UWSM / Hyprland
+# Requires:    Bash 5.0+, dnf, sudo
 # Flags:       -Rns = Remove + recursive deps + no config backup
 # -----------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ IFS=$' \t\n'
 # CONFIGURATION
 # ==============================================================================
 
-# Official Repository Packages (sudo pacman)
+# Official Repository Packages (sudo dnf)
 readonly -a REPO_TARGETS=(
   dunst
   dolphin
@@ -22,10 +22,6 @@ readonly -a REPO_TARGETS=(
   polkit-kde-agent
   power-profiles-daemon
   fluent-icon-theme-git
-)
-
-# AUR Packages (yay/paru, no sudo)
-readonly -a AUR_TARGETS=(
 )
 
 # ==============================================================================
@@ -66,7 +62,6 @@ die() {
 # Defaulted to 1 for fully autonomous execution without the -y flag
 declare -gi AUTO_CONFIRM=1
 declare -gi EXIT_CODE=0
-declare -g  AUR_HELPER=''
 declare -gi INTERRUPTED=0
 
 # ==============================================================================
@@ -98,7 +93,7 @@ trap 'handle_interrupt 143' TERM
 
 show_help() {
     cat <<EOF
-${BOLD}${SCRIPT_NAME}${RESET} v${SCRIPT_VERSION} — Arch Package Removal Tool
+${BOLD}${SCRIPT_NAME}${RESET} v${SCRIPT_VERSION} — Fedora Package Removal Tool
 
 ${BOLD}USAGE:${RESET}
     ${SCRIPT_NAME} [OPTIONS]
@@ -148,7 +143,7 @@ check_not_root() {
 check_required_commands() {
     local -a missing=()
     local cmd
-    for cmd in pacman sudo; do
+    for cmd in dnf sudo rpm; do
         command -v "$cmd" &>/dev/null || missing+=("$cmd")
     done
     if (( ${#missing[@]} )); then
@@ -156,25 +151,10 @@ check_required_commands() {
     fi
 }
 
-detect_aur_helper() {
-    local helper
-    for helper in paru yay; do
-        if command -v "$helper" &>/dev/null; then
-            AUR_HELPER="$helper"
-            return 0
-        fi
-    done
-    if (( ${#AUR_TARGETS[@]} )); then
-        log_warn "No AUR helper (paru/yay) found — AUR targets will be skipped."
-    fi
-    return 0
-}
-
 check_environment() {
     check_bash_version
     check_not_root
     check_required_commands
-    detect_aur_helper
 }
 
 # ==============================================================================
@@ -194,8 +174,8 @@ filter_installed() {
     for pkg in "${_filter_in[@]}"; do
         [[ -n $pkg ]] || continue
 
-        # Query local DB. Will return providers if virtual package is queried.
-        mapfile -t resolved_pkgs < <(pacman -Qq -- "$pkg" 2>/dev/null || true)
+        # Query local RPM DB.
+        mapfile -t resolved_pkgs < <(rpm -q --qf '%{NAME}\n' "$pkg" 2>/dev/null || true)
 
         # Enforce strict literal matching to bypass virtual provider traps
         local actual_pkg
@@ -220,10 +200,9 @@ filter_installed() {
 is_required_by_anything() {
     local -r pkg="$1"
     local req
-    # "Required By" field exists in pacman -Qi output.
-    # if it is "None", it's not required by installed packages.
-    req="$(pacman -Qi -- "$pkg" 2>/dev/null | awk -F': ' '/^Required By/ {print $2; exit}')"
-    [[ -n "$req" && "$req" != "None" ]]
+    # dnf can query reverse dependencies from the installed set.
+    req="$(dnf repoquery --installed --whatrequires "$pkg" --qf '%{name}' 2>/dev/null | head -n1 || true)"
+    [[ -n "$req" ]]
 }
 
 # ==============================================================================
@@ -245,7 +224,7 @@ process_removal() {
     for pkg in "${active_targets[@]}"; do
         if is_required_by_anything "$pkg"; then
             local reqby
-            reqby="$(pacman -Qi -- "$pkg" 2>/dev/null | awk -F': ' '/^Required By/ {print $2; exit}')"
+            reqby="$(dnf repoquery --installed --whatrequires "$pkg" --qf '%{name}' 2>/dev/null | tr '\n' ' ' || true)"
             log_warn "Skipping '${CYAN}${pkg}${RESET}': required by installed package(s): ${BOLD}${reqby}${RESET}"
             continue
         fi
@@ -259,8 +238,7 @@ process_removal() {
 
     local -a cmd=()
     (( use_sudo )) && cmd+=(sudo)
-    cmd+=("$pkg_cmd" -Rns)
-    (( AUTO_CONFIRM )) && cmd+=(--noconfirm)
+    cmd+=("$pkg_cmd" -y remove)
     cmd+=(-- "${removable_targets[@]}")
 
     log_info "Removing ${BOLD}${#removable_targets[@]}${RESET} ${label} package(s):"
@@ -289,7 +267,7 @@ main() {
         log_info "Mode: ${YELLOW}Autonomous (--noconfirm)${RESET}"
     fi
 
-    local -ri total_targets=$(( ${#REPO_TARGETS[@]} + ${#AUR_TARGETS[@]} ))
+    local -ri total_targets=$(( ${#REPO_TARGETS[@]} ))
     if (( total_targets == 0 )); then
         log_warn "No packages configured for removal."
         return 0
@@ -298,11 +276,7 @@ main() {
     printf '%s\n' "${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
 
     if (( ${#REPO_TARGETS[@]} )); then
-        process_removal "Repo" "pacman" REPO_TARGETS 1
-    fi
-
-    if [[ -n $AUR_HELPER ]] && (( ${#AUR_TARGETS[@]} )); then
-        process_removal "AUR" "$AUR_HELPER" AUR_TARGETS 0
+        process_removal "Repo" "dnf" REPO_TARGETS 1
     fi
 
     printf '%s\n' "${DIM}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"

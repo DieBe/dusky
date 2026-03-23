@@ -4,7 +4,7 @@
 # Script: switch_to_zsh.sh
 # Description: Safely switches the user's shell to Zsh (Sudo-aware).
 # Author: Elite DevOps Engineer
-# Compatibility: Bash 5+ | Arch Linux
+# Compatibility: Bash 5+ | Fedora
 # ==============================================================================
 
 # 1. Strict Mode
@@ -45,7 +45,7 @@ fi
 # 3b. Verify Zsh installation
 if ! command -v "$TARGET_SHELL_BIN" >/dev/null 2>&1; then
   log_err "Zsh is not installed."
-  printf "       Run: ${BOLD}sudo pacman -S zsh${RESET} to install it.\n"
+  printf "       Run: ${BOLD}sudo dnf install -y zsh${RESET} to install it.\n"
   exit 1
 fi
 

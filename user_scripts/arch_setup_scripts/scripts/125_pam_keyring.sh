@@ -4,7 +4,7 @@
 # Script Name: setup_gnome_keyring.sh
 # Description: Automates the installation of Gnome Keyring components and 
 #              configures PAM for auto-unlocking on login.
-#              Designed for Arch Linux (Hyprland/UWSM ecosystem).
+#              Designed for Fedora (Hyprland/UWSM ecosystem).
 # Target:      /etc/pam.d/login
 # ==============================================================================
 
@@ -54,10 +54,10 @@ main() {
 
     # 2. Install Packages
     log_info "Installing necessary packages: ${PACKAGES[*]}..."
-    if pacman -S --needed --noconfirm "${PACKAGES[@]}"; then
+    if dnf -y install "${PACKAGES[@]}"; then
         log_info "Packages installed/verified successfully."
     else
-        log_error "Failed to install packages via pacman."
+        log_error "Failed to install packages via dnf."
         exit 1
     fi
 

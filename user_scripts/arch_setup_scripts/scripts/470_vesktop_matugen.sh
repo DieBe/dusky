@@ -3,7 +3,7 @@
 
 # ==============================================================================
 #  Vesktop & Matugen Automation Suite
-#  Target: Arch Linux (Hyprland) | Deps: yay/paru, jq
+#  Target: Fedora (Hyprland) | Deps: dnf, jq
 # ==============================================================================
 
 # --- Strict Mode ---
@@ -42,7 +42,7 @@ log_error()   { printf '%s[ERROR]%s %s\n' "$RED"    "$NC" "$1" >&2; exit 1; }
 
 # --- Privilege Check ---
 if [[ $EUID -eq 0 ]]; then
-    log_error "This script must NOT be run as root. It modifies user configs and uses AUR helpers."
+    log_error "This script must NOT be run as root. It modifies user configs."
 fi
 
 # ==============================================================================
@@ -89,17 +89,6 @@ if [[ "$_auto_mode" == "false" ]]; then
     fi
 fi
 
-# --- Detect AUR Helper ---
-AUR_HELPER=""
-if command -v paru &>/dev/null; then
-    AUR_HELPER="paru"
-elif command -v yay &>/dev/null; then
-    AUR_HELPER="yay"
-else
-    log_error "Neither 'paru' nor 'yay' found. Please install an AUR helper."
-fi
-readonly AUR_HELPER
-
 # ==============================================================================
 #  Phase 1: Installation
 # ==============================================================================
@@ -108,7 +97,7 @@ log_info "Phase 1: Package Management..."
 # Ensure jq is installed (vital for JSON editing in Phase 4)
 if ! command -v jq &>/dev/null; then
     log_info "Installing dependency: jq..."
-    sudo pacman -S --needed --noconfirm jq
+    sudo dnf -y install jq
 fi
 
 # Warn early if matugen is missing (config is written regardless)
@@ -116,12 +105,12 @@ if ! command -v matugen &>/dev/null; then
     log_warn "'matugen' is not installed. Theme generation will not work until it is."
 fi
 
-# Install vesktop-bin
-if pacman -Qi vesktop-bin &>/dev/null; then
-    log_success "vesktop-bin is already installed."
+# Install vesktop
+if rpm -q vesktop &>/dev/null; then
+    log_success "vesktop is already installed."
 else
-    log_info "Installing vesktop-bin via ${AUR_HELPER}..."
-    "$AUR_HELPER" -S --needed --noconfirm vesktop-bin
+    log_info "Installing vesktop via dnf..."
+    sudo dnf -y install vesktop
 fi
 
 # ==============================================================================

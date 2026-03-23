@@ -46,7 +46,7 @@ main() {
         case "${_choice,,}" in
             y|yes)
                 printf "%s[RUN]%s Installing intel-media-sdk...\n" "${YELLOW}" "${RESET}"
-                pacman -S --needed --noconfirm intel-media-sdk
+                dnf -y install intel-media-sdk
                 printf "%s[SUCCESS]%s Intel Media SDK installed.\n" "${GREEN}" "${RESET}"
                 break
                 ;;

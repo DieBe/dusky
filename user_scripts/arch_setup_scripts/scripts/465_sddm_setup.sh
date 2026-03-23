@@ -69,18 +69,18 @@ prompt_yes_no() {
 
 install_dependencies() {
     log_info "Checking dependencies..."
-    require_command pacman || log_error "Pacman not found. This script is designed for Arch Linux."
+    require_command dnf || log_error "dnf not found. This script is designed for Fedora."
 
     local -a pkgs=(sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg imagemagick git)
     local -a needed=()
 
     for pkg in "${pkgs[@]}"; do
-        pacman -Qi "${pkg}" &>/dev/null || needed+=("${pkg}")
+        rpm -q "${pkg}" &>/dev/null || needed+=("${pkg}")
     done
 
     if [[ ${#needed[@]} -gt 0 ]]; then
         log_info "Installing missing dependencies: ${needed[*]}"
-        pacman -S --needed --noconfirm "${needed[@]}" || log_error "Failed to install dependencies."
+        dnf -y install "${needed[@]}" || log_error "Failed to install dependencies."
     else
         log_success "All dependencies are installed."
     fi

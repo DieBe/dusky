@@ -218,11 +218,11 @@ ensure_gum() {
     ((HAS_GUM)) && return 0
 
     printf 'Error: gum is required for TUI mode.\n'
-    read -rn1 -p "Install via pacman? [y/N] " REPLY
+    read -rn1 -p "Install via dnf? [y/N] " REPLY
     printf '\n'
 
     if [[ "${REPLY:-n}" =~ ^[Yy]$ ]]; then
-        sudo pacman -S --needed --noconfirm gum || die "Failed to install gum"
+        sudo dnf -y install gum || die "Failed to install gum"
         _check_gum
         ((HAS_GUM)) || die "gum not found after install"
     else
