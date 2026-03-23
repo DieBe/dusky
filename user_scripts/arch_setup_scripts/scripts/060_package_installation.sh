@@ -8,6 +8,16 @@ fi
 
 command -v dnf >/dev/null 2>&1 || { echo "dnf is required." >&2; exit 1; }
 
+# Fedora package name replacements for Arch-era names.
+normalize_package_name() {
+  case "$1" in
+    polkit-kde-agent) printf '%s\n' "polkit-kde" ;;
+    swaynotificationcenter) printf '%s\n' "swaync" ;;
+    canberra-gtk3) printf '%s\n' "libcanberra-gtk3" ;;
+    *) printf '%s\n' "$1" ;;
+  esac
+}
+
 PACKAGES=(
   intel-media-driver mesa mesa-vulkan-drivers mesa-dri-drivers vulkan-loader vulkan-tools
   sof-firmware linux-firmware
@@ -26,7 +36,19 @@ PACKAGES=(
   ffmpeg mpv satty swayimg librsvg2-tools ImageMagick libheif ffmpegthumbnailer grim slurp wl-clipboard cliphist tesseract-langpack-eng
   btop htop nvtop inxi sysstat sysbench logrotate acpid thermald powertop iotop iftop lshw wev gnome-keyring libsecret seahorse yad fwupd perl
   snapshot gnome-text-editor gnome-calculator gnome-clocks zathura zathura-pdf-mupdf cava
+  matugen
 )
 
-# Install all packages; dnf skips already-installed ones.
-dnf -y install "${PACKAGES[@]}" || true
+# Install packages one by one so one unavailable package does not block all others.
+declare -a FAILED_PACKAGES=()
+for package in "${PACKAGES[@]}"; do
+  fedora_package="$(normalize_package_name "$package")"
+  if ! dnf -y install "$fedora_package"; then
+    FAILED_PACKAGES+=("$package")
+  fi
+done
+
+if (( ${#FAILED_PACKAGES[@]} > 0 )); then
+  printf 'Some packages could not be installed with dnf: %s\n' "${FAILED_PACKAGES[*]}" >&2
+  printf 'See %s for Fedora alternatives/COPR guidance.\n' "/FEDORA_PACKAGE_GAPS.md" >&2
+fi

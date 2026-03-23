@@ -19,9 +19,9 @@ readonly -a REPO_TARGETS=(
   dunst
   dolphin
   wofi
-  polkit-kde-agent
+  polkit-kde
   power-profiles-daemon
-  fluent-icon-theme-git
+  fluent-icon-theme
 )
 
 # ==============================================================================

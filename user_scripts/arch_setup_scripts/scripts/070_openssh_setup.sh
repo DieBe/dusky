@@ -108,7 +108,7 @@ if [[ ! "$response" =~ ^[yY]([eE][sS])?$ ]]; then
 fi
 
 # --- 7. Package Installation ---
-if ! rpm -q openssh &>/dev/null; then
+if ! rpm -q openssh-server &>/dev/null; then
     info "Installing OpenSSH..."
 
     if [[ -f /var/lib/rpm/.rpm.lock ]]; then
@@ -116,7 +116,7 @@ if ! rpm -q openssh &>/dev/null; then
     fi
 
     install_output=""
-    if install_output=$(dnf -y install openssh 2>&1); then
+    if install_output=$(dnf -y install openssh-server 2>&1); then
         success "OpenSSH installed."
     else
         error "Installation failed:"
@@ -656,7 +656,7 @@ else
     CANDIDATE_IP=$(ip -o -4 addr show scope global 2>/dev/null \
         | awk '
             $2 ~ /^(e|w)/ &&
-            $2 !~ /(docker|br-|vbox|virbr|waydroid|tun|warp|wg)/ {
+            $2 !~ /(docker|br-|vbox|virbr|tun|warp|wg)/ {
                 split($4, a, "/")
                 print a[1]
                 exit

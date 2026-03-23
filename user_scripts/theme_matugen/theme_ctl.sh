@@ -5,7 +5,7 @@
 # Description: Centralized state manager for system theming.
 #              Handles Matugen config, physical directory swaps, and wallpaper updates.
 #
-# Ecosystem:   Arch Linux / Hyprland / UWSM / Wayland
+# Ecosystem:   Fedora KDE / Hyprland / UWSM / Wayland
 #
 # Architecture:
 #   1. INTERNAL STATE: ~/.config/dusky/settings/dusky_theme/state.conf
