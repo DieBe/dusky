@@ -238,7 +238,8 @@ process_removal() {
 
     local -a cmd=()
     (( use_sudo )) && cmd+=(sudo)
-    cmd+=("$pkg_cmd" -y remove)
+    cmd+=("$pkg_cmd" remove)
+    (( AUTO_CONFIRM )) && cmd+=(-y)
     cmd+=(-- "${removable_targets[@]}")
 
     log_info "Removing ${BOLD}${#removable_targets[@]}${RESET} ${label} package(s):"

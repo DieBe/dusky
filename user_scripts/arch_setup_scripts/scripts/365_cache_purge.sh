@@ -28,8 +28,13 @@ fi
 log() { printf "%s::%s %s\n" "$B" "$RESET" "$1"; }
 
 # --- 3. Dynamic Configuration ---
-# DNF cache directories
-readonly DNF_CACHE="/var/cache/dnf"
+# DNF cache directory (respects /etc/dnf/dnf.conf cachedir if set)
+_dnf_cache_dir=""
+if [[ -r /etc/dnf/dnf.conf ]]; then
+    _dnf_cache_dir="$(awk -F= '/^[[:space:]]*cachedir[[:space:]]*=/ {gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2); print $2; exit}' /etc/dnf/dnf.conf 2>/dev/null || true)"
+fi
+readonly DNF_CACHE="${_dnf_cache_dir:-/var/cache/dnf}"
+unset _dnf_cache_dir
 
 # --- 4. Cleanup Tracking ---
 SUDO_KEEPALIVE_PID=""

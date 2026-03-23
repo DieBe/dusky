@@ -247,7 +247,7 @@ get_kernel_headers() {
     # Regex scan for standard headers, explicitly excluding API headers
     while read -r pkg; do
         headers+=("$pkg")
-    done < <(rpm -qa --qf '%{NAME}\n' 'kernel*-devel' 2>/dev/null || true)
+    done < <(rpm -qa --qf '%{NAME}\n' 2>/dev/null | grep -E '^kernel-devel' || true)
 
     if [[ ${#headers[@]} -eq 0 ]]; then
         log_warn "No kernel header packages found. DKMS will fail!" >&2

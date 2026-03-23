@@ -656,7 +656,7 @@ else
     CANDIDATE_IP=$(ip -o -4 addr show scope global 2>/dev/null \
         | awk '
             $2 ~ /^(e|w)/ &&
-            $2 !~ /(docker|br-|vbox|virbr|tun|warp|wg)/ {
+            $2 !~ /(docker|br-|vbox|virbr|waydroid|tun|warp|wg)/ {
                 split($4, a, "/")
                 print a[1]
                 exit
