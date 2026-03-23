@@ -8,6 +8,58 @@ fi
 
 command -v dnf >/dev/null 2>&1 || { echo "dnf is required." >&2; exit 1; }
 
+# Fedora package name replacements for Arch-era names.
+normalize_package_name() {
+  case "$1" in
+    polkit-kde-agent) printf '%s\n' "polkit-kde" ;;
+    swaynotificationcenter) printf '%s\n' "swaync" ;;
+    canberra-gtk3) printf '%s\n' "libcanberra-gtk3" ;;
+    *) printf '%s\n' "$1" ;;
+  esac
+}
+
+# Required commands used by active Fedora orchestrator scripts.
+ensure_required_commands() {
+  local -a requirements=(
+    "hyprctl:hyprland"
+    "brightnessctl:brightnessctl"
+    "notify-send:libnotify"
+    "uwsm:uwsm"
+    "swww:swww"
+    "swww-daemon:swww"
+    "matugen:matugen"
+    "xdg-mime:xdg-utils"
+  )
+  local req command package fedora_package
+  local -a attempted_commands=()
+  local -a still_missing_commands=()
+
+  for req in "${requirements[@]}"; do
+    command="${req%%:*}"
+    package="${req#*:}"
+    if ! command -v "$command" >/dev/null 2>&1; then
+      attempted_commands+=("$command")
+      fedora_package="$(normalize_package_name "$package")"
+      if ! dnf -y install "$fedora_package"; then
+        FAILED_PACKAGES+=("$fedora_package (required by command '$command')")
+        printf "Failed to install required Fedora package '%s' for command '%s'.\n" "$fedora_package" "$command" >&2
+      fi
+
+      if ! command -v "$command" >/dev/null 2>&1; then
+        still_missing_commands+=("$command")
+      fi
+    fi
+  done
+
+  if (( ${#attempted_commands[@]} > 0 )); then
+    printf 'Attempted to install providers for missing commands: %s\n' "${attempted_commands[*]}" >&2
+  fi
+
+  if (( ${#still_missing_commands[@]} > 0 )); then
+    printf 'Commands still missing after installation attempt: %s\n' "${still_missing_commands[*]}" >&2
+  fi
+}
+
 PACKAGES=(
   intel-media-driver mesa mesa-vulkan-drivers mesa-dri-drivers vulkan-loader vulkan-tools
   sof-firmware linux-firmware
@@ -26,7 +78,34 @@ PACKAGES=(
   ffmpeg mpv satty swayimg librsvg2-tools ImageMagick libheif ffmpegthumbnailer grim slurp wl-clipboard cliphist tesseract-langpack-eng
   btop htop nvtop inxi sysstat sysbench logrotate acpid thermald powertop iotop iftop lshw wev gnome-keyring libsecret seahorse yad fwupd perl
   snapshot gnome-text-editor gnome-calculator gnome-clocks zathura zathura-pdf-mupdf cava
+  matugen
 )
 
-# Install all packages; dnf skips already-installed ones.
-dnf -y install "${PACKAGES[@]}" || true
+# Install packages one by one so one unavailable package does not block all others.
+declare -a FAILED_PACKAGES=()
+for package in "${PACKAGES[@]}"; do
+  fedora_package="$(normalize_package_name "$package")"
+  if ! dnf -y install "$fedora_package"; then
+    if [[ "$fedora_package" == "$package" ]]; then
+      FAILED_PACKAGES+=("$fedora_package")
+      printf 'Failed to install package via dnf: %s\n' "$fedora_package" >&2
+    else
+      FAILED_PACKAGES+=("$fedora_package (from $package)")
+      printf 'Failed to install package via dnf: %s (normalized from %s)\n' "$fedora_package" "$package" >&2
+    fi
+  fi
+done
+
+ensure_required_commands
+
+if (( ${#FAILED_PACKAGES[@]} > 0 )); then
+  printf 'Some packages could not be installed with dnf: %s\n' "${FAILED_PACKAGES[*]}" >&2
+  SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+  REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../../.." && pwd)"
+  GAP_FILE="${REPO_ROOT}/FEDORA_PACKAGE_GAPS.md"
+  if [[ -f "$GAP_FILE" ]]; then
+    printf 'See %s for Fedora alternatives/COPR guidance.\n' "$GAP_FILE" >&2
+  else
+    printf 'See FEDORA_PACKAGE_GAPS.md in the Dusky repository for Fedora alternatives/COPR guidance.\n' >&2
+  fi
+fi
