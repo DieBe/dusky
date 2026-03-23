@@ -36,7 +36,6 @@ shopt -s extglob
 # Type 1 = Terminal (exec, uwsm-app -- $terminal --class $key -e $textEditor)
 declare -ra EDITOR_CATALOG=(
     "gnome-text-editor|0|org.gnome.TextEditor.desktop|GNOME Text Editor (GUI)"
-    "nvim|1|nvim.desktop|Neovim (Terminal)"
     "nano|1|nano.desktop|Nano (Terminal)"
     "code|0|code.desktop|VS Code (GUI)"
     "zeditor|0|dev.zed.Zed.desktop|Zed (GUI)"

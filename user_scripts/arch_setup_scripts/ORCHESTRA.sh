@@ -15,8 +15,7 @@
 
 # --- USER CONFIGURATION AREA ---
 
-# REMOVE THIS IN TEH FUTRE!!!!!!!!!!!!!!!!!!!!
-rm -rf /tmp/orchestra_1000.lock
+# NOTE: Do not delete arbitrary lock files here.
 
 # Directories to search for scripts (in order — first match wins)
 SCRIPT_SEARCH_DIRS=(
@@ -34,7 +33,7 @@ POST_SCRIPT_DELAY=0
 INSTALL_SEQUENCE=(
 
 # ------ CUSTOM PATH SCRIPTS -------
-    "U | deploy_dotfiles.sh --force"
+    # "U | deploy_dotfiles.sh --force"
 
 # ------ Setup SCRIPTS -------
 
@@ -83,12 +82,12 @@ INSTALL_SEQUENCE=(
     "S | 220_logrotate_optimization.sh"
 #    "S | 225_faillock_timeout.sh"
     "U | 230_non_asus_laptop.sh --auto"
-    "U | 235_file_manager_switch.sh --nemo"
+    "U | 235_file_manager_switch.sh --dolphin"
     "U | 236_browser_switcher.sh --firefox"
 
 #    "U | dusky_firefox_tui.sh --sync --all"
 
-    "U | 237_text_editer_switcher.sh --gnome-text-editor"
+    "U | 237_text_editer_switcher.sh --kate"
     "U | 238_terminal_switcher.sh --kitty"
     "U | 240_swaync_dgpu_fix.sh --disable"
 #    "S | 245_asusd_service_fix.sh"
@@ -118,8 +117,7 @@ INSTALL_SEQUENCE=(
     "S | 370_fedora_install_scripts_cleanup.sh"
     "U | 375_cursor_theme_bibata_classic_modern.sh"
     "U | 376_generate_colorfiles_for_current_wallpaer.sh"
-    "U | 380_nvidia_open_source.sh --auto"
-    "S | 381_nvidia_services.sh"
+    # Nvidia/GPU-specific setup intentionally omitted on Fedora KDE.
     "U | 390_clipboard_persistance.sh --ram"
     "S | 395_intel_media_sdk_check.sh"
     "U | 400_firefox_matugen_pywalfox.sh"
@@ -133,7 +131,7 @@ INSTALL_SEQUENCE=(
     "U | 455_hyprctl_reload.sh"
     "U | 460_switch_clipboard.sh --terminal"
     "S | 465_sddm_setup.sh --auto"
-    "U | 470_vesktop_matugen.sh --auto"
+    # Discord/Vesktop intentionally omitted.
     "U | 475_reverting_sleep_timeout.sh"
     "U | 480_dusky_commands.sh"
     "S | 485_sudoers_nopassword.sh"

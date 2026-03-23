@@ -69,44 +69,76 @@ main() {
         log_warn "$TARGET_FILE does not exist. Creating a new one."
     fi
 
-    # 4. Write New Configuration
-    # Note: Using standard ASCII spaces to ensure PAM compatibility.
-    log_info "Writing new PAM configuration to $TARGET_FILE..."
-    
-    cat > "$TARGET_FILE" <<EOF
-#%PAM-1.0
+    # 4. Non-destructive PAM update (idempotent)
+    # Fedora KDE systems rely on existing PAM stack; overwriting /etc/pam.d/login
+    # is risky and can break logins. We only insert missing pam_gnome_keyring lines.
+    log_info "Updating PAM configuration (non-destructive): $TARGET_FILE"
 
-# 1. Standard Checks
-auth       requisite     pam_nologin.so
-auth       include       system-local-login
-auth       optional      pam_gnome_keyring.so
-
-# 2. Account Management
-account    include       system-local-login
-
-# 3. Session Setup
-session    include       system-local-login
-session    optional      pam_gnome_keyring.so auto_start
-
-# 4. Password Changes
-password   include       system-local-login
-password   optional      pam_gnome_keyring.so
-EOF
-
-    # 5. Verification
-    if [[ $? -eq 0 ]]; then
-        log_info "Configuration updated successfully."
-        echo ""
-        printf "${BOLD}Success!${RESET} The GNOME Keyring PAM module is now configured.\n"
-        printf "A reboot or re-login is required for the PAM changes to take effect.\n"
-    else
-        log_error "Failed to write to $TARGET_FILE. Restoring backup..."
-        if [[ -f "$BACKUP_FILE" ]]; then
-            cp "$BACKUP_FILE" "$TARGET_FILE"
-            log_warn "Backup restored."
-        fi
+    # Ensure target exists
+    if [[ ! -f "$TARGET_FILE" ]]; then
+        log_error "$TARGET_FILE does not exist; refusing to create a new PAM stack from scratch."
+        log_error "Restore the default Fedora file and re-run."
         exit 1
     fi
+
+    local need_auth=0 need_session=0 need_password=0
+    if ! grep -Eq '^[[:space:]]*auth[[:space:]]+.*pam_gnome_keyring\.so' "$TARGET_FILE"; then
+        need_auth=1
+    fi
+    if ! grep -Eq '^[[:space:]]*session[[:space:]]+.*pam_gnome_keyring\.so' "$TARGET_FILE"; then
+        need_session=1
+    fi
+    if ! grep -Eq '^[[:space:]]*password[[:space:]]+.*pam_gnome_keyring\.so' "$TARGET_FILE"; then
+        need_password=1
+    fi
+
+    if (( need_auth == 0 && need_session == 0 && need_password == 0 )); then
+        log_info "pam_gnome_keyring entries already present; nothing to do."
+        printf "${BOLD}Success!${RESET} GNOME Keyring PAM entries already configured.\n"
+        return 0
+    fi
+
+    local tmp_file
+    tmp_file="$(mktemp)"
+
+    awk \
+        -v need_auth="$need_auth" \
+        -v need_session="$need_session" \
+        -v need_password="$need_password" \
+        '
+        BEGIN { done_auth=0; done_session=0; done_password=0 }
+        {
+            print $0
+
+            if (need_auth == 1 && done_auth == 0 && $0 ~ /^[[:space:]]*auth[[:space:]]+include[[:space:]]+system-local-login/) {
+                print "auth       optional      pam_gnome_keyring.so"
+                done_auth=1
+            }
+
+            if (need_session == 1 && done_session == 0 && $0 ~ /^[[:space:]]*session[[:space:]]+include[[:space:]]+system-local-login/) {
+                print "session    optional      pam_gnome_keyring.so auto_start"
+                done_session=1
+            }
+
+            if (need_password == 1 && done_password == 0 && $0 ~ /^[[:space:]]*password[[:space:]]+include[[:space:]]+system-local-login/) {
+                print "password   optional      pam_gnome_keyring.so"
+                done_password=1
+            }
+        }
+        END {
+            if (need_auth == 1 && done_auth == 0) print "auth       optional      pam_gnome_keyring.so"
+            if (need_session == 1 && done_session == 0) print "session    optional      pam_gnome_keyring.so auto_start"
+            if (need_password == 1 && done_password == 0) print "password   optional      pam_gnome_keyring.so"
+        }
+        ' "$TARGET_FILE" > "$tmp_file"
+
+    # Replace atomically
+    cp "$tmp_file" "$TARGET_FILE"
+    rm -f "$tmp_file"
+
+    log_info "PAM configuration updated successfully (non-destructive)."
+    printf "${BOLD}Success!${RESET} GNOME Keyring PAM entries have been added.\n"
+    printf "A reboot or re-login is required for the PAM changes to take effect.\n"
 }
 
 main "$@"

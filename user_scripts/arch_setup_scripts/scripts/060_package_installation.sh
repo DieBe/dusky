@@ -12,7 +12,7 @@ command -v dnf >/dev/null 2>&1 || { echo "dnf is required." >&2; exit 1; }
 normalize_package_name() {
   case "$1" in
     polkit-kde-agent) printf '%s\n' "polkit-kde" ;;
-    swaynotificationcenter) printf '%s\n' "swaync" ;;
+    swaynotificationcenter|swaync) printf '%s\n' "SwayNotificationCenter" ;;
     canberra-gtk3) printf '%s\n' "libcanberra-gtk3" ;;
     *) printf '%s\n' "$1" ;;
   esac
@@ -67,17 +67,19 @@ PACKAGES=(
   polkit xdg-utils socat inotify-tools libnotify file
   qt5-qtwayland qt6-qtwayland gtk3 gtk4 nwg-look qt5ct qt6ct qt6-qtsvg adw-gtk3-theme
   waybar swww hyprlock hypridle hyprsunset hyprpicker swaynotificationcenter rofi-wayland brightnessctl
-  pipewire wireplumber pipewire-pulseaudio playerctl bluez bluez-tools blueman pavucontrol canberra-gtk3 sox
-  btrfs-progs compsize zram-generator udisks2 udiskie dosfstools ntfs-3g xdg-user-dirs usbutils gnome-disk-utility
+  pipewire wireplumber pipewire-pulseaudio playerctl bluez bluez-tools blueman bluedevil pavucontrol canberra-gtk3 sox
+  btrfs-progs compsize zram-generator udisks2 udiskie dosfstools ntfs-3g xdg-user-dirs usbutils kde-partitionmanager
   unzip zip unrar p7zip cpio file-roller rsync
+  dolphin ark kate okular gwenview kcalc kclock
+  kwalletmanager5 pam-kwallet plasma-nm kde-connect kdeconnectd
   nemo nemo-extensions file-roller gvfs gvfs-smb gvfs-mtp gvfs-gphoto2 gvfs-afc ffmpegthumbnailer
   network-manager-applet iwd wget curl openssh-server firewalld vsftpd bmon ethtool httrack wavemon firefox
   kitty foot zsh zsh-syntax-highlighting starship fastfetch bat eza fd-find yazi gum tree fzf less ripgrep
   zsh-autosuggestions iperf3 qalculate moreutils
-  neovim git git-delta lazygit meson cmake clang uv jq bc viu chafa ccache mold shellcheck shfmt stylua prettier tree-sitter-cli nano
+  git git-delta meson cmake clang uv jq bc viu chafa ccache mold shellcheck shfmt prettier nano
   ffmpeg mpv satty swayimg librsvg2-tools ImageMagick libheif ffmpegthumbnailer grim slurp wl-clipboard cliphist tesseract-langpack-eng
   btop htop nvtop inxi sysstat sysbench logrotate acpid thermald powertop iotop iftop lshw wev gnome-keyring libsecret seahorse yad fwupd perl
-  snapshot gnome-text-editor gnome-calculator gnome-clocks zathura zathura-pdf-mupdf cava
+  zathura zathura-pdf-mupdf cava
   matugen
 )
 

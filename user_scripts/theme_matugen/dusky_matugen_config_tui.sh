@@ -79,7 +79,6 @@ register_items() {
     register_template 2 "VS Code"        "vscode"     "false" "vscodium"
     register_template 2 "Alacritty"      "alacritty"  "false" "alacritty"
     register_template 2 "Steam"          "steam"      "false" ""
-    register_template 2 "NeoVim"         "neovim"     "true"  "nvim"
     register_template 2 "Zed Editor"     "zed"        "false" "zeditor"
     register_template 2 "Yazi"           "yazi"       "true"  "yazi"
     register_template 2 "Zathura"        "zathura"    "false" "zathura"
@@ -89,9 +88,7 @@ register_items() {
 
     # Tab 3: Media & Misc
     register_template 3 "OBS Studio"     "obs"        "false" "obs"
-    register_template 3 "Vesktop"        "vesktop"    "false" "vesktop"
     register_template 3 "Beeper"         "beeper"     "false" "beeper"
-    register_template 3 "Spicetify"      "spicetify"  "false" "spicetify"
     register_template 3 "Cava"           "cava"       "true" ""
     register_template 3 "Dump All Matugen Colors" "master_dump" "false" ""
     register_template 3 "Btop"           "btop"       "true" ""

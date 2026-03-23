@@ -417,7 +417,7 @@
       {
           "format": "",
           "tooltip": false,
-          "on-click": "uwsm-app -- ~/user_scripts/spotify/spotify_toggle.sh"
+          "on-click": ""
       },
 
       "mpris":
