@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 # Script: 044_firefox_pywal.sh
 # Description: Setup Firefox, Pywalfox, and Matugen (Orchestra compatible)
-# Environment: Arch Linux / Hyprland / UWSM
+# Environment: Fedora / Hyprland / UWSM
 # -----------------------------------------------------------------------------
 
 # --- Safety & Error Handling ---
@@ -14,7 +14,6 @@ trap 'printf "\n[WARN] Script interrupted. Exiting.\n" >&2; exit 130' INT TERM
 # --- Configuration ---
 readonly TARGET_URL='https://addons.mozilla.org/en-US/firefox/addon/pywalfox/'
 readonly BROWSER_BIN='firefox'
-readonly NATIVE_HOST_PKG='python-pywalfox'
 readonly THEME_ENGINE_PKG='matugen'
 
 # --- Visual Styling ---
@@ -38,12 +37,6 @@ log_warn()    { printf '%b[WARNING]%b %s\n' "${C_WARN}" "${C_RESET}" "$1" >&2; }
 die()         { printf '%b[ERROR]%b %s\n' "${C_ERR}" "${C_RESET}" "$1" >&2; exit 1; }
 
 # --- Helper Functions ---
-check_aur_helper() {
-    if command -v paru &>/dev/null; then echo "paru";
-    elif command -v yay &>/dev/null; then echo "yay";
-    else return 1; fi
-}
-
 preflight() {
     if ((EUID == 0)); then die 'Run as normal user, not Root.'; fi
 }
@@ -67,36 +60,18 @@ main() {
 
     # 2. Standard Packages
     log_info "Ensuring ${BROWSER_BIN} and ${THEME_ENGINE_PKG} are installed..."
-    if sudo pacman -S --needed --noconfirm "${BROWSER_BIN}" "${THEME_ENGINE_PKG}"; then
+    if sudo dnf -y install "${BROWSER_BIN}" "${THEME_ENGINE_PKG}"; then
         log_success "Core packages verified."
     else
         die "Failed to install standard packages."
     fi
 
-    # 3. The Critical Pywalfox Logic (The "Smart" Part)
-    log_info "Handling ${NATIVE_HOST_PKG}..."
-    local helper
-    if helper=$(check_aur_helper); then
-        # Check if installed, then NUKE it to force clean state
-        if pacman -Qq "${NATIVE_HOST_PKG}" &>/dev/null; then
-            log_warn "Existing ${NATIVE_HOST_PKG} found. Removing to enforce clean rebuild..."
-            sudo pacman -Rns --noconfirm "${NATIVE_HOST_PKG}" || true
-        fi
-
-        log_info "Installing/Rebuilding ${NATIVE_HOST_PKG} with ${helper}..."
-        if "$helper" -S --rebuild --noconfirm "${NATIVE_HOST_PKG}"; then
-            log_success "${NATIVE_HOST_PKG} ready."
-            
-            # Auto-register manifest
-            if command -v pywalfox &>/dev/null; then
-                log_info "Refreshing manifest..."
-                pywalfox install || log_warn "Manifest update failed (non-fatal)."
-            fi
-        else
-            die "Failed to install ${NATIVE_HOST_PKG}."
-        fi
+    # 3. Fedora path: no helper-manager usage
+    if command -v pywalfox &>/dev/null; then
+        log_info "Refreshing pywalfox manifest..."
+        pywalfox install || log_warn "Manifest update failed (non-fatal)."
     else
-        log_warn "No AUR helper found. Skipping Pywalfox backend."
+        log_warn "pywalfox backend not found on this system; skipping backend setup."
     fi
 
     # 4. Instructions
@@ -107,7 +82,7 @@ main() {
     cat <<'BANNER'
    ╔═══════════════════════════════════════╗
    ║      PYWALFOX SETUP ASSISTANT         ║
-   ║      Arch / Hyprland / UWSM           ║
+   ║      Fedora / Hyprland / UWSM         ║
    ╚═══════════════════════════════════════╝
 BANNER
     printf '%b\n' "${C_RESET}"

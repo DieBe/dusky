@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #          Auto sets up SSH
 #          iptables/nftables), smart IP/Tailscale detection, sshd.socket aware.
-# Target:  Arch Linux (latest), Wayland/Hyprland
+# Target:  Fedora (latest), Wayland/Hyprland
 # Usage:   ./setup-ssh.sh [--auto|-a] [--help|-h]
 # ==============================================================================
 
@@ -89,7 +89,7 @@ if ! id "$REAL_USER" &>/dev/null; then
 fi
 
 # --- 6. User Confirmation ---
-printf "\n%sArch Linux SSH Provisioning%s\n" "$C_BOLD" "$C_RESET"
+printf "\n%sFedora SSH Provisioning%s\n" "$C_BOLD" "$C_RESET"
 printf "Provisions: OpenSSH · Firewalls · Tailscale · Network Routes\n\n"
 
 if [[ "$AUTO_MODE" == "true" ]]; then
@@ -108,21 +108,21 @@ if [[ ! "$response" =~ ^[yY]([eE][sS])?$ ]]; then
 fi
 
 # --- 7. Package Installation ---
-if ! pacman -Qi openssh &>/dev/null; then
+if ! rpm -q openssh &>/dev/null; then
     info "Installing OpenSSH..."
 
-    if [[ -f /var/lib/pacman/db.lck ]]; then
-        die "Pacman database locked (/var/lib/pacman/db.lck). Is another package manager running?"
+    if [[ -f /var/lib/rpm/.rpm.lock ]]; then
+        die "RPM database lock detected (/var/lib/rpm/.rpm.lock). Is another package manager running?"
     fi
 
     install_output=""
-    if install_output=$(pacman -S --noconfirm --needed openssh 2>&1); then
+    if install_output=$(dnf -y install openssh 2>&1); then
         success "OpenSSH installed."
     else
         error "Installation failed:"
         printf "%s\n" "$install_output" >&2
-        warn "If your package database is stale, run 'sudo pacman -Syu' first."
-        die "Refusing partial upgrade (-Sy). Fix the above and re-run."
+        warn "If your package metadata is stale, run 'sudo dnf makecache --refresh' first."
+        die "Fix the above and re-run."
     fi
 else
     success "OpenSSH is already installed."

@@ -2,7 +2,7 @@
 # MpV player configurator
 
 # ==============================================================================
-# Title:        Arch Linux MPV + UOSC + Thumbfast Auto-Config
+# Title:        Fedora MPV + UOSC + Thumbfast Auto-Config
 # Description:  Automated, idempotent setup for MPV on Hyprland/Wayland.
 # Version:      11.0 (Hardened: Crash Fixes + Network Retries + Stable Stack)
 # ==============================================================================
@@ -87,14 +87,14 @@ TEMP_DIR=$(mktemp -d)
 log_info "Checking installed packages..."
 MISSING_PKGS=()
 for pkg in "${DEPENDENCIES[@]}"; do
-    if ! pacman -Qi "$pkg" &>/dev/null; then
+    if ! rpm -q "$pkg" &>/dev/null; then
         MISSING_PKGS+=("$pkg")
     fi
 done
 
 if [[ ${#MISSING_PKGS[@]} -gt 0 ]]; then
     log_warn "Missing packages detected: ${MISSING_PKGS[*]}"
-    if ! sudo pacman -S --needed --noconfirm "${MISSING_PKGS[@]}"; then
+    if ! sudo dnf -y install "${MISSING_PKGS[@]}"; then
         log_error "Failed to install packages."
         exit 1
     fi

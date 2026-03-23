@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Configures hardware for non asus devices
 # ==============================================================================
-# ARCH LINUX / HYPRLAND / UWSM - HARDWARE CONFIGURATION TWEAKER
+# FEDORA / HYPRLAND / UWSM - HARDWARE CONFIGURATION TWEAKER
 # ==============================================================================
 # Purpose: Manage config lines for ASUS TUF F15 vs Non-ASUS hardware.
 #          - Non-ASUS: Comments out specific hardware lines.
@@ -38,12 +38,6 @@ setup_rules() {
     add_rule "$HYPR_KEYBINDS" 'bindld = ALT, 7, Set Refresh rate to 48Hz Asus Tuf, exec, hyprctl keyword monitor eDP-1,1920x1080@48,0x0,1.6 && sleep 2 && hyprctl keyword misc:vrr 0'
     add_rule "$HYPR_KEYBINDS" 'bindld = ALT, 8, Set Refresh rate to 144Hz Asus Tuf, exec, hyprctl keyword monitor eDP-1,1920x1080@144,0x0,1.6 && sleep 2 && hyprctl keyword misc:vrr 1'
     
-    # AI / TTS Tools (Updated paths)
-    add_rule "$HYPR_KEYBINDS" 'bindd = $mainMod, O, TTS Kokoro GPU, exec, wl-copy "$(wl-paste -p)" && uwsm-app -- $scripts/tts_stt/kokoro_gpu/speak.sh'
-    add_rule "$HYPR_KEYBINDS" 'bindd = $mainMod SHIFT, O, TTS Kokoro CPU, exec, wl-copy "$(wl-paste -p)" && uwsm-app -- $scripts/tts_stt/kokoro_cpu/kokoro.sh'
-    add_rule "$HYPR_KEYBINDS" 'bindd = $mainMod SHIFT, I, STT Whisper CPU, exec, uwsm-app -- $scripts/tts_stt/faster_whisper/faster_whisper_stt.sh'
-    add_rule "$HYPR_KEYBINDS" 'bindd = $mainMod, I, STT Parakeet GPU, exec, uwsm-app -- $scripts/tts_stt/parakeet/parakeet.sh'
-
     # --- 2. Input Configuration ---
     add_rule "$HYPR_INPUT" 'left_handed = true'
 }
