@@ -579,7 +579,6 @@ generate_colors() {
     local img="$1"
     local -a cmd
     local output
-    local i
 
     [[ -f "$img" ]] || die "Image file does not exist: $img"
 
@@ -587,34 +586,21 @@ generate_colors() {
 
     log "Matugen: Mode=[${THEME_MODE}] Type=[${MATUGEN_TYPE}] Contrast=[${MATUGEN_CONTRAST}] Index=[${SOURCE_COLOR_INDEX}] Base16=[${BASE16_BACKEND}]"
 
-    cmd=(matugen)
-    [[ "$BASE16_BACKEND" != "disable" && -n "$BASE16_BACKEND" ]] && cmd+=(--base16-backend "$BASE16_BACKEND")
+    if [[ "$BASE16_BACKEND" != "disable" && -n "$BASE16_BACKEND" ]]; then
+        warn "Base16 backend requested (${BASE16_BACKEND}) but matugen does not support --base16-backend; ignoring."
+    fi
+    if [[ -n "$SOURCE_COLOR_INDEX" && "$SOURCE_COLOR_INDEX" != "0" ]]; then
+        warn "Source color index requested (${SOURCE_COLOR_INDEX}) but matugen does not support --source-color-index; ignoring."
+    fi
+
+    cmd=(matugen image)
     cmd+=(--mode "$THEME_MODE")
     [[ "$MATUGEN_TYPE" != "disable" && -n "$MATUGEN_TYPE" ]] && cmd+=(--type "$MATUGEN_TYPE")
     [[ "$MATUGEN_CONTRAST" != "disable" && "$MATUGEN_CONTRAST" != "0" && "$MATUGEN_CONTRAST" != "0.0" && -n "$MATUGEN_CONTRAST" ]] && cmd+=(--contrast "$MATUGEN_CONTRAST")
-    cmd+=(--source-color-index "$SOURCE_COLOR_INDEX")
-    cmd+=(image "$img")
+    cmd+=("$img")
 
     if ! output=$("${cmd[@]}" 99>&- 2>&1); then
-        if [[ "$output" == *"out of bounds"* ]] && [[ "$SOURCE_COLOR_INDEX" != "0" ]]; then
-            warn "Requested color index ${SOURCE_COLOR_INDEX} out of bounds for ${img##*/}. Falling back to index 0."
-
-            for i in "${!cmd[@]}"; do
-                if [[ "${cmd[$i]}" == "--source-color-index" ]]; then
-                    cmd[$((i + 1))]="0"
-                    break
-                fi
-            done
-
-            if ! output=$("${cmd[@]}" 99>&- 2>&1); then
-                die "Matugen generation failed on fallback: $output"
-            fi
-
-            SOURCE_COLOR_INDEX="0"
-            write_state "$THEME_MODE" "$MATUGEN_TYPE" "$MATUGEN_CONTRAST" "$SOURCE_COLOR_INDEX" "$BASE16_BACKEND"
-        else
-            die "Matugen generation failed: $output"
-        fi
+        die "Matugen generation failed: $output"
     fi
 
     if command -v gsettings >/dev/null 2>&1; then
@@ -634,12 +620,15 @@ apply_solid_color() {
 
     log "Matugen Solid Color: Hex=[${hex}] Mode=[${THEME_MODE}] Type=[${MATUGEN_TYPE}] Contrast=[${MATUGEN_CONTRAST}] Base16=[${BASE16_BACKEND}]"
 
-    cmd=(matugen)
-    [[ "$BASE16_BACKEND" != "disable" && -n "$BASE16_BACKEND" ]] && cmd+=(--base16-backend "$BASE16_BACKEND")
+    if [[ "$BASE16_BACKEND" != "disable" && -n "$BASE16_BACKEND" ]]; then
+        warn "Base16 backend requested (${BASE16_BACKEND}) but matugen does not support --base16-backend; ignoring."
+    fi
+
+    cmd=(matugen color)
     cmd+=(--mode "$THEME_MODE")
     [[ "$MATUGEN_TYPE" != "disable" && -n "$MATUGEN_TYPE" ]] && cmd+=(--type "$MATUGEN_TYPE")
     [[ "$MATUGEN_CONTRAST" != "disable" && "$MATUGEN_CONTRAST" != "0" && "$MATUGEN_CONTRAST" != "0.0" && -n "$MATUGEN_CONTRAST" ]] && cmd+=(--contrast "$MATUGEN_CONTRAST")
-    cmd+=(color hex "$hex")
+    cmd+=(hex "$hex")
 
     if ! output=$("${cmd[@]}" 99>&- 2>&1); then
         die "Matugen color generation failed: $output"

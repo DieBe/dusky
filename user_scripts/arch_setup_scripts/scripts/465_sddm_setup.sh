@@ -69,21 +69,33 @@ prompt_yes_no() {
 
 install_dependencies() {
     log_info "Checking dependencies..."
-    require_command dnf || log_error "dnf not found. This script is designed for Fedora."
 
-    local -a pkgs=(sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg imagemagick git)
-    local -a needed=()
+    if command -v pacman &>/dev/null; then
+        local -a pkgs=(sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg imagemagick git)
+        local -a needed=()
 
-    for pkg in "${pkgs[@]}"; do
-        rpm -q "${pkg}" &>/dev/null || needed+=("${pkg}")
-    done
+        for pkg in "${pkgs[@]}"; do
+            pacman -Qi "${pkg}" &>/dev/null || needed+=("${pkg}")
+        done
 
-    if [[ ${#needed[@]} -gt 0 ]]; then
-        log_info "Installing missing dependencies: ${needed[*]}"
-        dnf -y install "${needed[@]}" || log_error "Failed to install dependencies."
-    else
-        log_success "All dependencies are installed."
+        if [[ ${#needed[@]} -gt 0 ]]; then
+            log_info "Installing missing dependencies: ${needed[*]}"
+            pacman -S --needed --noconfirm "${needed[@]}" || log_error "Failed to install dependencies."
+        else
+            log_success "All dependencies are installed."
+        fi
+        return 0
     fi
+
+    if command -v dnf &>/dev/null; then
+        local -a pkgs=(sddm git ImageMagick qt6-qtvirtualkeyboard qt6-qtsvg qt6-qtmultimedia)
+        log_info "Installing dependencies via dnf (best-effort)..."
+        dnf install -y "${pkgs[@]}" && log_success "Dependencies installed." || log_warn "dnf install failed; continuing best-effort."
+        return 0
+    fi
+
+    log_warn "No known package manager found; skipping dependency installation."
+    return 0
 }
 
 check_conflicts() {
@@ -110,17 +122,22 @@ check_conflicts() {
 }
 
 setup_sddm_service() {
+    if ! systemctl cat sddm.service &>/dev/null; then
+        log_warn "sddm.service not found; skipping service enable."
+        return 0
+    fi
+
     if systemctl is-enabled --quiet sddm.service; then
         log_success "SDDM service is already enabled."
         return
     fi
 
     if [[ "${AUTO_MODE}" == "true" ]]; then
-        systemctl enable sddm.service
+        systemctl enable sddm.service || log_warn "Failed to enable sddm.service"
     else
         printf '\nSDDM is not enabled. You can log in via TTY without it.\n'
         if prompt_yes_no "Enable SDDM to start at boot?"; then
-            systemctl enable sddm.service
+            systemctl enable sddm.service || log_warn "Failed to enable sddm.service"
             log_success "SDDM service enabled."
         fi
     fi

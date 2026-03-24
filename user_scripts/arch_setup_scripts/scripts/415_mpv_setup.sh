@@ -95,10 +95,10 @@ done
 if [[ ${#MISSING_PKGS[@]} -gt 0 ]]; then
     log_warn "Missing packages detected: ${MISSING_PKGS[*]}"
     if ! sudo dnf -y install "${MISSING_PKGS[@]}"; then
-        log_error "Failed to install packages."
-        exit 1
+        log_warn "Failed to install packages; continuing best-effort."
+    else
+        log_success "Dependencies installed."
     fi
-    log_success "Dependencies installed."
 else
     log_success "All dependencies already installed."
 fi
