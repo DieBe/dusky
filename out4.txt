@@ -1,0 +1,1060 @@
+--- Installation Started: 2026-03-24 16:36:47 ---
+--- Log File: /home/fedora/Documents/logs/install_20260324_163647.log ---
+[INFO] Search directory OK: /home/fedora/user_scripts/arch_setup_scripts/scripts
+[INFO] Search directory OK: /home/fedora/user_scripts/arch_setup_scripts
+[INFO] Search directory OK: /home/fedora/user_scripts/rofi
+[INFO] Search directory OK: /home/fedora/user_scripts/theme_matugen
+[INFO] Performing pre-flight validation...
+[SUCCESS] All sequence files verified and cached.
+[INFO] Sudo privileges required. Please authenticate.
+
+>>> PREVIOUS SESSION DETECTED <<<
+Do you want to [C]ontinue where you left off or [S]tart over? [C/s]: [INFO] State file reset. Starting fresh.
+
+>>> EXECUTION MODE <<<
+Do you want to run interactively (prompt before every script)? [y/N]: [INFO] Autonomous mode selected. Running all scripts without confirmation.
+[INFO] Processing 59 scripts...
+[RUN] [1/59] Executing: 005_hypr_custom_config_setup.sh (U)
+[0;34m[INFO][0m Initializing/Verifying Hyprland user configuration overlay...
+[0;34m[INFO][0m Directory exists: /home/fedora/.config/hypr/edit_here/source (verifying contents...)
+[0;34m[INFO][0m   - Exists: default_apps.conf
+[0;34m[INFO][0m   - Exists: monitors.conf
+[0;34m[INFO][0m   - Exists: keybinds.conf
+[0;34m[INFO][0m   - Exists: appearance.conf
+[0;34m[INFO][0m   - Exists: autostart.conf
+[0;34m[INFO][0m   - Exists: plugins.conf
+[0;34m[INFO][0m   - Exists: window_rules.conf
+[0;34m[INFO][0m   - Exists: workspace_rules.conf
+[0;34m[INFO][0m   - Exists: environment_variables.conf
+[0;34m[INFO][0m   - Exists: input.conf
+[0;34m[INFO][0m Loader file exists: /home/fedora/.config/hypr/edit_here/hyprland.conf
+[0;34m[INFO][0m Verifying main configuration at '/home/fedora/.config/hypr/hyprland.conf'...
+[0;32m[OK][0m   Main config already contains default_apps.conf source.
+[0;32m[OK][0m   Main config already contains the overlay loader source.
+
+[0;32m[OK][0m   Setup/Verification complete!
+[0;34m[INFO][0m Your custom configs are located in: /home/fedora/.config/hypr/edit_here
+[0;34m[INFO][0m To apply changes, restart Hyprland or run 'hyprctl reload'.
+[SUCCESS] Finished 005_hypr_custom_config_setup.sh
+[RUN] [2/59] Executing: 010_package_removal.sh --auto (U)
+[INFO]  Mode: Autonomous (--noconfirm)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[WARN]  Skipping 'dunst': exact package not installed.
+[WARN]  Skipping 'power-profiles-daemon': exact package not installed.
+[WARN]  Skipping 'fluent-icon-theme': exact package not installed.
+[WARN]  Skipping 'polkit-kde': required by installed package(s): plasma-workspace
+[WARN]  Skipping 'zathura': required by installed package(s): zathura-pdf-mupdf
+[WARN]  Skipping 'nemo': required by installed package(s): nemo-extensionsnemo-pythonnemo-search-helpers
+[WARN]  Skipping 'nemo-extensions': required by installed package(s): nemonemo-python
+[INFO]  Removing 8 Repo package(s):
+         wofi gnome-keyring seahorse gnome-text-editor gnome-calculator gnome-clocks zathura-pdf-mupdf network-manager-applet
+Unbekanntes Argument "--" für Kommando "remove". Fügen Sie "--help" hinzu, um weitere Informationen zu den Argumenten zu erhalten.
+Das Argument ist für Befehle verfügbar:. (Es muss nach dem Befehl platziert werden.)
+[ERROR] Failed to remove some Repo packages (exit code: 2).
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[WARN]  Cleanup completed with errors.
+
+[!] Script exited with code: 1
+[ERROR] Failed 010_package_removal.sh (Exit Code: 1).
+Action Required: Script execution failed.
+Do you want to [S]kip to next, [R]etry, or [Q]uit? (s/r/q): [WARN] Skipping 010_package_removal.sh (User Selection). NOT marking as complete.
+[RUN] [3/59] Executing: 015_set_thunar_terminal_kitty.sh (U)
+[INFO] Found existing uca.xml. Validating...
+[INFO] Action 'Open Terminal Here' exists. Updating command...
+[OK] Updated existing action to use Kitty.
+[SUCCESS] Finished 015_set_thunar_terminal_kitty.sh
+[RUN] [4/59] Executing: 020_desktop_apps_username_setter.sh (U)
+Arch Linux Desktop Path Fixer
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Target Directory: /home/fedora/.local/share/applications
+Target User:      fedora
+
+• airmon_ng.desktop (No changes needed)
+• asus_control.desktop (No changes needed)
+• btrfs_compression_stats.desktop (No changes needed)
+• cache_purge.desktop (No changes needed)
+• clipboard_persistance.desktop (No changes needed)
+• dusky_appearances.desktop (No changes needed)
+• dusky_battery_notify.desktop (No changes needed)
+• dusky_control_center.desktop (No changes needed)
+• dusky_hyprlock_switcher.desktop (No changes needed)
+• dusky_hypridle_timeout.desktop (No changes needed)
+• dusky_hypridle_toggle.desktop (No changes needed)
+• dusky_input.desktop (No changes needed)
+• dusky_gsettings.desktop (No changes needed)
+• dusky_keybinds.desktop (No changes needed)
+• dusky_monitor.desktop (No changes needed)
+• dusky_matugen_presets.desktop (No changes needed)
+• dusky_network.desktop (No changes needed)
+• dusky_power.desktop (No changes needed)
+• dusky_waybars.desktop (No changes needed)
+• dusky_window_rules.desktop (No changes needed)
+• dusky_workspace_manager.desktop (No changes needed)
+• dusky_site_blocker.desktop (No changes needed)
+• dusky_sliders.desktop (No changes needed)
+• dusky_swaync_side.desktop (No changes needed)
+• dusky_service_toggle.desktop (No changes needed)
+• file_switcher.desktop (No changes needed)
+• google_image_search.desktop (No changes needed)
+• IO_Monitor.desktop (No changes needed)
+• iphone_vnc.desktop (No changes needed)
+• matugen.desktop (No changes needed)
+• mouse_button_reverse.desktop (No changes needed)
+• music_recognition.desktop (No changes needed)
+• new_github_repo.desktop (No changes needed)
+• ollama_terminal.desktop (No changes needed)
+• opacity_blur_shadow.desktop (No changes needed)
+• openssh.desktop (No changes needed)
+• powersave.desktop (No changes needed)
+• powersave_off.desktop (No changes needed)
+• process_terminator.desktop (No changes needed)
+• relink_github_repo.desktop (No changes needed)
+• rotate_screen_clockwise.desktop (No changes needed)
+• rotate_screen_counter_clockwise.desktop (No changes needed)
+• rofi_emoji.desktop (No changes needed)
+• rofi_calculator.desktop (No changes needed)
+• rofi_wallpaper_selector.desktop (No changes needed)
+• scale_down.desktop (No changes needed)
+• scale_up.desktop (No changes needed)
+• sysbench_benchmark.desktop (No changes needed)
+• tailscale_setup.desktop (No changes needed)
+• tailscale_uninstall.desktop (No changes needed)
+• update_dusky.desktop (No changes needed)
+• warp.desktop (No changes needed)
+• wayclick.desktop (No changes needed)
+
+Summary
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✔ Updated:  0
+  • Skipped:  53
+
+[SUCCESS] Finished 020_desktop_apps_username_setter.sh
+[RUN] [5/59] Executing: 025_configure_keyboard.sh (U)
+[INFO] Detecting system keyboard configuration...
+[INFO] Patching /home/fedora/.config/hypr/source/input.conf → kb_layout = ch
+[OK] Configuration updated successfully.
+[SUCCESS] Finished 025_configure_keyboard.sh
+[RUN] [6/59] Executing: 035_configure_uwsm_gpu.sh --auto (U)
+[INFO] Starting Elite DevOps GPU Configuration...
+[INFO] Scanning GPU topology via sysfs...
+
+--- GPU Topology Detected ---
+  • /dev/dri/card0 [boot_vga] [default]
+      ├─ Name: Red Hat, Inc. Virtio 1.0 GPU (rev 01)
+      ├─ PCI : 0000:00:01.0
+      └─ Link: /dev/dri/by-path/pci-0000:00:01.0-card
+
+[INFO] Single GPU detected; using /dev/dri/card0.
+[OK] Config is strictly optimal and up to date: /home/fedora/.config/uwsm/env.d/gpu
+[INFO] Previewing active config parameters:
+-------------------------------------
+# UWSM GPU Config | Mode: SINGLE
+# Primary DRM node: /dev/dri/card0
+# Primary GPU: Vendor 0x1af4 | Red Hat, Inc. Virtio 1.0 GPU (rev 01) | 0000:00:01.0
+export AQ_DRM_DEVICES="$(readlink -f -- '/dev/dri/by-path/pci-0000:00:01.0-card')"
+-------------------------------------
+[OK] Done. Please restart your UWSM session.
+[SUCCESS] Finished 035_configure_uwsm_gpu.sh
+[RUN] [7/59] Executing: 040_long_sleep_timeout.sh --auto (U)
+[1;33m[1m>>> SETUP POWER CONFIGURATION NOTICE <<<[0m
+------------------------------------------------------------------------
+To ensure the installation/setup process completes without interruption:
+
+  1. [1;32mScreen Protection:[0m The screen WILL dim and turn off to save battery.
+     (This prevents battery drain if running on an unplugged laptop).
+     If you are on a desktop PC, this is fine and harmless.
+
+  2. [1;31mNo System Sleep:[0m The system WILL NOT suspend (sleep).
+     This ensures long-running compilations are not killed by idle timers.
+
+[1;34mNOTE:[0m These are temporary settings for the setup phase.
+This will later automatically revert to the defaults or you can customize
+these timeouts later by running: [1m~/user_scripts/hypridle/timeout.sh[0m
+------------------------------------------------------------------------
+[1mPROPOSED CONFIGURATION:[0m
+Target Config: [1;34m/home/fedora/.config/hypr/hypridle.conf[0m
+
+Dim Screen      : [1;32m120[0m s
+Lock Session    : [1;32m2480[0m s
+Screen Off      : [1;32m4600[0m s
+System Suspend  : [1;32m43200[0m s
+------------------------------------------------------------------------
+[1;34mAuto mode: applying settings without confirmation.[0m
+
+[1;34mWriting configuration...[0m
+[1;32m✓ Configuration saved successfully.[0m
+[1;34mRestarting hypridle service...[0m
+[1;32m✓ Hypridle restarted.[0m
+[SUCCESS] Finished 040_long_sleep_timeout.sh
+[RUN] [8/59] Executing: 060_package_installation.sh (S)
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Das Paket "intel-media-driver-25.2.6-1.fc42.x86_64" ist bereits installiert.
+Das Paket "mesa-vulkan-drivers-25.1.9-1.fc42.x86_64" ist bereits installiert.
+Das Paket "mesa-dri-drivers-25.1.9-1.fc42.x86_64" ist bereits installiert.
+Das Paket "vulkan-loader-1.4.313.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "vulkan-tools-1.4.313.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "alsa-sof-firmware-2025.12.1-1.fc42.noarch" ist bereits installiert.
+Das Paket "linux-firmware-20260221-1.fc42.noarch" ist bereits installiert.
+Das Paket "hyprland-0.51.1-3.fc42.x86_64" ist bereits installiert.
+Das Paket "uwsm-0.23.3-3.fc42.noarch" ist bereits installiert.
+Das Paket "xorg-x11-server-Xwayland-24.1.9-1.fc42.x86_64" ist bereits installiert.
+Das Paket "xdg-desktop-portal-hyprland-1:1.3.11-1.fc42.x86_64" ist bereits installiert.
+Das Paket "xdg-desktop-portal-gtk-1.15.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "polkit-126-3.fc42.1.x86_64" ist bereits installiert.
+Das Paket "xdg-utils-1.2.1-3.fc42.noarch" ist bereits installiert.
+Das Paket "socat-1.8.0.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "inotify-tools-4.23.9.0-4.fc42.x86_64" ist bereits installiert.
+Das Paket "libnotify-0.8.8-1.fc42.x86_64" ist bereits installiert.
+Das Paket "file-5.46-3.fc42.x86_64" ist bereits installiert.
+Das Paket "xhost-1.0.9-9.fc42.x86_64" ist bereits installiert.
+Das Paket "qt5-qtwayland-5.15.18-1.fc42.x86_64" ist bereits installiert.
+Das Paket "qt6-qtwayland-6.10.2-1.fc42.x86_64" ist bereits installiert.
+Das Paket "gtk3-3.24.49-2.fc42.x86_64" ist bereits installiert.
+Das Paket "gtk4-4.18.6-1.fc42.x86_64" ist bereits installiert.
+Das Paket "nwg-look-1.0.6-1.fc42.x86_64" ist bereits installiert.
+Das Paket "qt5ct-1.9-7.fc42.x86_64" ist bereits installiert.
+Das Paket "qt6ct-0.11-12.20250907git23a985f.fc42.x86_64" ist bereits installiert.
+Das Paket "qt6-qtsvg-6.10.2-1.fc42.x86_64" ist bereits installiert.
+Das Paket "adw-gtk3-theme-6.3-1.fc42.noarch" ist bereits installiert.
+Das Paket "waybar-0.13.0-2.fc42.x86_64" ist bereits installiert.
+Das Paket "swww-0.11.2-1.fc42.x86_64" ist bereits installiert.
+Das Paket "hyprlock-0.9.2-3.fc42.x86_64" ist bereits installiert.
+Das Paket "hypridle-0.1.7-3.fc42.x86_64" ist bereits installiert.
+Das Paket "hyprsunset-0.3.3-2.fc42.x86_64" ist bereits installiert.
+Das Paket "hyprpicker-0.4.5-4.fc42.x86_64" ist bereits installiert.
+Das Paket "SwayNotificationCenter-0.12.5-1.fc42.x86_64" ist bereits installiert.
+Das Paket "rofi-wayland-1.7.9+wayland1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "brightnessctl-0.5.1-13.fc42.x86_64" ist bereits installiert.
+Das Paket "pipewire-1.4.10-1.fc42.x86_64" ist bereits installiert.
+Das Paket "wireplumber-0.5.13-1.fc42.x86_64" ist bereits installiert.
+Das Paket "pipewire-pulseaudio-1.4.10-1.fc42.x86_64" ist bereits installiert.
+Das Paket "playerctl-2.4.1-10.fc42.x86_64" ist bereits installiert.
+Das Paket "bluez-5.84-2.fc42.x86_64" ist bereits installiert.
+Das Paket "bluez-tools-0.2.0-0.27.git20170912.7cb788c.fc42.x86_64" ist bereits installiert.
+Das Paket "blueman-1:2.4.6-1.fc42.x86_64" ist bereits installiert.
+Das Paket "bluedevil-6.6.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "pavucontrol-6.1-3.fc42.x86_64" ist bereits installiert.
+Das Paket "libcanberra-gtk3-0.30-37.fc42.x86_64" ist bereits installiert.
+Das Paket "sox-14.4.2.0-41.fc42.x86_64" ist bereits installiert.
+Das Paket "btrfs-progs-6.17.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "compsize-1.5^git20250123.d79eacf-12.fc42.x86_64" ist bereits installiert.
+Das Paket "zram-generator-1.2.1-2.fc42.x86_64" ist bereits installiert.
+Das Paket "udisks2-2.10.91-1.fc42.x86_64" ist bereits installiert.
+Das Paket "udiskie-2.5.8-1.fc42.noarch" ist bereits installiert.
+Das Paket "dosfstools-4.2-15.fc42.x86_64" ist bereits installiert.
+Das Paket "ntfs-3g-2:2022.10.3-9.fc42.x86_64" ist bereits installiert.
+Das Paket "xdg-user-dirs-0.18-9.fc42.x86_64" ist bereits installiert.
+Das Paket "usbutils-018-3.fc42.x86_64" ist bereits installiert.
+Das Paket "kde-partitionmanager-25.12.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "unzip-6.0-66.fc42.x86_64" ist bereits installiert.
+Das Paket "zip-3.0-43.fc42.x86_64" ist bereits installiert.
+Das Paket "unrar-7.1.7-1.fc42.x86_64" ist bereits installiert.
+Das Paket "p7zip-16.02-32.fc42.x86_64" ist bereits installiert.
+Das Paket "cpio-2.15-4.fc42.x86_64" ist bereits installiert.
+Das Paket "file-roller-44.6-1.fc42.x86_64" ist bereits installiert.
+Das Paket "rsync-3.4.1-5.fc42.x86_64" ist bereits installiert.
+Das Paket "dolphin-25.12.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "ark-25.12.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "okular-25.12.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "gwenview-1:25.12.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "kcalc-25.12.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "kwalletmanager5-25.12.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "pam-kwallet-6.6.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "plasma-nm-6.6.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "kde-connect-25.12.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "kdeconnectd-25.12.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "gvfs-1.58.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "gvfs-smb-1.58.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "gvfs-mtp-1.58.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "gvfs-gphoto2-1.58.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "gvfs-afc-1.58.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "ffmpegthumbnailer-2.2.4-1.fc42.x86_64" ist bereits installiert.
+Das Paket "iwd-3.9-1.fc42.x86_64" ist bereits installiert.
+Das Paket "wget2-wget-2.2.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "curl-8.11.1-7.fc42.x86_64" ist bereits installiert.
+Das Paket "openssh-server-9.9p1-13.fc42.x86_64" ist bereits installiert.
+Das Paket "firewalld-2.3.2-1.fc42.noarch" ist bereits installiert.
+Das Paket "vsftpd-3.0.5-14.fc42.x86_64" ist bereits installiert.
+Das Paket "bmon-4.0-12.fc42.x86_64" ist bereits installiert.
+Das Paket "ethtool-2:6.19-1.fc42.x86_64" ist bereits installiert.
+Das Paket "httrack-3.49.2-25.fc42.x86_64" ist bereits installiert.
+Das Paket "wavemon-0.9.6-3.fc42.x86_64" ist bereits installiert.
+Das Paket "firefox-148.0.2-1.fc42.x86_64" ist bereits installiert.
+Das Paket "kitty-0.43.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "foot-1.25.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "zsh-5.9-17.fc42.x86_64" ist bereits installiert.
+Das Paket "zsh-syntax-highlighting-0.8.0-5.fc42.noarch" ist bereits installiert.
+Das Paket "fastfetch-2.44.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "bat-0.25.0-9.fc42.x86_64" ist bereits installiert.
+Das Paket "fd-find-10.3.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "gum-0.16.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "tree-2.2.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "fzf-0.70.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "less-685-1.fc42.x86_64" ist bereits installiert.
+Das Paket "ripgrep-14.1.1-2.fc42.x86_64" ist bereits installiert.
+Das Paket "zsh-autosuggestions-0.7.1-2.fc42.noarch" ist bereits installiert.
+Das Paket "iperf3-3.18-3.fc42.x86_64" ist bereits installiert.
+Das Paket "qalculate-5.5.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "moreutils-0.68-4.fc42.x86_64" ist bereits installiert.
+Das Paket "git-2.53.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "git-delta-0.18.2-13.fc42.x86_64" ist bereits installiert.
+Das Paket "meson-1.7.2-1.fc42.noarch" ist bereits installiert.
+Das Paket "cmake-3.31.6-2.fc42.x86_64" ist bereits installiert.
+Das Paket "clang-20.1.8-4.fc42.x86_64" ist bereits installiert.
+Das Paket "uv-0.10.9-1.fc42.x86_64" ist bereits installiert.
+Das Paket "jq-1.7.1-11.fc42.x86_64" ist bereits installiert.
+Das Paket "bc-1.08.1-2.fc42.x86_64" ist bereits installiert.
+Das Paket "chafa-1.14.5-2.fc42.x86_64" ist bereits installiert.
+Das Paket "ccache-4.10.2-2.fc42.x86_64" ist bereits installiert.
+Das Paket "mold-2.40.4-1.fc42.x86_64" ist bereits installiert.
+Das Paket "ShellCheck-0.10.0-4.fc42.x86_64" ist bereits installiert.
+Das Paket "shfmt-3.7.0-5.fc41.x86_64" ist bereits installiert.
+Das Paket "nano-8.3-3.fc42.x86_64" ist bereits installiert.
+Das Paket "mpv-0.40.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "satty-0.20.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "swayimg-4.7-1.fc42.x86_64" ist bereits installiert.
+Das Paket "librsvg2-tools-2.60.0-5.fc42.x86_64" ist bereits installiert.
+Das Paket "ImageMagick-1:7.1.1.47-1.fc42.x86_64" ist bereits installiert.
+Das Paket "libheif-1.19.8-1.fc42.x86_64" ist bereits installiert.
+Das Paket "grim-1.5.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "slurp-1.5.0-4.fc42.x86_64" ist bereits installiert.
+Das Paket "wl-clipboard-2.2.1-4.fc42.x86_64" ist bereits installiert.
+Das Paket "cliphist-0.7.0-1.fc42.x86_64" ist bereits installiert.
+Das Paket "tesseract-langpack-eng-4.1.0-10.fc42.noarch" ist bereits installiert.
+Das Paket "btop-1.4.6-1.fc42.x86_64" ist bereits installiert.
+Das Paket "htop-3.4.1-1.fc42.x86_64" ist bereits installiert.
+Das Paket "nvtop-3.3.2-1.fc42.x86_64" ist bereits installiert.
+Das Paket "inxi-3.3.40-1.fc42.noarch" ist bereits installiert.
+Das Paket "sysstat-12.7.7-1.fc42.x86_64" ist bereits installiert.
+Das Paket "sysbench-1.0.20-19.fc42.x86_64" ist bereits installiert.
+Das Paket "logrotate-3.22.0-3.fc42.x86_64" ist bereits installiert.
+Das Paket "acpid-2.0.34-13.fc42.x86_64" ist bereits installiert.
+Das Paket "thermald-2.5.9-1.fc42.x86_64" ist bereits installiert.
+Das Paket "powertop-2.15-10.fc42.x86_64" ist bereits installiert.
+Das Paket "iotop-c-1.30-1.fc42.x86_64" ist bereits installiert.
+Das Paket "iftop-1.0-0.36.pre4.fc42.x86_64" ist bereits installiert.
+Das Paket "lshw-B.02.20-10.fc42.x86_64" ist bereits installiert.
+Das Paket "wev-1.0.1-0.20230429git0fc0549.fc42.x86_64" ist bereits installiert.
+Das Paket "yad-9.3-12.fc42.x86_64" ist bereits installiert.
+Das Paket "fwupd-2.0.20-1.fc42.x86_64" ist bereits installiert.
+Das Paket "perl-4:5.40.3-519.fc42.x86_64" ist bereits installiert.
+Das Paket "cava-0.10.2-4.fc42.x86_64" ist bereits installiert.
+Das Paket "matugen-2.4.1-1.fc42.x86_64" ist bereits installiert.
+Problem: Problem mit installiertem Paket
+  - Installiertes Paket ffmpeg-free-7.1.2-1.fc42.x86_64 kollidiert mit ffmpeg-free, welches von ffmpeg-7.1.1-5.fc42.x86_64 aus rpmfusion-free bereitgestellt wird
+  - Paket ffmpeg-7.1.1-5.fc42.x86_64 aus rpmfusion-free kollidiert mit ffmpeg-free, welches von ffmpeg-free-7.1.2-1.fc42.x86_64 aus updates bereitgestellt wird
+  - Paket ffmpeg-7.1.1-5.fc42.x86_64 aus rpmfusion-free kollidiert mit ffmpeg-free, welches von ffmpeg-free-7.1.1-3.fc42.x86_64 aus fedora bereitgestellt wird
+  - widersprüchliche Anforderungen
+  - Installiertes Paket ffmpeg-free-7.1.2-1.fc42.x86_64 kollidiert mit ffmpeg-free, welches von ffmpeg-7.1.2-1.fc42.x86_64 aus rpmfusion-free-updates bereitgestellt wird
+  - Paket ffmpeg-7.1.2-1.fc42.x86_64 aus rpmfusion-free-updates kollidiert mit ffmpeg-free, welches von ffmpeg-free-7.1.2-1.fc42.x86_64 aus updates bereitgestellt wird
+  - Paket ffmpeg-7.1.2-1.fc42.x86_64 aus rpmfusion-free-updates kollidiert mit ffmpeg-free, welches von ffmpeg-free-7.1.1-3.fc42.x86_64 aus fedora bereitgestellt wird
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --allowerasing, um das Entfernen installierter Pakete zur Problemlösung zu erlauben
+  --skip-broken, um deinstallierbare Pakete zu überspringen
+dnf returned a non-zero status during bulk install; continuing with required-command checks.
+[SUCCESS] Finished 060_package_installation.sh
+[RUN] [9/59] Executing: 065_enabling_user_services.sh (U)
+[1;34m[INFO][0m  Initializing UWSM/Hyprland User Service Setup...
+[1;32m[OK][0m    Enabled: [1mpipewire.socket[0m
+[1;32m[OK][0m    Enabled: [1mpipewire-pulse.socket[0m
+[1;32m[OK][0m    Enabled: [1mwireplumber.service[0m
+[1;32m[OK][0m    Enabled: [1mhypridle.service[0m
+[1;33m[WARN][0m  Unit [1mhyprpolkitagent.service[0m not found. Skipped.
+[1;32m[OK][0m    Enabled: [1mfumon.service[0m
+
+[1;34m[INFO][0m  Done. Success: 5 | Skipped/Failed: 1
+[SUCCESS] Finished 065_enabling_user_services.sh
+[RUN] [10/59] Executing: 070_openssh_setup.sh --auto (S)
+
+Fedora SSH Provisioning
+Provisions: OpenSSH · Firewalls · Tailscale · Network Routes
+
+[INFO] Autonomous mode — all prompts auto-accepted.
+[OK]   OpenSSH is already installed.
+[INFO] Ensuring SSH host keys exist...
+[OK]   SSH host keys verified.
+[INFO] Validating sshd configuration...
+[OK]   sshd configuration is valid.
+[INFO] SSH port: 22
+[INFO] Port 22 is held by sshd/systemd (expected).
+[INFO] Configuring firewalld for SSH (port 22)...
+[OK]   firewalld already allows SSH service in 'FedoraWorkstation'.
+[OK]   sshd.service is already active.
+[OK]   Verified: port 22 is listening.
+[INFO] Detecting Local LAN IP...
+
+======================================================
+ SSH Setup Complete!
+======================================================
+ IP Address      : 192.168.122.6
+ Port            : 22
+ User            : fedora
+
+ Connect from another device:
+    ssh fedora@192.168.122.6
+
+======================================================
+[SUCCESS] Finished 070_openssh_setup.sh
+[RUN] [11/59] Executing: 075_changing_shell_zsh.sh (U)
+[32m[SUCCESS][0m User '[1mfedora[0m' is already using Zsh (/usr/bin/zsh).
+[0m[SUCCESS] Finished 075_changing_shell_zsh.sh
+[RUN] [12/59] Executing: 100_fedora_optional_packages.sh (U)
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: adwaita-qt5
+Keine Übereinstimmung für Argument: adwaita-qt6
+Das Paket "adw-gtk3-theme-6.3-1.fc42.noarch" ist bereits installiert.
+Das Paket "papirus-icon-theme-20250501-1.fc42.noarch" ist bereits installiert.
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+If any optional package is unavailable in Fedora repos, see /FEDORA_PACKAGE_GAPS.md
+[SUCCESS] Finished 100_fedora_optional_packages.sh
+[RUN] [13/59] Executing: 110_aur_packages_sudo_services.sh (S)
+
+[1mStarting System Service Initialization...[0m
+[1m-----------------------------------------[0m
+[32m[OK][0m    Enabled & Started: [1mfwupd.service[0m
+[33m[SKIP][0m  Service not found: [1mwarp-svc.service[0m. Skipping...
+[33m[SKIP][0m  Service not found: [1mpreload[0m. Skipping...
+[33m[SKIP][0m  Service not found: [1masusd.service[0m. Skipping...
+[1m-----------------------------------------[0m
+[34m[INFO][0m  Operation complete.
+
+[0m[SUCCESS] Finished 110_aur_packages_sudo_services.sh
+[RUN] [14/59] Executing: 115_aur_packages_user_services.sh (U)
+
+[1mStarting User Service Initialization (UWSM/Hyprland)...[0m
+[1m-------------------------------------------------------[0m
+[32m[OK][0m    Enabled & Started: [35mhypridle.service[0m
+[1m-------------------------------------------------------[0m
+[34m[INFO][0m  User services updated.
+
+[0m[SUCCESS] Finished 115_aur_packages_user_services.sh
+[RUN] [15/59] Executing: 125_pam_keyring.sh (S)
+[1m[32m[INFO][0m Ensuring KDE wallet packages are installed: pam-kwallet kwalletmanager5...
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "pam-kwallet-6.6.3-1.fc42.x86_64" ist bereits installiert.
+Das Paket "kwalletmanager5-25.12.3-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+[1m[32m[INFO][0m KWallet packages installed/verified successfully.
+[1m[32m[INFO][0m Backing up existing configuration to /etc/pam.d/login.bak.20260324_163712...
+[1m[32m[INFO][0m Cleaning GNOME Keyring PAM entries (non-destructive): /etc/pam.d/login
+[1m[32m[INFO][0m PAM configuration cleaned successfully (non-destructive).
+[1m[32m[INFO][0m Removing GNOME Keyring packages if installed: gnome-keyring seahorse...
+Paket          Architektur Version        Paketquelle     Größe
+Wird entfernt:
+ gnome-keyring x86_64      48.0-1.fc42    fedora        3.4 MiB
+ seahorse      x86_64      47.0.1-2.fc42  fedora        7.2 MiB
+Nicht benötigte Abhängigkeiten werden entfernt:
+ gcr3          x86_64      3.41.1-10.fc42 fedora        1.7 MiB
+ gcr3-base     x86_64      3.41.1-10.fc42 fedora      795.1 KiB
+
+Transaktionszusammenfasung:
+ Entferne:           4 Pakete
+
+Nach dieser Operation werden 13 MiB frei (installiere 0 B, entferne 13 MiB).
+Transaktion wird ausgeführt
+[1/5] Transaktion vorbereiten           100% |  16.0   B/s |   4.0   B |  00m00s
+[2/5] Entferne seahorse-0:47.0.1-2.fc42 100% |   2.8 KiB/s | 921.0   B |  00m00s
+>>> Führe %preun scriptlet aus: gnome-keyring-0:48.0-1.fc42.x86_64              
+>>> Fertiggestellt %preun scriptlet: gnome-keyring-0:48.0-1.fc42.x86_64         
+>>> Scriptlet Ausgabe:                                                          
+>>> Removed '/home/fedora/.config/systemd/user/sockets.target.wants/gnome-keyrin
+>>> Removed '/home/fedora/.config/systemd/user/default.target.wants/gnome-keyrin
+>>>                                                                             
+[3/5] Entferne gnome-keyring-0:48.0-1.f 100% |   2.3 KiB/s | 141.0   B |  00m00s
+[4/5] Entferne gcr3-0:3.41.1-10.fc42.x8 100% |   6.0 KiB/s | 147.0   B |  00m00s
+[5/5] Entferne gcr3-base-0:3.41.1-10.fc 100% |   3.0   B/s |   9.0   B |  00m02s
+Abgeschlossen!
+[1m[32m[INFO][0m GNOME Keyring removal processed.
+[1mSuccess![0m GNOME Keyring removed/disabled; KDE KWallet packages ensured.
+[SUCCESS] Finished 125_pam_keyring.sh
+[RUN] [16/59] Executing: 130_copy_service_files.sh --default (U)
+[INFO] Starting Service Manager...
+------------------------------------------------
+[INFO] Processing: network_meter.service
+[INFO] Installing to /home/fedora/.config/systemd/user/network_meter.service...
+[INFO] Auto-applying default action (enable)...
+[INFO] Enabling and Starting...
+[OK] network_meter.service is active.
+------------------------------------------------
+[INFO] Processing: dusky.service
+[INFO] Installing to /home/fedora/.config/systemd/user/dusky.service...
+[INFO] Auto-applying default action (disable)...
+[INFO] Disabling/Stopping...
+[OK] dusky.service is inactive.
+------------------------------------------------
+[INFO] Processing: update_checker.service
+[INFO] Installing to /home/fedora/.config/systemd/user/update_checker.service...
+[INFO] Auto-applying default action (disable)...
+[INFO] Disabling/Stopping...
+[OK] update_checker.service is inactive.
+------------------------------------------------
+[INFO] Processing: update_checker.timer
+[INFO] Installing to /home/fedora/.config/systemd/user/update_checker.timer...
+[INFO] Auto-applying default action (enable)...
+[INFO] Enabling and Starting...
+[OK] update_checker.timer is active.
+------------------------------------------------
+[INFO] Processing: dusky_sliders.service
+[INFO] Installing to /home/fedora/.config/systemd/user/dusky_sliders.service...
+[INFO] Auto-applying default action (disable)...
+[INFO] Disabling/Stopping...
+[OK] dusky_sliders.service is inactive.
+------------------------------------------------
+[OK] All operations completed.
+[SUCCESS] Finished 130_copy_service_files.sh
+[RUN] [17/59] Executing: 131_dbus_copy_service_files.sh (U)
+[INFO] Starting Robust Link Manager...
+------------------------------------------------
+[INFO] Target: com.github.dusky.controlcenter.service
+[OK]   Link already exists and is correct.
+------------------------------------------------
+[INFO] Target: org.dusky.sliders.service
+[OK]   Link already exists and is correct.
+------------------------------------------------
+[OK]   Done.
+[SUCCESS] Finished 131_dbus_copy_service_files.sh
+[RUN] [18/59] Executing: 135_battery_notify_service.sh --auto (U)
+[0;34m[INFO][0m Auto-mode: No battery detected. Skipping installation.
+[SUCCESS] Finished 135_battery_notify_service.sh
+[RUN] [19/59] Executing: 140_fc_cache_fv.sh (U)
+[1;33m:: Refreshing System Font Cache...[0m
+Font directories:
+	/home/fedora/.local/share/fonts
+	/home/fedora/.local/share/flatpak/exports/share/fonts
+	/var/lib/flatpak/exports/share/fonts
+	/usr/local/share/fonts
+	/usr/share/fonts
+	/home/fedora/.fonts
+	/usr/share/fonts/aajohan-comfortaa-fonts
+	/usr/share/fonts/abattis-cantarell-fonts
+	/usr/share/fonts/abattis-cantarell-vf-fonts
+	/usr/share/fonts/adwaita-mono-fonts
+	/usr/share/fonts/adwaita-sans-fonts
+	/usr/share/fonts/fontawesome-6-brands-fonts
+	/usr/share/fonts/fontawesome-6-free-fonts
+	/usr/share/fonts/gdouros-symbola
+	/usr/share/fonts/google-carlito-fonts
+	/usr/share/fonts/google-crosextra-caladea-fonts
+	/usr/share/fonts/google-droid-sans-fonts
+	/usr/share/fonts/google-noto
+	/usr/share/fonts/google-noto-color-emoji-fonts
+	/usr/share/fonts/google-noto-emoji-fonts
+	/usr/share/fonts/google-noto-sans-cjk-vf-fonts
+	/usr/share/fonts/google-noto-sans-mono-cjk-vf-fonts
+	/usr/share/fonts/google-noto-serif-cjk-vf-fonts
+	/usr/share/fonts/google-noto-vf
+	/usr/share/fonts/jomolhari-fonts
+	/usr/share/fonts/liberation-mono-fonts
+	/usr/share/fonts/liberation-sans-fonts
+	/usr/share/fonts/liberation-serif-fonts
+	/usr/share/fonts/madan-fonts
+	/usr/share/fonts/open-sans
+	/usr/share/fonts/opensymbol
+	/usr/share/fonts/paktype-naskh-basic-fonts
+	/usr/share/fonts/rit-meera-new-fonts
+	/usr/share/fonts/rit-rachana-fonts
+	/usr/share/fonts/sil-padauk-fonts
+	/usr/share/fonts/stix-fonts
+	/usr/share/fonts/urw-base35
+	/usr/share/fonts/vazirmatn-vf-fonts
+/home/fedora/.local/share/fonts: skipping, no such directory
+/home/fedora/.local/share/flatpak/exports/share/fonts: skipping, no such directory
+/var/lib/flatpak/exports/share/fonts: skipping, no such directory
+/usr/local/share/fonts: skipping, no such directory
+/usr/share/fonts: caching, new cache contents: 0 fonts, 32 dirs
+/usr/share/fonts/aajohan-comfortaa-fonts: caching, new cache contents: 5 fonts, 0 dirs
+/usr/share/fonts/abattis-cantarell-fonts: caching, new cache contents: 5 fonts, 0 dirs
+/usr/share/fonts/abattis-cantarell-vf-fonts: caching, new cache contents: 6 fonts, 0 dirs
+/usr/share/fonts/adwaita-mono-fonts: caching, new cache contents: 4 fonts, 0 dirs
+/usr/share/fonts/adwaita-sans-fonts: caching, new cache contents: 20 fonts, 0 dirs
+/usr/share/fonts/fontawesome-6-brands-fonts: caching, new cache contents: 1 fonts, 0 dirs
+/usr/share/fonts/fontawesome-6-free-fonts: caching, new cache contents: 2 fonts, 0 dirs
+/usr/share/fonts/gdouros-symbola: caching, new cache contents: 1 fonts, 0 dirs
+/usr/share/fonts/google-carlito-fonts: caching, new cache contents: 4 fonts, 0 dirs
+/usr/share/fonts/google-crosextra-caladea-fonts: caching, new cache contents: 4 fonts, 0 dirs
+/usr/share/fonts/google-droid-sans-fonts: caching, new cache contents: 16 fonts, 0 dirs
+/usr/share/fonts/google-noto: caching, new cache contents: 184 fonts, 0 dirs
+/usr/share/fonts/google-noto-color-emoji-fonts: caching, new cache contents: 1 fonts, 0 dirs
+/usr/share/fonts/google-noto-emoji-fonts: caching, new cache contents: 1 fonts, 0 dirs
+/usr/share/fonts/google-noto-sans-cjk-vf-fonts: caching, new cache contents: 40 fonts, 0 dirs
+/usr/share/fonts/google-noto-sans-mono-cjk-vf-fonts: caching, new cache contents: 20 fonts, 0 dirs
+/usr/share/fonts/google-noto-serif-cjk-vf-fonts: caching, new cache contents: 40 fonts, 0 dirs
+/usr/share/fonts/google-noto-vf: caching, new cache contents: 278 fonts, 0 dirs
+/usr/share/fonts/jomolhari-fonts: caching, new cache contents: 1 fonts, 0 dirs
+/usr/share/fonts/liberation-mono-fonts: caching, new cache contents: 4 fonts, 0 dirs
+/usr/share/fonts/liberation-sans-fonts: caching, new cache contents: 4 fonts, 0 dirs
+/usr/share/fonts/liberation-serif-fonts: caching, new cache contents: 4 fonts, 0 dirs
+/usr/share/fonts/madan-fonts: caching, new cache contents: 1 fonts, 0 dirs
+/usr/share/fonts/open-sans: caching, new cache contents: 10 fonts, 0 dirs
+/usr/share/fonts/opensymbol: caching, new cache contents: 1 fonts, 0 dirs
+/usr/share/fonts/paktype-naskh-basic-fonts: caching, new cache contents: 3 fonts, 0 dirs
+/usr/share/fonts/rit-meera-new-fonts: caching, new cache contents: 1 fonts, 0 dirs
+/usr/share/fonts/rit-rachana-fonts: caching, new cache contents: 4 fonts, 0 dirs
+/usr/share/fonts/sil-padauk-fonts: caching, new cache contents: 2 fonts, 0 dirs
+/usr/share/fonts/stix-fonts: caching, new cache contents: 9 fonts, 0 dirs
+/usr/share/fonts/urw-base35: caching, new cache contents: 70 fonts, 0 dirs
+/usr/share/fonts/vazirmatn-vf-fonts: caching, new cache contents: 10 fonts, 0 dirs
+/home/fedora/.fonts: skipping, no such directory
+/usr/share/fonts/aajohan-comfortaa-fonts: skipping, looped directory detected
+/usr/share/fonts/abattis-cantarell-fonts: skipping, looped directory detected
+/usr/share/fonts/abattis-cantarell-vf-fonts: skipping, looped directory detected
+/usr/share/fonts/adwaita-mono-fonts: skipping, looped directory detected
+/usr/share/fonts/adwaita-sans-fonts: skipping, looped directory detected
+/usr/share/fonts/fontawesome-6-brands-fonts: skipping, looped directory detected
+/usr/share/fonts/fontawesome-6-free-fonts: skipping, looped directory detected
+/usr/share/fonts/gdouros-symbola: skipping, looped directory detected
+/usr/share/fonts/google-carlito-fonts: skipping, looped directory detected
+/usr/share/fonts/google-crosextra-caladea-fonts: skipping, looped directory detected
+/usr/share/fonts/google-droid-sans-fonts: skipping, looped directory detected
+/usr/share/fonts/google-noto: skipping, looped directory detected
+/usr/share/fonts/google-noto-color-emoji-fonts: skipping, looped directory detected
+/usr/share/fonts/google-noto-emoji-fonts: skipping, looped directory detected
+/usr/share/fonts/google-noto-sans-cjk-vf-fonts: skipping, looped directory detected
+/usr/share/fonts/google-noto-sans-mono-cjk-vf-fonts: skipping, looped directory detected
+/usr/share/fonts/google-noto-serif-cjk-vf-fonts: skipping, looped directory detected
+/usr/share/fonts/google-noto-vf: skipping, looped directory detected
+/usr/share/fonts/jomolhari-fonts: skipping, looped directory detected
+/usr/share/fonts/liberation-mono-fonts: skipping, looped directory detected
+/usr/share/fonts/liberation-sans-fonts: skipping, looped directory detected
+/usr/share/fonts/liberation-serif-fonts: skipping, looped directory detected
+/usr/share/fonts/madan-fonts: skipping, looped directory detected
+/usr/share/fonts/open-sans: skipping, looped directory detected
+/usr/share/fonts/opensymbol: skipping, looped directory detected
+/usr/share/fonts/paktype-naskh-basic-fonts: skipping, looped directory detected
+/usr/share/fonts/rit-meera-new-fonts: skipping, looped directory detected
+/usr/share/fonts/rit-rachana-fonts: skipping, looped directory detected
+/usr/share/fonts/sil-padauk-fonts: skipping, looped directory detected
+/usr/share/fonts/stix-fonts: skipping, looped directory detected
+/usr/share/fonts/urw-base35: skipping, looped directory detected
+/usr/share/fonts/vazirmatn-vf-fonts: skipping, looped directory detected
+/usr/lib/fontconfig/cache: not cleaning unwritable cache directory
+/home/fedora/.cache/fontconfig: cleaning cache directory
+/home/fedora/.fontconfig: not cleaning non-existent cache directory
+/usr/bin/fc-cache-64: succeeded
+
+[1;33m:: Verifying Font Aliases...[0m
+   Input Request:  [0mArial
+   System Return:  [0mLiberationSans-Regular.ttf: "Liberation Sans" "Regular"
+
+[0;31m[FAIL] System is NOT using Atkinson Hyperlegible Next.[0m
+       Current default for Arial is: Liberation Sans
+       Check ~/.config/fontconfig/fonts.conf or missing font files.
+[SUCCESS] Finished 140_fc_cache_fv.sh
+[RUN] [20/59] Executing: dusky_matugen_config_tui.sh --smart (U)
+[SUCCESS] Finished dusky_matugen_config_tui.sh
+[RUN] [21/59] Executing: 145_matugen_directories.sh (U)
+[1;34m[INFO][0m Initializing environment directories...
+[0;90m[SKIP][0m Directory exists: /home/fedora/.config/gtk-4.0
+[0;90m[SKIP][0m Directory exists: /home/fedora/.config/btop/themes
+[0;90m[SKIP][0m Directory exists: /home/fedora/.cache/wal
+[1;34m[INFO][0m Directory initialization complete.
+[SUCCESS] Finished 145_matugen_directories.sh
+[RUN] [22/59] Executing: 150_wallpapers_download.sh (U)
+:: Dusk Wallpaper Installer
+   Download curated wallpaper collection? (~1.7 GB)
+   [y/N] > [INFO] Aborted by user.
+[SUCCESS] Finished 150_wallpapers_download.sh
+[RUN] [23/59] Executing: 155_blur_shadow_opacity.sh (U)
+[1;34m[INFO][0m Initializing Max Performance/Visibility Mode...
+[1;34m[INFO][0m Setting brightness to 100%...
+[1;32m[SUCCESS][0m Brightness maximized.
+[1;34m[INFO][0m Engaging visual effects (on)...
+Warning: 4 hyprctl command(s) failed. Is Hyprland running?
+[1;32m[SUCCESS][0m Visual effects toggled successfully.
+[1;32m[SUCCESS][0m All operations completed cleanly.
+[SUCCESS] Finished 155_blur_shadow_opacity.sh
+[RUN] [24/59] Executing: 160_theme_ctl.sh (U)
+error: unexpected argument '--source-color-index' found
+
+  tip: to pass '--source-color-index' as a value, use '-- --source-color-index'
+
+Usage: matugen image <PATH>
+
+For more information, try '--help'.
+[ERROR] Failed 160_theme_ctl.sh (Exit Code: 2).
+Action Required: Script execution failed.
+Do you want to [S]kip to next, [R]etry, or [Q]uit? (s/r/q): [INFO] Retrying 160_theme_ctl.sh...
+[RUN] [24/59] Executing: 160_theme_ctl.sh (U)
+error: unexpected argument '--source-color-index' found
+
+  tip: to pass '--source-color-index' as a value, use '-- --source-color-index'
+
+Usage: matugen image <PATH>
+
+For more information, try '--help'.
+[ERROR] Failed 160_theme_ctl.sh (Exit Code: 2).
+Action Required: Script execution failed.
+Do you want to [S]kip to next, [R]etry, or [Q]uit? (s/r/q): [WARN] Skipping 160_theme_ctl.sh (User Selection). NOT marking as complete.
+[RUN] [25/59] Executing: 165_qtct_config.sh (U)
+[34m[1m[INFO][0m Processing configuration for [1mqt5ct[0m...
+[32m[1m[OK][0m Updated /home/fedora/.config/qt5ct/qt5ct.conf
+[34m[1m[INFO][0m Processing configuration for [1mqt6ct[0m...
+[32m[1m[OK][0m Updated /home/fedora/.config/qt6ct/qt6ct.conf
+[32m[1m[OK][0m Qt configuration sync complete.
+[SUCCESS] Finished 165_qtct_config.sh
+[RUN] [26/59] Executing: 170_waypaper_config_reset.sh (U)
+[1;34m[INFO][0m Initializing Waypaper configuration reset...
+[1;34m[INFO][0m Removed old configuration.
+[1;32m[OK][0m New configuration generated at: /home/fedora/.config/waypaper/config.ini
+[1;34m[NOTE][0m Waypaper config has been reset to fix teh git bug!
+[SUCCESS] Finished 170_waypaper_config_reset.sh
+[RUN] [27/59] Executing: 175_animation_default.sh (U)
+[[0;90m16:37:37[0m] [1;33m[WARN][0m  Config copied, but Hyprland reload failed (Is Hyprland running?)
+[[0;90m16:37:37[0m] [1;34m[INFO][0m  Switched animation to: [1;32mdusky[0m
+[SUCCESS] Finished 175_animation_default.sh
+[RUN] [28/59] Executing: 180_udev_usb_notify.sh (S)
+[0;34m[INFO][0m Setting permissions on source script...
+[0;32m[OK][0m Permissions set (755)
+[0;34m[INFO][0m Creating symlink...
+[0;32m[OK][0m Symlink created
+[0;34m[INFO][0m Writing udev rule...
+[0;32m[OK][0m Udev rule written
+[0;34m[INFO][0m Reloading udev rules...
+[0;32m[OK][0m Udev rules reloaded
+[0;32m[OK][0m Setup complete!
+[SUCCESS] Finished 180_udev_usb_notify.sh
+[RUN] [29/59] Executing: 185_terminal_default.sh (U)
+[0;34m[INFO][0m Writing /home/fedora/.config/xdg-terminals.list...
+[0;32m[OK][0m Done
+[SUCCESS] Finished 185_terminal_default.sh
+[RUN] [30/59] Executing: 205_zram_configuration.sh (S)
+[34m[INFO][0m Detected System RAM: 11947 MB
+[34m[INFO][0m RAM is > 8GB. Setting zram-size to 'ram - 2000'.
+[32m[SUCCESS][0m Configuration written to /etc/systemd/zram-generator.conf
+[34m[INFO][0m Reloading systemd daemon...
+[32m[SUCCESS][0m ZRAM configuration complete. Changes apply on next reboot or service restart.
+[SUCCESS] Finished 205_zram_configuration.sh
+[RUN] [31/59] Executing: 220_logrotate_optimization.sh (S)
+[0;34m[INFO] Checking /etc/logrotate.conf...[0m
+[0;32m[SUCCESS] Logrotate configuration validated/updated safely.[0m
+[SUCCESS] Finished 220_logrotate_optimization.sh
+[RUN] [32/59] Executing: 230_non_asus_laptop.sh --auto (U)
+[34m[INFO][0m Applying non-ASUS optimizations (Commenting lines)...
+[33m[SKIP][0m Pattern not found in: keybinds.conf
+[33m[SKIP][0m Already commented: keybinds.conf
+[33m[SKIP][0m Already commented: keybinds.conf
+[33m[SKIP][0m Pattern not found in: keybinds.conf
+[33m[SKIP][0m Pattern not found in: keybinds.conf
+[33m[SKIP][0m Pattern not found in: keybinds.conf
+[33m[SKIP][0m Pattern not found in: keybinds.conf
+[33m[SKIP][0m Pattern not found in: input.conf
+[SUCCESS] Finished 230_non_asus_laptop.sh
+[RUN] [33/59] Executing: 235_file_manager_switch.sh --dolphin (U)
+[1;31m[ERROR][0m Unknown argument: --dolphin
+[?1000l[?1002l[?1006l[?25h[0m
+[ERROR] Failed 235_file_manager_switch.sh (Exit Code: 1).
+Action Required: Script execution failed.
+Do you want to [S]kip to next, [R]etry, or [Q]uit? (s/r/q): [WARN] Skipping 235_file_manager_switch.sh (User Selection). NOT marking as complete.
+[RUN] [34/59] Executing: 236_browser_switcher.sh --firefox (U)
+[1;36m[INFO][0m Switched to Firefox
+[?1000l[?1002l[?1006l[?25h[0m
+[SUCCESS] Finished 236_browser_switcher.sh
+[RUN] [35/59] Executing: 237_text_editer_switcher.sh --kate (U)
+[1;31m[ERROR][0m Unknown argument: --kate
+[?1000l[?1002l[?1006l[?25h[0m
+[ERROR] Failed 237_text_editer_switcher.sh (Exit Code: 1).
+Action Required: Script execution failed.
+Do you want to [S]kip to next, [R]etry, or [Q]uit? (s/r/q): [WARN] Skipping 237_text_editer_switcher.sh (User Selection). NOT marking as complete.
+[RUN] [36/59] Executing: 238_terminal_switcher.sh --kitty (U)
+[1;36m[INFO][0m Switched to Kitty
+[?1000l[?1002l[?1006l[?25h[0m
+[SUCCESS] Finished 238_terminal_switcher.sh
+[RUN] [37/59] Executing: 240_swaync_dgpu_fix.sh --disable (U)
+[34m[INFO][0m Disable flag detected. Proceeding to DISABLE fix...
+[32m[OK][0m Configuration renamed to .bak (Fix Disabled)
+[34m[INFO][0m Reloading systemd user daemon...
+[34m[INFO][0m Restarting swaync.service...
+[32m[OK][0m swaync.service is up and running.
+[SUCCESS] Finished 240_swaync_dgpu_fix.sh
+[RUN] [38/59] Executing: 280_dusk_clipboard_errands_delete.sh --delete (U)
+[WARN]  Starting DELETE operation...
+[WARN]  This will PERMANENTLY remove data from BOTH the live system and backups.
+[INFO]  Preparing environment for data migration...
+[OK]    Deleted Live: /home/fedora/.local/share/rofi-cliphist
+[OK]    Cleanup complete. 1 items removed.
+[INFO]  Restarting background services...
+[SUCCESS] Finished 280_dusk_clipboard_errands_delete.sh
+[RUN] [39/59] Executing: 290_system_services.sh (S)
+
+--- Arch System Service Optimization ---
+[[0;34mINFO[0m] NetworkManager.service is already enabled.
+[[0;33mWARN[0m] Skipping: tlp.service (Package not installed / Unit not found)
+[[0;34mINFO[0m] udisks2.service is already enabled.
+[[0;34mINFO[0m] thermald.service is already enabled.
+[[0;34mINFO[0m] bluetooth.service is already enabled.
+[[0;34mINFO[0m] firewalld.service is already enabled.
+[[0;34mINFO[0m] fstrim.timer is already enabled.
+[[0;34mINFO[0m] systemd-timesyncd.service is already enabled.
+[[0;34mINFO[0m] acpid.service is already enabled.
+[[0;34mINFO[0m] vsftpd.service is already enabled.
+[[0;33mWARN[0m] Skipping: reflector.timer (Package not installed / Unit not found)
+[[0;33mWARN[0m] Skipping: swayosd-libinput-backend.service (Package not installed / Unit not found)
+[[0;34mINFO[0m] systemd-resolved.service is already enabled.
+
+--- Operation Complete ---
+[SUCCESS] Finished 290_system_services.sh
+[RUN] [40/59] Executing: 330_gtk_root_symlink.sh (S)
+Syncing GTK themes from: /home/fedora
+Processing GTK 3.0...
+ -> Linked GTK 3.0
+Processing GTK 4.0...
+ -> Linked GTK 4.0
+Success. Root themes are synced.
+[SUCCESS] Finished 330_gtk_root_symlink.sh
+[RUN] [41/59] Executing: 350_dns_systemd_resolve.sh (S)
+[1;34m[INFO][0m Writing configuration to /etc/systemd/resolved.conf...
+[1;32m[OK][0m Configuration written.
+[1;34m[INFO][0m Linking /etc/resolv.conf -> /run/systemd/resolve/stub-resolv.conf...
+[1;32m[OK][0m Symlink updated.
+[1;34m[INFO][0m Restarting systemd-resolved...
+[1;32m[OK][0m Service is active.
+
+[1;34m---[ DNS Status ]---[0m
+Global
+           Protocols: -LLMNR +mDNS DNSOverTLS=opportunistic
+                      DNSSEC=allow-downgrade/supported
+    resolv.conf mode: stub
+         DNS Servers: 9.9.9.9#dns.quad9.net 149.112.112.112#dns.quad9.net
+                      1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com
+Fallback DNS Servers: 9.9.9.9#dns.quad9.net 1.1.1.1#cloudflare-dns.com
+
+Link 2 (enp1s0)
+    Current Scopes: DNS mDNS/IPv4 mDNS/IPv6
+         Protocols: +DefaultRoute -LLMNR +mDNS DNSOverTLS=opportunistic
+                    DNSSEC=allow-downgrade/supported
+Current DNS Server: 192.168.122.1
+       DNS Servers: 192.168.122.1
+     Default Route: yes
+[SUCCESS] Finished 350_dns_systemd_resolve.sh
+[RUN] [42/59] Executing: 360_obsidian_pensive_vault_configure.sh (U)
+[SUCCESS] Finished 360_obsidian_pensive_vault_configure.sh
+[RUN] [43/59] Executing: 365_cache_purge.sh (U)
+Starting Aggressive Cache Cleanup...
+:: Measuring current cache usage...
+   Pacman Cache:   0 MB
+   Sync Database:  0 MB
+:: Purging Pacman cache (System)...
+   ✔ Pacman cache cleared.
+:: Calculating reclaimed space...
+
+========================================
+       DISK SPACE RECLAIMED REPORT      
+========================================
+Initial Usage:  0 MB
+Final Usage:    0 MB
+----------------------------------------
+TOTAL CLEARED: 0 MB (Already Clean)
+========================================
+[SUCCESS] Finished 365_cache_purge.sh
+[RUN] [44/59] Executing: 370_fedora_install_scripts_cleanup.sh (S)
+
+>>> POST-INSTALL CLEANUP SCANNER <<<
+[INFO] Scanning root directory (/) for installation artifacts...
+[SUCCESS] No scripts or repository found at root. System is clean.
+[SUCCESS] Finished 370_fedora_install_scripts_cleanup.sh
+[RUN] [45/59] Executing: 375_cursor_theme_bibata_classic_modern.sh (U)
+[INFO] Starting Bibata Cursor setup...
+[INFO] Resolving latest version...
+[INFO] Target: Bibata-Modern-Classic (v2.0.7) @ 18px
+[WARN] Removing existing installation for clean update...
+[INFO] Downloading and Extracting...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 1726k  100 1726k    0     0  1639k      0  0:00:01  0:00:01 --:--:-- 1639k
+[OK] Installed to /home/fedora/.local/share/icons/Bibata-Modern-Classic
+[INFO] Updated legacy index.theme fallback.
+[WARN] Hyprland not running/detected. Cursor installed but not active.
+[SUCCESS] Finished 375_cursor_theme_bibata_classic_modern.sh
+[RUN] [46/59] Executing: 376_generate_colorfiles_for_current_wallpaer.sh (U)
+error: unexpected argument '--source-color-index' found
+
+  tip: to pass '--source-color-index' as a value, use '-- --source-color-index'
+
+Usage: matugen image [OPTIONS] <PATH>
+
+For more information, try '--help'.
+[ERROR] Failed 376_generate_colorfiles_for_current_wallpaer.sh (Exit Code: 2).
+Action Required: Script execution failed.
+Do you want to [S]kip to next, [R]etry, or [Q]uit? (s/r/q): [WARN] Skipping 376_generate_colorfiles_for_current_wallpaer.sh (User Selection). NOT marking as complete.
+[RUN] [47/59] Executing: 390_clipboard_persistance.sh --ram (U)
+[0;34m[INFO][0m Applying Ephemeral settings (--ram)...
+[0;34m[INFO][0m Config is already set to Ephemeral.
+
+[0;34m[INFO][0m Changes saved. Live-reloading clipboard daemons...
+[0;32m[SUCCESS][0m Daemons reloaded. New persistence mode is now active.
+
+[1;37;41m================================================================================[0m
+[1;37;41m||                                                                            ||[0m
+[1;37;41m||                      !!! SYSTEM REBOOT REQUIRED !!!                        ||[0m
+[1;37;41m||                                                                            ||[0m
+[1;37;41m||  THE CLIPBOARD IS NOW IN A TRANSITIONAL STATE AND WILL NOT                 ||[0m
+[1;37;41m||  FUNCTION CORRECTLY UNTIL A FULL SYSTEM REBOOT IS PERFORMED.               ||[0m
+[1;37;41m||                                                                            ||[0m
+[1;37;41m||  PLEASE SAVE ALL YOUR WORK AND REBOOT YOUR COMPUTER AT THE EARLIEST.       ||[0m
+[1;37;41m||                                                                            ||[0m
+[1;37;41m================================================================================[0m
+
+[SUCCESS] Finished 390_clipboard_persistance.sh
+[RUN] [48/59] Executing: 395_intel_media_sdk_check.sh (S)
+[0;34m[INFO][0m Starting Intel Media SDK Compatibility Check...
+
+[0;34m>>> SYSTEM CPU INFORMATION:[0m
+13th Gen Intel(R) Core(TM) i7-1360P
+[0;34m----------------------------------------[0m
+
+[1mDo you have an Intel CPU between 5th Gen and 11th Gen?[0m
+Options: [y]es, [n]o, [d]on't know
+Select: [0;33m[INFO][0m Skipping installation (Hardware not compatible/selected).
+[SUCCESS] Finished 395_intel_media_sdk_check.sh
+[RUN] [49/59] Executing: 400_firefox_matugen_pywalfox.sh (U)
+
+[38;5;214m>>> OPTIONAL SETUP: FIREFOX, PYWALFOX & MATUGEN[0m
+This will install Firefox, Matugen, and the Pywalfox backend.
+[1mDo you want to proceed? [y/N]:[0m [38;5;45m[INFO][0m Skipping setup by user request.
+[SUCCESS] Finished 400_firefox_matugen_pywalfox.sh
+[RUN] [50/59] Executing: 410_waybar_swap_config.sh (U)
+[?1000h[?1002h[?1006h[?25l[2J[H[H[1;35m┌────────────────────────────────────────────────────────────────────────────┐[0m[K
+[1;35m│                        [1;37mDusky Waybar Manager [1;36mv4.8.1[1;35m                         │[0m[K
+[1;35m├────────────────────────────────────────────────────────────────────────────┤[0m[K
+[1;35m│                                                                            │[0m[K
+[1;35m│    [1;30m[TOP][0m 01_horizontal_block                                               │[0m[K
+[1;35m│    [1;30m[TOP][0m 02_horizontal_block_translucent                                   │[0m[K
+[1;35m│    [1;30m[BOT][0m 02_horizontal_material                                            │[0m[K
+[1;35m│    [1;30m[TOP][0m 03_horizontal_block_compact                                       │[0m[K
+[1;35m│    [1;30m[TOP][0m 04_horizontal_circular                                            │[0m[K
+[1;35m│    [1;30m[TOP][0m 05_horizontal_minimal                                             │[0m[K
+[1;35m│    [1;30m[TOP][0m 06_horizontal_nerdy_modern                                        │[0m[K
+[1;35m│    [1;30m[TOP][0m 07_horizontal_nerdy_modern_compact                                │[0m[K
+[1;35m│    [1;30m[RGT][0m 08_vertical_minimal                                               │[0m[K
+[1;35m│[1;36m ➤ [7m[1;33m[RGT][0m 09_vertical_modern                              [0m [1;32m● Active[0m          [1;35m│[0m[K
+[1;35m│    [1;30m[LFT][0m 10_vertical_nerdy_compact                                         │[0m[K
+[1;35m│    [1;30m[TOP][0m 11_horizontal_block_compact_visualizer                            │[0m[K
+[1;35m│    [1;30m[TOP][0m 12_horizontal_Dock                                                │[0m[K
+[1;35m│    [1;30m[TOP][0m 13_expandable_pill_custom                                         │[0m[K
+[1;35m│[1;30m    ▼ (more below)                                                   [10/16][1;35m│[0m[K
+[1;35m└────────────────────────────────────────────────────────────────────────────┘[0m[K
+[1;36m [Space] Toggle Position   [↑/↓ j/k] Navigate   [PgUp/PgDn] Page[0m[K
+[1;36m [Home/g] First   [End/G] Last   [Enter] Apply   [Esc/q] Cancel[0m[K
+[1;36m Config: [1;37m/home/fedora/.config/waybar[0m[K[J[21;1H[K [1;32m✓ Applied:[0m [1;37m09_vertical_modern[0m[K
+ [1;33mRestarting waybar...[0m[K[1;32m[OK][0m Applied: 09_vertical_modern
+[?1000l[?1002l[?1006l[?25h[0m
+[SUCCESS] Finished 410_waybar_swap_config.sh
+[RUN] [51/59] Executing: 415_mpv_setup.sh (U)
+[INFO] Starting MPV Setup...
+[INFO] Checking installed packages...
+[WARN] Missing packages detected: mpv unzip git curl yt-dlp mpv-mpris
+sudo: pacman: Befehl nicht gefunden
+[ERROR] Failed to install packages.
+[ERROR] Failed 415_mpv_setup.sh (Exit Code: 1).
+Action Required: Script execution failed.
+Do you want to [S]kip to next, [R]etry, or [Q]uit? (s/r/q): [WARN] Skipping 415_mpv_setup.sh (User Selection). NOT marking as complete.
+[RUN] [52/59] Executing: 440_config_bat_notify.sh --default (U)
+No battery detected. Skipping configuration (Desktop detected).
+[SUCCESS] Finished 440_config_bat_notify.sh
+[RUN] [53/59] Executing: 455_hyprctl_reload.sh (U)
+[SUCCESS] Finished 455_hyprctl_reload.sh
+[RUN] [54/59] Executing: 460_switch_clipboard.sh --terminal (U)
+[WARN] HYPRLAND_INSTANCE_SIGNATURE not set. Hyprland may not be running.
+[INFO] Initiating switch to Terminal Clipboard mode' (force)'...
+[INFO] Starting atomic file modification: uncomment...
+[INFO] Successfully updated configuration file.
+[WARN] hyprctl reload failed. Manual Hyprland reload may be required.
+[OK] Terminal Clipboard enabled.
+[SUCCESS] Finished 460_switch_clipboard.sh
+[RUN] [55/59] Executing: 465_sddm_setup.sh --auto (S)
+[0;36m[INFO][0m Autonomous mode enabled.
+[0;36m[INFO][0m Checking dependencies...
+[0;31m[ERROR][0m Pacman not found. This script is designed for Arch Linux.
+[ERROR] Failed 465_sddm_setup.sh (Exit Code: 1).
+Action Required: Script execution failed.
+Do you want to [S]kip to next, [R]etry, or [Q]uit? (s/r/q): [WARN] Skipping 465_sddm_setup.sh (User Selection). NOT marking as complete.
+[RUN] [56/59] Executing: 475_reverting_sleep_timeout.sh (U)
+
+[1mHYPRIDLE CONFIGURATOR[0m
+Target Config: [1;34m/home/fedora/.config/hypr/hypridle.conf[0m
+----------------------------------------
+Dim Screen      : [1;32m150[0m s
+Lock Session    : [1;32m300[0m s
+Screen Off      : [1;32m330[0m s
+System Suspend  : [1;32m600[0m s
+----------------------------------------
+[1;34mWriting configuration...[0m
+[1;32m✓ Configuration saved successfully.[0m
+[1;34mRestarting hypridle service...[0m
+[1;32m✓ Hypridle restarted.[0m
+[SUCCESS] Finished 475_reverting_sleep_timeout.sh
+[RUN] [57/59] Executing: 480_dusky_commands.sh (U)
+[INFO] Fleet Patcher Initialized: 2026-03-24 16:38:11
+[INFO] [1/10] Skipping (Already applied): gsettings set org.gnome.desktop.interface icon-theme "Papirus"
+[INFO] [2/10] Skipping (Already applied): gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3"
+[INFO] [3/10] Skipping (Already applied): gsettings set org.cinnamon.desktop.default-applications.terminal exec "kitty"
+[INFO] [4/10] Skipping (Already applied): mkdir -p "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"
+[INFO] [5/10] Skipping (Already applied): ln -nfs "$HOME/.config/matugen/generated/gtk-3.css" "$HOME/.config/gtk-3.0/gtk.css"
+[INFO] [6/10] Skipping (Already applied): ln -nfs "$HOME/.config/matugen/generated/gtk-4.css" "$HOME/.config/gtk-4.0/gtk.css"
+[INFO] [7/10] Skipping (Already applied): ln -nfs "/usr/share/themes/adw-gtk3/gtk-4.0/libadwaita.css" "$HOME/.config/gtk-4.0/libadwaita.css"
+[INFO] [8/10] Skipping (Already applied): ln -nfs "/usr/share/themes/adw-gtk3/gtk-4.0/libadwaita-tweaks.css" "$HOME/.config/gtk-4.0/libadwaita-tweaks.css"
+[INFO] [9/10] Skipping (Already applied): "$HOME/user_scripts/dusky_system/reload_cc/cc_restart.sh" --quiet &
+[INFO] [10/10] Skipping (Already applied): "$HOME/user_scripts/sliders/reload_sliders/reload_sliders.sh" --quiet &
+[SUCCESS] All fleet patches verified and up to date.
+[SUCCESS] Finished 480_dusky_commands.sh
+[RUN] [58/59] Executing: 485_sudoers_nopassword.sh (S)
+--------------------------------------------------------------------------------
+[INFO] Processing: /usr/bin/papirus-folders
+[WARN] NOT INSTALLED: The target binary does not exist. Skipping '/usr/bin/papirus-folders'.
+--------------------------------------------------------------------------------
+[INFO] Processing: /home/fedora/user_scripts/btrfs_snapshots/cc/04_dusky_snapshot_manager.py
+[INFO] Idempotency trigger: Existing managed rule found at zzzz-nopasswd-fedora-04_dusky_snapshot_manager-py
+[INFO] Verifying syntax via visudo...
+[SUCCESS] Rule already up to date for 04_dusky_snapshot_manager.py.
+--------------------------------------------------------------------------------
+[INFO] Processing: /home/fedora/user_scripts/btrfs_snapshots/cc/bash_wrapper_for_cc.sh
+[INFO] Idempotency trigger: Existing managed rule found at zzzz-nopasswd-fedora-bash_wrapper_for_cc-sh
+[INFO] Verifying syntax via visudo...
+[SUCCESS] Rule already up to date for bash_wrapper_for_cc.sh.
+--------------------------------------------------------------------------------
+[WARN] Completed successfully. 1 missing binaries were skipped.
+[SUCCESS] Finished 485_sudoers_nopassword.sh
+[RUN] [59/59] Executing: rofi_wallpaper_selctor.sh --cache-only --progress (U)
+[2026-03-24 16:38:11] [INFO] [pid=91735] ===== rofi_wallpaper_selctor.sh start =====
+[2026-03-24 16:38:11] [INFO] [pid=91735] Log file: /home/fedora/.local/state/rofi-wallpaper-selector/wallpaper-selector.log
+[2026-03-24 16:38:11] [INFO] [pid=91735] Parallel thumbnail jobs: 6
+[2026-03-24 16:38:11] [INFO] [pid=91735] Wallpaper cache is current.
+[SUCCESS] Finished rofi_wallpaper_selctor.sh
+
+================================================================
+NOTE: Some scripts were skipped or failed:
+ - 010_package_removal.sh
+ - 160_theme_ctl.sh
+ - 235_file_manager_switch.sh
+ - 237_text_editer_switcher.sh
+ - 376_generate_colorfiles_for_current_wallpaer.sh
+ - 415_mpv_setup.sh
+ - 465_sddm_setup.sh
+
+You can run them individually from their respective directories:
+  /home/fedora/user_scripts/arch_setup_scripts/scripts/
+  /home/fedora/user_scripts/arch_setup_scripts/
+  /home/fedora/user_scripts/rofi/
+  /home/fedora/user_scripts/theme_matugen/
+================================================================
+
+
+================================================================
+FINAL INSTRUCTIONS:
+1. Execution Time: 1m 24s
+2. Please REBOOT YOUR SYSTEM for all changes to take effect.
+3. This script is designed to be run multiple times.
+   If you think something wasn't done right, you can run this script again.
+   It will NOT re-download the whole thing again, but instead
+   only download/configure what might have failed the first time.
+================================================================
+
+[SUCCESS] Orchestrator finished successfully.

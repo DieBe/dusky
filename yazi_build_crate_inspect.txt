@@ -1,0 +1,17 @@
+## yazi-build crate paths
+/home/fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/yazi-build-26.1.22
+
+## bins in Cargo.toml
+--- /home/fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/yazi-build-26.1.22/Cargo.toml ---
+[[bin]]
+name = "yazi-build"
+path = "src/main.rs"
+
+[build-dependencies.yazi-term]
+
+## package name/version
+--- /home/fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/yazi-build-26.1.22/Cargo.toml ---
+name = "yazi-build"
+version = "26.1.22"
+name = "yazi-build"
+version = "26.1.22"

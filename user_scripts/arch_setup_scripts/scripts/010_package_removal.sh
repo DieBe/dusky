@@ -249,7 +249,7 @@ process_removal() {
     (( use_sudo )) && cmd+=(sudo)
     cmd+=("$pkg_cmd" remove)
     (( AUTO_CONFIRM )) && cmd+=(-y)
-    cmd+=(-- "${removable_targets[@]}")
+    cmd+=("${removable_targets[@]}")
 
     log_info "Removing ${BOLD}${#removable_targets[@]}${RESET} ${label} package(s):"
     printf '         %s%s%s\n' "${CYAN}" "${removable_targets[*]}" "${RESET}"

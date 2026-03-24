@@ -1,0 +1,14 @@
+## PATH
+/home/fedora/.config/Code/User/globalStorage/github.copilot-chat/debugCommand:/home/fedora/.config/Code/User/globalStorage/github.copilot-chat/copilotCli:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+
+## command -v
+/usr/bin/matugen
+/usr/bin/waybar
+
+## rpm -q
+matugen-2.4.1-1.fc42.x86_64
+waybar-0.13.0-2.fc42.x86_64
+
+## versions
+matugen 2.4.1
+Waybar v0.13.0

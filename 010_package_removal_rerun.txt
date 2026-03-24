@@ -1,0 +1,16 @@
+[INFO]  Mode: Autonomous (--noconfirm)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[WARN]  Skipping 'dunst': exact package not installed.
+[WARN]  Skipping 'power-profiles-daemon': exact package not installed.
+[WARN]  Skipping 'fluent-icon-theme': exact package not installed.
+[WARN]  Skipping 'gnome-keyring': exact package not installed.
+[WARN]  Skipping 'seahorse': exact package not installed.
+[WARN]  Skipping 'polkit-kde': required by installed package(s): plasma-workspace
+[WARN]  Skipping 'zathura': required by installed package(s): zathura-pdf-mupdf
+[WARN]  Skipping 'nemo': required by installed package(s): nemo-extensionsnemo-pythonnemo-search-helpers
+[WARN]  Skipping 'nemo-extensions': required by installed package(s): nemonemo-python
+[INFO]  Removing 6 Repo package(s):
+         wofi gnome-text-editor gnome-calculator gnome-clocks zathura-pdf-mupdf network-manager-applet
+sudo: Ein Passwort ist notwendig
+
+[!] Interrupted by signal.

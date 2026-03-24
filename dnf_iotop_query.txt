@@ -1,0 +1,10 @@
+## dnf list iotop
+Keine übereinstimmenden Pakete zum Auflisten
+
+## dnf list iotop-c
+Verfügbare Pakete
+iotop-c.x86_64 1.30-1.fc42 updates
+
+## dnf list iotop* (head)
+Verfügbare Pakete
+iotop-c.x86_64 1.30-1.fc42 updates

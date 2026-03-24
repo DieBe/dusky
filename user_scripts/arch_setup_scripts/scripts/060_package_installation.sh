@@ -53,6 +53,13 @@ if (( ENABLE_RPMFUSION == 1 )); then
   fi
 fi
 
+# Auto-detect already-enabled RPM Fusion repos even when not explicitly requested.
+if (( RPMFUSION_ENABLED == 0 )); then
+  if rpmfusion_enabled; then
+    RPMFUSION_ENABLED=1
+  fi
+fi
+
 # Fedora package name replacements for Arch-era names.
 normalize_package_name() {
   case "$1" in
@@ -60,6 +67,7 @@ normalize_package_name() {
     swaynotificationcenter|swaync) printf '%s\n' "SwayNotificationCenter" ;;
     canberra-gtk3) printf '%s\n' "libcanberra-gtk3" ;;
     sof-firmware) printf '%s\n' "alsa-sof-firmware" ;;
+    iotop) printf '%s\n' "iotop-c" ;;
     ffmpeg)
       if (( RPMFUSION_ENABLED == 1 )); then
         printf '%s\n' "ffmpeg"
@@ -74,6 +82,23 @@ normalize_package_name() {
 log_info() { printf '[INFO] %s\n' "$*"; }
 log_warn() { printf '[WARN] %s\n' "$*" >&2; }
 log_err()  { printf '[ERR]  %s\n' "$*" >&2; }
+
+preflight_ffmpeg_rpmfusion_swap() {
+  # If RPM Fusion is enabled, prefer ffmpeg from RPM Fusion. Fedora's ffmpeg-free
+  # conflicts with RPM Fusion's ffmpeg packages.
+  if (( RPMFUSION_ENABLED != 1 )); then
+    return 0
+  fi
+
+  if rpm -q ffmpeg >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if rpm -q ffmpeg-free >/dev/null 2>&1; then
+    log_info "RPM Fusion enabled; swapping ffmpeg-free -> ffmpeg (allow erasing) to avoid conflicts..."
+    dnf -y swap ffmpeg-free ffmpeg --allowerasing || record_failed "ffmpeg (swap failed)"
+  fi
+}
 
 # Required commands used by active Fedora orchestrator scripts.
 ensure_required_commands() {
@@ -263,9 +288,10 @@ install_source_tool_if_missing() {
       if command -v yazi >/dev/null 2>&1; then
         return 0
       fi
-      log_info "Installing yazi from source via cargo (yazi-fm)..."
+      log_info "Installing yazi from source via cargo (yazi-build)..."
       ensure_rust_build_deps || return 1
-      cargo_install_locked_root yazi-fm
+      mkdir -p /usr/local/bin
+      CARGO_INSTALL_ROOT=/usr/local cargo install --locked --force --root /usr/local yazi-build
       ;;
     *)
       log_warn "No source installer defined for: $tool"
@@ -351,6 +377,8 @@ for package in "${PACKAGES[@]}"; do
     SEEN_PACKAGES["$fedora_package"]=1
   fi
 done
+
+preflight_ffmpeg_rpmfusion_swap
 
 if ! bulk_install_packages "${NORMALIZED_PACKAGES[@]}"; then
   printf 'dnf returned a non-zero status during bulk install; continuing with required-command checks.\n' >&2

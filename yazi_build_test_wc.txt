@@ -1,0 +1,1 @@
+154 /home/fedora/dusky/yazi_build_test.txt

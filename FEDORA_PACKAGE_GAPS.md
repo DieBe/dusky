@@ -27,6 +27,7 @@ The Fedora installer script attempts to install several common CLI tools from so
 - `matugen` is available in Fedora repos (`dnf install matugen`).
 - `waypaper` is available in Fedora repos (`dnf install waypaper`).
 - `SwayNotificationCenter` is the Fedora package providing the `swaync` command.
+- `iotop` is provided as `iotop-c` on Fedora (`dnf install iotop-c`).
 
 ## COPR / Alternatives
 
@@ -39,6 +40,7 @@ If these show up in the installer’s “could not be installed” list, it mean
 
 - `starship`, `eza`, `yazi`, `lazygit`, `viu`, `stylua`: often installed via COPR or from upstream (many are Rust/Go projects).
 	- Rust-based tools can usually be installed via `cargo install <tool> --locked`.
+	- `yazi` is special: upstream crates require installing via `cargo install --force yazi-build --locked` (it installs `yazi-fm`/`yazi-cli`).
 	- Go-based tools can usually be installed via `go install <module>@latest`.
 - `prettier`: usually installed via Node (`npm install -g prettier`).
 
