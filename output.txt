@@ -1,0 +1,1115 @@
+--- Installation Started: 2026-03-24 08:43:17 ---
+--- Log File: /home/fedora/Documents/logs/install_20260324_084317.log ---
+[INFO] Search directory OK: /home/fedora/user_scripts/arch_setup_scripts/scripts
+[INFO] Search directory OK: /home/fedora/user_scripts/arch_setup_scripts
+[INFO] Search directory OK: /home/fedora/user_scripts/rofi
+[INFO] Search directory OK: /home/fedora/user_scripts/theme_matugen
+[INFO] Performing pre-flight validation...
+[SUCCESS] All sequence files verified and cached.
+[INFO] Sudo privileges required. Please authenticate.
+
+>>> PREVIOUS SESSION DETECTED <<<
+Do you want to [C]ontinue where you left off or [S]tart over? [C/s]: [INFO] State file reset. Starting fresh.
+
+>>> EXECUTION MODE <<<
+Do you want to run interactively (prompt before every script)? [y/N]: [INFO] Interactive mode selected. You will be asked before each script.
+[INFO] Processing 59 scripts...
+
+>>> NEXT SCRIPT [1/59]: 005_hypr_custom_config_setup.sh (U)
+    Description: Initializes or validates the 'edit_here' user configuration overlay for Hyprland.
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [1/59] Executing: 005_hypr_custom_config_setup.sh (U)
+[0;34m[INFO][0m Initializing/Verifying Hyprland user configuration overlay...
+[0;34m[INFO][0m Directory exists: /home/fedora/.config/hypr/edit_here/source (verifying contents...)
+[0;34m[INFO][0m   - Exists: default_apps.conf
+[0;34m[INFO][0m   - Exists: monitors.conf
+[0;34m[INFO][0m   - Exists: keybinds.conf
+[0;34m[INFO][0m   - Exists: appearance.conf
+[0;34m[INFO][0m   - Exists: autostart.conf
+[0;34m[INFO][0m   - Exists: plugins.conf
+[0;34m[INFO][0m   - Exists: window_rules.conf
+[0;34m[INFO][0m   - Exists: workspace_rules.conf
+[0;34m[INFO][0m   - Exists: environment_variables.conf
+[0;34m[INFO][0m   - Exists: input.conf
+[0;34m[INFO][0m Loader file exists: /home/fedora/.config/hypr/edit_here/hyprland.conf
+[0;34m[INFO][0m Verifying main configuration at '/home/fedora/.config/hypr/hyprland.conf'...
+[0;32m[OK][0m   Main config already contains default_apps.conf source.
+[0;32m[OK][0m   Main config already contains the overlay loader source.
+
+[0;32m[OK][0m   Setup/Verification complete!
+[0;34m[INFO][0m Your custom configs are located in: /home/fedora/.config/hypr/edit_here
+[0;34m[INFO][0m To apply changes, restart Hyprland or run 'hyprctl reload'.
+[SUCCESS] Finished 005_hypr_custom_config_setup.sh
+
+>>> NEXT SCRIPT [2/59]: 010_package_removal.sh --auto (U)
+    Description: Fedora wrapper: delegate to Fedora-native removal script.
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [2/59] Executing: 010_package_removal.sh --auto (U)
+[WARN]  Skipping 'dunst': exact package not installed.
+[WARN]  Skipping 'power-profiles-daemon': exact package not installed.
+[WARN]  Skipping 'fluent-icon-theme': exact package not installed.
+[WARN]  Skipping 'dolphin': required by installed package(s): dolphin-plugins-25.12.3-1.fc42.x86_64 
+[WARN]  Skipping 'wofi': required by installed package(s): Kein Paket benötigt wofi 
+[INFO]  No repo packages require removal.
+[OK]    All requested removals processed.
+[SUCCESS] Finished 010_package_removal.sh
+
+>>> NEXT SCRIPT [3/59]: 015_set_thunar_terminal_kitty.sh (U)
+    Description: Sets up "right click to open in terminal" for thunar
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [3/59] Executing: 015_set_thunar_terminal_kitty.sh (U)
+[INFO] Found existing uca.xml. Validating...
+[INFO] Action 'Open Terminal Here' exists. Updating command...
+[OK] Updated existing action to use Kitty.
+[SUCCESS] Finished 015_set_thunar_terminal_kitty.sh
+
+>>> NEXT SCRIPT [4/59]: 020_desktop_apps_username_setter.sh (U)
+    Description: Surgical update of 'Exec' paths in .desktop files to match $USER.
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [4/59] Executing: 020_desktop_apps_username_setter.sh (U)
+Arch Linux Desktop Path Fixer
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Target Directory: /home/fedora/.local/share/applications
+Target User:      fedora
+
+• airmon_ng.desktop (No changes needed)
+• asus_control.desktop (No changes needed)
+• btrfs_compression_stats.desktop (No changes needed)
+• cache_purge.desktop (No changes needed)
+• clipboard_persistance.desktop (No changes needed)
+• dusky_appearances.desktop (No changes needed)
+• dusky_battery_notify.desktop (No changes needed)
+• dusky_control_center.desktop (No changes needed)
+• dusky_hyprlock_switcher.desktop (No changes needed)
+• dusky_hypridle_timeout.desktop (No changes needed)
+• dusky_hypridle_toggle.desktop (No changes needed)
+• dusky_input.desktop (No changes needed)
+• dusky_gsettings.desktop (No changes needed)
+• dusky_keybinds.desktop (No changes needed)
+• dusky_monitor.desktop (No changes needed)
+• dusky_matugen_presets.desktop (No changes needed)
+• dusky_network.desktop (No changes needed)
+• dusky_power.desktop (No changes needed)
+• dusky_waybars.desktop (No changes needed)
+• dusky_window_rules.desktop (No changes needed)
+• dusky_workspace_manager.desktop (No changes needed)
+• dusky_site_blocker.desktop (No changes needed)
+• dusky_sliders.desktop (No changes needed)
+• dusky_swaync_side.desktop (No changes needed)
+• dusky_service_toggle.desktop (No changes needed)
+• file_switcher.desktop (No changes needed)
+• google_image_search.desktop (No changes needed)
+• IO_Monitor.desktop (No changes needed)
+• iphone_vnc.desktop (No changes needed)
+• matugen.desktop (No changes needed)
+• mouse_button_reverse.desktop (No changes needed)
+• music_recognition.desktop (No changes needed)
+• new_github_repo.desktop (No changes needed)
+• ollama_terminal.desktop (No changes needed)
+• opacity_blur_shadow.desktop (No changes needed)
+• openssh.desktop (No changes needed)
+• powersave.desktop (No changes needed)
+• powersave_off.desktop (No changes needed)
+• process_terminator.desktop (No changes needed)
+• relink_github_repo.desktop (No changes needed)
+• rotate_screen_clockwise.desktop (No changes needed)
+• rotate_screen_counter_clockwise.desktop (No changes needed)
+• rofi_emoji.desktop (No changes needed)
+• rofi_calculator.desktop (No changes needed)
+• rofi_wallpaper_selector.desktop (No changes needed)
+• scale_down.desktop (No changes needed)
+• scale_up.desktop (No changes needed)
+• sysbench_benchmark.desktop (No changes needed)
+• tailscale_setup.desktop (No changes needed)
+• tailscale_uninstall.desktop (No changes needed)
+• update_dusky.desktop (No changes needed)
+• warp.desktop (No changes needed)
+• wayclick.desktop (No changes needed)
+
+Summary
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✔ Updated:  0
+  • Skipped:  53
+
+[SUCCESS] Finished 020_desktop_apps_username_setter.sh
+
+>>> NEXT SCRIPT [5/59]: 025_configure_keyboard.sh (U)
+    Description: Auto-detects system keyboard layout and patches Hyprland config.
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [5/59] Executing: 025_configure_keyboard.sh (U)
+[INFO] Detecting system keyboard configuration...
+[INFO] Patching /home/fedora/.config/hypr/source/input.conf → kb_layout = ch
+[OK] Configuration updated successfully.
+[SUCCESS] Finished 025_configure_keyboard.sh
+
+>>> NEXT SCRIPT [6/59]: 035_configure_uwsm_gpu.sh --auto (U)
+    Description: -----------------------------------------------------------------------------
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [6/59] Executing: 035_configure_uwsm_gpu.sh --auto (U)
+[INFO] Starting Elite DevOps GPU Configuration...
+[INFO] Scanning GPU topology via sysfs...
+
+--- GPU Topology Detected ---
+  • /dev/dri/card0 [boot_vga] [default]
+      ├─ Name: Red Hat, Inc. Virtio 1.0 GPU (rev 01)
+      ├─ PCI : 0000:00:01.0
+      └─ Link: /dev/dri/by-path/pci-0000:00:01.0-card
+
+[INFO] Single GPU detected; using /dev/dri/card0.
+[OK] Config is strictly optimal and up to date: /home/fedora/.config/uwsm/env.d/gpu
+[INFO] Previewing active config parameters:
+-------------------------------------
+# UWSM GPU Config | Mode: SINGLE
+# Primary DRM node: /dev/dri/card0
+# Primary GPU: Vendor 0x1af4 | Red Hat, Inc. Virtio 1.0 GPU (rev 01) | 0000:00:01.0
+export AQ_DRM_DEVICES="$(readlink -f -- '/dev/dri/by-path/pci-0000:00:01.0-card')"
+-------------------------------------
+[OK] Done. Please restart your UWSM session.
+[SUCCESS] Finished 035_configure_uwsm_gpu.sh
+
+>>> NEXT SCRIPT [7/59]: 040_long_sleep_timeout.sh --auto (U)
+    Description: To set longer screen timeout during the setup process to prevent the device from going into sleep.
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [7/59] Executing: 040_long_sleep_timeout.sh --auto (U)
+[1;33m[1m>>> SETUP POWER CONFIGURATION NOTICE <<<[0m
+------------------------------------------------------------------------
+To ensure the installation/setup process completes without interruption:
+
+  1. [1;32mScreen Protection:[0m The screen WILL dim and turn off to save battery.
+     (This prevents battery drain if running on an unplugged laptop).
+     If you are on a desktop PC, this is fine and harmless.
+
+  2. [1;31mNo System Sleep:[0m The system WILL NOT suspend (sleep).
+     This ensures long-running compilations are not killed by idle timers.
+
+[1;34mNOTE:[0m These are temporary settings for the setup phase.
+This will later automatically revert to the defaults or you can customize
+these timeouts later by running: [1m~/user_scripts/hypridle/timeout.sh[0m
+------------------------------------------------------------------------
+[1mPROPOSED CONFIGURATION:[0m
+Target Config: [1;34m/home/fedora/.config/hypr/hypridle.conf[0m
+
+Dim Screen      : [1;32m120[0m s
+Lock Session    : [1;32m2480[0m s
+Screen Off      : [1;32m4600[0m s
+System Suspend  : [1;32m43200[0m s
+------------------------------------------------------------------------
+[1;34mAuto mode: applying settings without confirmation.[0m
+
+[1;34mWriting configuration...[0m
+[1;32m✓ Configuration saved successfully.[0m
+[1;34mRestarting hypridle service...[0m
+[1;32m✓ Hypridle restarted.[0m
+[SUCCESS] Finished 040_long_sleep_timeout.sh
+
+>>> NEXT SCRIPT [8/59]: 060_package_installation.sh (S)
+    Description: Fedora wrapper: delegate to Fedora-native installer.
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [8/59] Executing: 060_package_installation.sh (S)
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "intel-media-driver-25.2.6-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: mesa
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: mesa
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "mesa-vulkan-drivers-25.1.9-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "mesa-dri-drivers-25.1.9-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "vulkan-loader-1.4.313.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "vulkan-tools-1.4.313.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: sof-firmware
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: sof-firmware
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "linux-firmware-20260221-1.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "hyprland-0.51.1-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "uwsm-0.23.3-3.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "xorg-x11-server-Xwayland-24.1.9-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "xdg-desktop-portal-hyprland-1:1.3.11-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "xdg-desktop-portal-gtk-1.15.3-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: xorg-x11-server-utils
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: xorg-x11-server-utils (normalized from xhost)
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "polkit-126-3.fc42.1.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "polkit-kde-6.6.3-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "xdg-utils-1.2.1-3.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "socat-1.8.0.3-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "inotify-tools-4.23.9.0-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "libnotify-0.8.8-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "file-5.46-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "qt5-qtwayland-5.15.18-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "qt6-qtwayland-6.10.2-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gtk3-3.24.49-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gtk4-4.18.6-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "nwg-look-1.0.6-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "qt5ct-1.9-7.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "qt6ct-0.11-12.20250907git23a985f.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "qt6-qtsvg-6.10.2-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "adw-gtk3-theme-6.3-1.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "waybar-0.13.0-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "swww-0.11.2-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "hyprlock-0.9.2-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "hypridle-0.1.7-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "hyprsunset-0.3.3-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "hyprpicker-0.4.5-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "SwayNotificationCenter-0.12.5-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "rofi-wayland-1.7.9+wayland1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "brightnessctl-0.5.1-13.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "waypaper-2.7-1.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: hyprshade
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "pipewire-1.4.10-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "wireplumber-0.5.13-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "pipewire-pulseaudio-1.4.10-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "playerctl-2.4.1-10.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "bluez-5.84-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "bluez-tools-0.2.0-0.27.git20170912.7cb788c.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "blueman-1:2.4.6-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "pavucontrol-6.1-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "libcanberra-gtk3-0.30-37.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "sox-14.4.2.0-41.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "btrfs-progs-6.17.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "compsize-1.5^git20250123.d79eacf-12.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "zram-generator-1.2.1-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "udisks2-2.10.91-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "udiskie-2.5.8-1.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "dosfstools-4.2-15.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "ntfs-3g-2:2022.10.3-9.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "xdg-user-dirs-0.18-9.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "usbutils-018-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gnome-disk-utility-46.1-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "unzip-6.0-66.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "zip-3.0-43.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "unrar-7.1.7-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "p7zip-16.02-32.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "cpio-2.15-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "file-roller-44.6-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "rsync-3.4.1-5.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "nemo-6.4.5-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "nemo-extensions-6.4.5-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "file-roller-44.6-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gvfs-1.58.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gvfs-smb-1.58.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gvfs-mtp-1.58.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gvfs-gphoto2-1.58.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gvfs-afc-1.58.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "ffmpegthumbnailer-2.2.4-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "network-manager-applet-1.36.0-5.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "iwd-3.9-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "wget2-wget-2.2.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "curl-8.11.1-7.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "openssh-server-9.9p1-13.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "firewalld-2.3.2-1.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "vsftpd-3.0.5-14.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "bmon-4.0-12.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "ethtool-2:6.19-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "httrack-3.49.2-25.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "wavemon-0.9.6-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "firefox-148.0.2-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "kitty-0.43.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "foot-1.25.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "zsh-5.9-17.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "zsh-syntax-highlighting-0.8.0-5.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: starship
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: starship
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "fastfetch-2.44.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "bat-0.25.0-9.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: eza
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: eza
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "fd-find-10.3.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: yazi
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: yazi
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gum-0.16.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "tree-2.2.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "fzf-0.70.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "less-685-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "ripgrep-14.1.1-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "zsh-autosuggestions-0.7.1-2.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "iperf3-3.18-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "qalculate-5.5.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "moreutils-0.68-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "neovim-0.11.5-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "git-2.53.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "git-delta-0.18.2-13.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: lazygit
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: lazygit
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "meson-1.7.2-1.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "cmake-3.31.6-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "clang-20.1.8-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "uv-0.10.9-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "jq-1.7.1-11.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "bc-1.08.1-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: viu
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: viu
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "chafa-1.14.5-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "ccache-4.10.2-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "mold-2.40.4-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "ShellCheck-0.10.0-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "shfmt-3.7.0-5.fc41.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: stylua
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: stylua
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Keine Übereinstimmung für Argument: nodejs-prettier
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --skip-unavailable, um nicht-verfügbare Pakete zu überspringen
+Failed to install package via dnf: nodejs-prettier (normalized from prettier)
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "tree-sitter-cli-0.25.10-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "nano-8.3-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Auflösen der Transaktion fehlgeschlagen:
+Problem: Problem mit installiertem Paket
+  - Installiertes Paket ffmpeg-free-7.1.2-1.fc42.x86_64 kollidiert mit ffmpeg-free, welches von ffmpeg-7.1.1-5.fc42.x86_64 aus rpmfusion-free bereitgestellt wird
+  - Paket ffmpeg-7.1.1-5.fc42.x86_64 aus rpmfusion-free kollidiert mit ffmpeg-free, welches von ffmpeg-free-7.1.2-1.fc42.x86_64 aus updates bereitgestellt wird
+  - Paket ffmpeg-7.1.1-5.fc42.x86_64 aus rpmfusion-free kollidiert mit ffmpeg-free, welches von ffmpeg-free-7.1.1-3.fc42.x86_64 aus fedora bereitgestellt wird
+  - widersprüchliche Anforderungen
+  - Installiertes Paket ffmpeg-free-7.1.2-1.fc42.x86_64 kollidiert mit ffmpeg-free, welches von ffmpeg-7.1.2-1.fc42.x86_64 aus rpmfusion-free-updates bereitgestellt wird
+  - Paket ffmpeg-7.1.2-1.fc42.x86_64 aus rpmfusion-free-updates kollidiert mit ffmpeg-free, welches von ffmpeg-free-7.1.2-1.fc42.x86_64 aus updates bereitgestellt wird
+  - Paket ffmpeg-7.1.2-1.fc42.x86_64 aus rpmfusion-free-updates kollidiert mit ffmpeg-free, welches von ffmpeg-free-7.1.1-3.fc42.x86_64 aus fedora bereitgestellt wird
+Sie können versuchen, folgendes der Befehlszeile hinzuzufügen:
+  --allowerasing, um das Entfernen installierter Pakete zur Problemlösung zu erlauben
+  --skip-broken, um deinstallierbare Pakete zu überspringen
+Failed to install package via dnf: ffmpeg
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "mpv-0.40.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "satty-0.20.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "swayimg-4.7-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "librsvg2-tools-2.60.0-5.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "ImageMagick-1:7.1.1.47-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "libheif-1.19.8-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "ffmpegthumbnailer-2.2.4-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "grim-1.5.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "slurp-1.5.0-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "wl-clipboard-2.2.1-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "cliphist-0.7.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "tesseract-langpack-eng-4.1.0-10.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "btop-1.4.6-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "htop-3.4.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "nvtop-3.3.2-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "inxi-3.3.40-1.fc42.noarch" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "sysstat-12.7.7-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "sysbench-1.0.20-19.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "logrotate-3.22.0-3.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "acpid-2.0.34-13.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "thermald-2.5.9-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "powertop-2.15-10.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "iotop-c-1.30-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "iftop-1.0-0.36.pre4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "lshw-B.02.20-10.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "wev-1.0.1-0.20230429git0fc0549.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gnome-keyring-48.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "libsecret-0.21.7-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "seahorse-47.0.1-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "yad-9.3-12.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "fwupd-2.0.20-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "perl-4:5.40.3-519.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "snapshot-48.0.1-2.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gnome-text-editor-48.3-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gnome-calculator-48.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "gnome-clocks-48.0-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "zathura-0.5.14-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "zathura-pdf-mupdf-0.4.4-5.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "cava-0.10.2-4.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Aktualisiere und lade Paketquellen:
+Paketquellen geladen.
+Das Paket "matugen-2.4.1-1.fc42.x86_64" ist bereits installiert.
+
+Nichts zu tun.
+Some packages could not be installed with dnf: mesa sof-firmware xorg-x11-server-utils (from xhost) starship eza yazi lazygit viu stylua nodejs-prettier (from prettier) ffmpeg
+See /home/fedora/FEDORA_PACKAGE_GAPS.md for Fedora alternatives/COPR guidance.
+[SUCCESS] Finished 060_package_installation.sh
+
+>>> NEXT SCRIPT [9/59]: 065_enabling_user_services.sh (U)
+    Description: Enables user services
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [9/59] Executing: 065_enabling_user_services.sh (U)
+[1;34m[INFO][0m  Initializing UWSM/Hyprland User Service Setup...
+[1;32m[OK][0m    Enabled: [1mpipewire.socket[0m
+[1;32m[OK][0m    Enabled: [1mpipewire-pulse.socket[0m
+[1;32m[OK][0m    Enabled: [1mwireplumber.service[0m
+[1;32m[OK][0m    Enabled: [1mhypridle.service[0m
+[1;33m[WARN][0m  Unit [1mhyprpolkitagent.service[0m not found. Skipped.
+[1;32m[OK][0m    Enabled: [1mfumon.service[0m
+[1;32m[OK][0m    Enabled: [1mgnome-keyring-daemon.service[0m
+[1;32m[OK][0m    Enabled: [1mgnome-keyring-daemon.socket[0m
+
+[1;34m[INFO][0m  Done. Success: 7 | Skipped/Failed: 1
+[SUCCESS] Finished 065_enabling_user_services.sh
+
+>>> NEXT SCRIPT [10/59]: 070_openssh_setup.sh --auto (S)
+    Description: Auto sets up SSH
+Do you want to [P]roceed, [S]kip, or [Q]uit? (p/s/q): [RUN] [10/59] Executing: 070_openssh_setup.sh --auto (S)
+
+Arch Linux SSH Provisioning
+Provisions: OpenSSH · Firewalls · Tailscale · Network Routes
+
+[INFO] Autonomous mode — all prompts auto-accepted.
+[INFO] Installing OpenSSH...
+[ERR]  Installation failed:
+070_openssh_setup.sh: Zeile 119: pacman: Kommando nicht gefunden.
+[WARN] If your package database is stale, run 'sudo pacman -Syu' first.
+[ERR]  Refusing partial upgrade (-Sy). Fix the above and re-run.
+
+[!] Script exited with errors (code 1). Some changes may have been partially applied.
+[ERROR] Failed 070_openssh_setup.sh (Exit Code: 1).
+Action Required: Script execution failed.
+Do you want to [S]kip to next, [R]etry, or [Q]uit? (s/r/q): [INFO] Stopping execution as requested.
+[ERROR] Orchestrator exited with error code 1.

@@ -8,12 +8,65 @@ fi
 
 command -v dnf >/dev/null 2>&1 || { echo "dnf is required." >&2; exit 1; }
 
+ENABLE_RPMFUSION=0
+if [[ ${1:-} == "--enable-rpmfusion" ]]; then
+  ENABLE_RPMFUSION=1
+  shift
+fi
+
+declare -a FAILED_PACKAGES=()
+declare -A FAILED_PACKAGES_SEEN=()
+
+record_failed() {
+  local item="${1:-}"
+  [[ -z "$item" ]] && return 0
+  if [[ -z ${FAILED_PACKAGES_SEEN["$item"]+x} ]]; then
+    FAILED_PACKAGES+=("$item")
+    FAILED_PACKAGES_SEEN["$item"]=1
+  fi
+}
+
+rpmfusion_enabled() {
+  dnf -q repolist --enabled 2>/dev/null | grep -Eq '^(rpmfusion-free|rpmfusion-nonfree)\b'
+}
+
+enable_rpmfusion() {
+  local fedora_version
+  fedora_version="$(rpm -E %fedora)"
+  if rpmfusion_enabled; then
+    return 0
+  fi
+  if rpm -q rpmfusion-free-release rpmfusion-nonfree-release >/dev/null 2>&1; then
+    return 0
+  fi
+
+  dnf -y install \
+    "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${fedora_version}.noarch.rpm" \
+    "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${fedora_version}.noarch.rpm"
+}
+
+RPMFUSION_ENABLED=0
+if (( ENABLE_RPMFUSION == 1 )); then
+  enable_rpmfusion || record_failed "rpmfusion release packages"
+  if rpmfusion_enabled; then
+    RPMFUSION_ENABLED=1
+  fi
+fi
+
 # Fedora package name replacements for Arch-era names.
 normalize_package_name() {
   case "$1" in
     polkit-kde-agent) printf '%s\n' "polkit-kde" ;;
     swaynotificationcenter|swaync) printf '%s\n' "SwayNotificationCenter" ;;
     canberra-gtk3) printf '%s\n' "libcanberra-gtk3" ;;
+    sof-firmware) printf '%s\n' "alsa-sof-firmware" ;;
+    ffmpeg)
+      if (( RPMFUSION_ENABLED == 1 )); then
+        printf '%s\n' "ffmpeg"
+      else
+        printf '%s\n' "ffmpeg-free"
+      fi
+      ;;
     *) printf '%s\n' "$1" ;;
   esac
 }
@@ -31,29 +84,17 @@ ensure_required_commands() {
     "xdg-mime:xdg-utils"
   )
   local req command package fedora_package
-  local -a attempted_commands=()
   local -a still_missing_commands=()
 
   for req in "${requirements[@]}"; do
     command="${req%%:*}"
     package="${req#*:}"
     if ! command -v "$command" >/dev/null 2>&1; then
-      attempted_commands+=("$command")
+      still_missing_commands+=("$command")
       fedora_package="$(normalize_package_name "$package")"
-      if ! dnf -y install "$fedora_package"; then
-        FAILED_PACKAGES+=("$fedora_package (required by command '$command')")
-        printf "Failed to install required Fedora package '%s' for command '%s'.\n" "$fedora_package" "$command" >&2
-      fi
-
-      if ! command -v "$command" >/dev/null 2>&1; then
-        still_missing_commands+=("$command")
-      fi
+      record_failed "$fedora_package (required for '$command')"
     fi
   done
-
-  if (( ${#attempted_commands[@]} > 0 )); then
-    printf 'Attempted to install providers for missing commands: %s\n' "${attempted_commands[*]}" >&2
-  fi
 
   if (( ${#still_missing_commands[@]} > 0 )); then
     printf 'Commands still missing after installation attempt: %s\n' "${still_missing_commands[*]}" >&2
@@ -61,9 +102,9 @@ ensure_required_commands() {
 }
 
 PACKAGES=(
-  intel-media-driver mesa mesa-vulkan-drivers mesa-dri-drivers vulkan-loader vulkan-tools
+  intel-media-driver mesa-vulkan-drivers mesa-dri-drivers vulkan-loader vulkan-tools
   sof-firmware linux-firmware
-  hyprland uwsm xorg-x11-server-Xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk xhost
+  hyprland uwsm xorg-x11-server-Xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
   polkit xdg-utils socat inotify-tools libnotify file
   qt5-qtwayland qt6-qtwayland gtk3 gtk4 nwg-look qt5ct qt6ct qt6-qtsvg adw-gtk3-theme
   waybar swww hyprlock hypridle hyprsunset hyprpicker swaynotificationcenter rofi-wayland brightnessctl
@@ -83,20 +124,87 @@ PACKAGES=(
   matugen
 )
 
-# Install packages one by one so one unavailable package does not block all others.
-declare -a FAILED_PACKAGES=()
+collect_unavailable_packages_from_log() {
+  local log_file="$1"
+  local -a missing=()
+  local line
+
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    missing+=("$line")
+  done < <(
+    {
+      grep -oP 'No match for argument: \K\S+' "$log_file" || true
+      grep -oP '^Skipping unavailable packages:\s*\K.*' "$log_file" | tr ' ' '\n' || true
+      grep -oP '^No match for arguments:\s*\K.*' "$log_file" | tr ' ' '\n' || true
+    } | sed 's/[,:]$//' | sed '/^$/d' | sort -u
+  )
+
+  if (( ${#missing[@]} > 0 )); then
+    for line in "${missing[@]}"; do
+      record_failed "$line"
+    done
+  fi
+}
+
+collect_unavailable_packages_via_repoquery() {
+  local -a requested_packages=("$@")
+  local -A available=()
+  local pkg
+
+  while IFS= read -r pkg; do
+    [[ -z "$pkg" ]] && continue
+    available["$pkg"]=1
+  done < <(dnf -q repoquery --available --qf '%{name}\n' "${requested_packages[@]}" 2>/dev/null || true)
+
+  local -a missing=()
+  for pkg in "${requested_packages[@]}"; do
+    if rpm -q "$pkg" >/dev/null 2>&1; then
+      continue
+    fi
+    if [[ -z ${available["$pkg"]+x} ]]; then
+      missing+=("$pkg")
+    fi
+  done
+
+  if (( ${#missing[@]} > 0 )); then
+    for pkg in "${missing[@]}"; do
+      record_failed "$pkg"
+    done
+  fi
+}
+
+bulk_install_packages() {
+  local -a requested_packages=("$@")
+  local log_file
+  log_file="$(mktemp -t dusky-dnf-install.XXXXXX.log)"
+  if dnf -y install --skip-unavailable "${requested_packages[@]}" 2>&1 | tee "$log_file"; then
+    collect_unavailable_packages_from_log "$log_file"
+    collect_unavailable_packages_via_repoquery "${requested_packages[@]}"
+    rm -f -- "$log_file"
+    return 0
+  fi
+
+  collect_unavailable_packages_from_log "$log_file"
+  collect_unavailable_packages_via_repoquery "${requested_packages[@]}"
+  rm -f -- "$log_file"
+  return 1
+}
+
+declare -a NORMALIZED_PACKAGES=()
+declare -A SEEN_PACKAGES=()
 for package in "${PACKAGES[@]}"; do
   fedora_package="$(normalize_package_name "$package")"
-  if ! dnf -y install "$fedora_package"; then
-    if [[ "$fedora_package" == "$package" ]]; then
-      FAILED_PACKAGES+=("$fedora_package")
-      printf 'Failed to install package via dnf: %s\n' "$fedora_package" >&2
-    else
-      FAILED_PACKAGES+=("$fedora_package (from $package)")
-      printf 'Failed to install package via dnf: %s (normalized from %s)\n' "$fedora_package" "$package" >&2
-    fi
+  [[ -z "$fedora_package" ]] && continue
+  if [[ -z ${SEEN_PACKAGES["$fedora_package"]+x} ]]; then
+    NORMALIZED_PACKAGES+=("$fedora_package")
+    SEEN_PACKAGES["$fedora_package"]=1
   fi
 done
+
+if ! bulk_install_packages "${NORMALIZED_PACKAGES[@]}"; then
+  printf 'dnf returned a non-zero status during bulk install; continuing with required-command checks.\n' >&2
+fi
 
 ensure_required_commands
 
