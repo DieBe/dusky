@@ -582,6 +582,9 @@ generate_colors() {
 
     [[ -f "$img" ]] || die "Image file does not exist: $img"
 
+    # Matugen does not reliably create template output directories.
+    ensure_dir "${HOME}/.config/matugen/generated"
+
     ensure_swaync_running
 
     log "Matugen: Mode=[${THEME_MODE}] Type=[${MATUGEN_TYPE}] Contrast=[${MATUGEN_CONTRAST}] Index=[${SOURCE_COLOR_INDEX}] Base16=[${BASE16_BACKEND}]"
@@ -617,6 +620,9 @@ apply_solid_color() {
     [[ "$hex" != \#* ]] && hex="#${hex}"
 
     ensure_swaync_running
+
+    # Matugen does not reliably create template output directories.
+    ensure_dir "${HOME}/.config/matugen/generated"
 
     log "Matugen Solid Color: Hex=[${hex}] Mode=[${THEME_MODE}] Type=[${MATUGEN_TYPE}] Contrast=[${MATUGEN_CONTRAST}] Base16=[${BASE16_BACKEND}]"
 
@@ -678,7 +684,21 @@ regenerate_current() {
     done <<< "$query_output"
 
     current_wallpaper=$(trim_trailing "$current_wallpaper")
-    [[ -n "$current_wallpaper" ]] || die "Could not determine current wallpaper from swww query"
+
+    if [[ -z "$current_wallpaper" ]]; then
+        local fallback_wallpaper
+        fallback_wallpaper="${HOME}/Pictures/wallpapers/dusk_default.jpg"
+        [[ -f "$fallback_wallpaper" ]] || die "Could not determine current wallpaper from swww query and fallback wallpaper is missing: ${fallback_wallpaper}"
+
+        log "No wallpaper currently set; applying default: ${fallback_wallpaper##*/}"
+        swww img "$fallback_wallpaper" \
+            --transition-type grow \
+            --transition-duration 2 \
+            --transition-fps 60 || die "Failed to apply fallback wallpaper with swww"
+
+        generate_colors "$fallback_wallpaper"
+        return 0
+    fi
 
     resolved_wallpaper="$current_wallpaper"
 

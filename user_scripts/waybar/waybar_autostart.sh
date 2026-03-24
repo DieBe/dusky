@@ -11,6 +11,9 @@ set -euo pipefail
 # --- Constants ---
 readonly APP_NAME="waybar"
 readonly TIMEOUT_SEC=5
+readonly LOG_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/dusky"
+readonly LOG_FILE="${LOG_DIR}/waybar_autostart.log"
+readonly STARTUP_VERIFY_SEC=1
 
 # --- Terminal-Aware Colors (stderr detection) ---
 if [[ -t 2 ]]; then
@@ -31,6 +34,15 @@ log_info()    { printf '%s[INFO]%s %s\n' "${C_BLUE}" "${C_RESET}" "$*" >&2; }
 log_success() { printf '%s[OK]%s %s\n' "${C_GREEN}" "${C_RESET}" "$*" >&2; }
 log_err()     { printf '%s[ERROR]%s %s\n' "${C_RED}" "${C_RESET}" "$*" >&2; }
 
+log_file() {
+    mkdir -p -- "${LOG_DIR}" 2>/dev/null || true
+    printf '%s %s\n' "$(date -Is 2>/dev/null || date)" "$*" >>"${LOG_FILE}" 2>/dev/null || true
+}
+
+log_info()    { printf '%s[INFO]%s %s\n' "${C_BLUE}" "${C_RESET}" "$*" >&2; log_file "[INFO] $*"; }
+log_success() { printf '%s[OK]%s %s\n' "${C_GREEN}" "${C_RESET}" "$*" >&2; log_file "[OK] $*"; }
+log_err()     { printf '%s[ERROR]%s %s\n' "${C_RED}" "${C_RESET}" "$*" >&2; log_file "[ERROR] $*"; }
+
 # --- Fallback Strategy ---
 # Note: As discovered, this method may not cure the "workspace inheritance" 
 # bug, but it ensures Waybar launches if systemd is broken.
@@ -40,13 +52,28 @@ launch_fallback() {
         unset XDG_ACTIVATION_TOKEN DESKTOP_STARTUP_ID
         setsid "${APP_NAME}" "$@" </dev/null >/dev/null 2>&1 &
     )
-    log_success "${APP_NAME} launched (fallback mode)."
+
+    sleep "${STARTUP_VERIFY_SEC}" || true
+    if pgrep -x "${APP_NAME}" >/dev/null 2>&1; then
+        log_success "${APP_NAME} launched (fallback mode)."
+    else
+        log_err "${APP_NAME} failed to start in fallback mode."
+        log_err "See ${LOG_FILE} (and try running '${APP_NAME}' in a terminal for stderr)."
+        return 1
+    fi
 }
 
 # --- Preflight Checks ---
 (( EUID != 0 )) || { log_err "This script must NOT be run as root."; exit 1; }
 command -v "${APP_NAME}" >/dev/null 2>&1 || { log_err "${APP_NAME} binary not found."; exit 1; }
-[[ -d ${XDG_RUNTIME_DIR:-} ]] || { log_err "XDG_RUNTIME_DIR is not set or invalid."; exit 1; }
+
+if [[ -z "${XDG_RUNTIME_DIR:-}" ]]; then
+    # Try best-effort default for systemd user sessions.
+    XDG_RUNTIME_DIR="/run/user/$(id -u)"
+    export XDG_RUNTIME_DIR
+fi
+
+[[ -d ${XDG_RUNTIME_DIR:-} ]] || { log_err "XDG_RUNTIME_DIR is not set or invalid: ${XDG_RUNTIME_DIR:-<unset>}"; exit 1; }
 
 readonly LOCK_FILE="${XDG_RUNTIME_DIR}/${APP_NAME}_manager.lock"
 
@@ -57,6 +84,8 @@ flock -n 9 || { log_err "Another instance is running. Exiting."; exit 1; }
 
 # --- Process Management ---
 log_info "Managing ${APP_NAME} instances..."
+log_info "Env: WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-<unset>} XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-<unset>} XDG_CURRENT_DESKTOP=${XDG_CURRENT_DESKTOP:-<unset>}"
+log_info "Env: HYPRLAND_INSTANCE_SIGNATURE=${HYPRLAND_INSTANCE_SIGNATURE:-<unset>}"
 
 if pgrep -x "${APP_NAME}" >/dev/null 2>&1; then
     log_info "Stopping existing instances..."
@@ -89,7 +118,13 @@ if command -v systemd-run >/dev/null 2>&1; then
 
     # '--' separates options from the command to prevent flag injection
     if systemd-run --user --quiet --unit="${unit_name}" -- "${APP_NAME}" "$@" >/dev/null 2>&1; then
-        log_success "${APP_NAME} launched via systemd unit: ${unit_name}"
+        sleep "${STARTUP_VERIFY_SEC}" || true
+        if pgrep -x "${APP_NAME}" >/dev/null 2>&1; then
+            log_success "${APP_NAME} launched via systemd unit: ${unit_name}"
+        else
+            log_err "systemd-run returned success but ${APP_NAME} is not running; attempting fallback."
+            launch_fallback "$@"
+        fi
     else
         log_err "systemd-run failed; attempting fallback."
         launch_fallback "$@"

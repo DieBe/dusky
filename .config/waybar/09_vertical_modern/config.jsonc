@@ -78,7 +78,7 @@
     "clock": {
         "format": "{:%I\n%M}",
         "tooltip-format": "{:%A, %d %B %Y}",
-        "on-click": "uwsm-app -- gnome-clocks",
+        "on-click": "uwsm-app -- kclock",
         "interval": 60
     },
 
