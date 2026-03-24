@@ -43,8 +43,6 @@ services=(
     "hypridle.service"
     "hyprpolkitagent.service"
     "fumon.service"
-    "gnome-keyring-daemon.service"
-    "gnome-keyring-daemon.socket"
 #    "hyprsunset.service"
 )
 

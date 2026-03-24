@@ -73,7 +73,7 @@ get_file_content() {
 # ==============================================================================
 
 $terminal    = kitty
-$fileManager = nemo
+$fileManager = dolphin
 $menu        = rofi -show drun
 $browser     = firefox
 $textEditor  = nvim

@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# Installation of Gnome Keyring components
+# Remove GNOME Keyring components (KDE uses KWallet)
 # ==============================================================================
-# Script Name: setup_gnome_keyring.sh
-# Description: Automates the installation of Gnome Keyring components and 
-#              configures PAM for auto-unlocking on login.
-#              Designed for Fedora (Hyprland/UWSM ecosystem).
-# Target:      /etc/pam.d/login
+# Script Name: remove_gnome_keyring_use_kwallet.sh
+# Description: Removes GNOME Keyring (and any PAM hooks it added) and ensures
+#              KDE's KWallet PAM integration packages are installed.
+# Target:      /etc/pam.d/login (removal only; no new PAM lines are added)
 # ==============================================================================
 
 set -euo pipefail
@@ -15,7 +14,8 @@ TARGET_FILE="/etc/pam.d/login"
 BACKUP_DIR="/etc/pam.d"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_FILE="${TARGET_FILE}.bak.${TIMESTAMP}"
-PACKAGES=("gnome-keyring" "libsecret" "seahorse")
+REMOVE_PACKAGES=("gnome-keyring" "seahorse")
+INSTALL_PACKAGES=("pam-kwallet" "kwalletmanager5")
 
 # --- Formatting ---
 BOLD=$'\e[1m'
@@ -52,12 +52,12 @@ main() {
     # 1. Privilege Check
     ensure_root
 
-    # 2. Install Packages
-    log_info "Installing necessary packages: ${PACKAGES[*]}..."
-    if dnf -y install "${PACKAGES[@]}"; then
-        log_info "Packages installed/verified successfully."
+    # 2. Ensure KDE wallet integration packages exist (no GNOME keyring).
+    log_info "Ensuring KDE wallet packages are installed: ${INSTALL_PACKAGES[*]}..."
+    if dnf -y install "${INSTALL_PACKAGES[@]}"; then
+        log_info "KWallet packages installed/verified successfully."
     else
-        log_error "Failed to install packages via dnf."
+        log_error "Failed to install KDE wallet packages via dnf."
         exit 1
     fi
 
@@ -69,10 +69,9 @@ main() {
         log_warn "$TARGET_FILE does not exist. Creating a new one."
     fi
 
-    # 4. Non-destructive PAM update (idempotent)
-    # Fedora KDE systems rely on existing PAM stack; overwriting /etc/pam.d/login
-    # is risky and can break logins. We only insert missing pam_gnome_keyring lines.
-    log_info "Updating PAM configuration (non-destructive): $TARGET_FILE"
+    # 4. Non-destructive PAM cleanup (idempotent)
+    # We remove pam_gnome_keyring hooks if previously added.
+    log_info "Cleaning GNOME Keyring PAM entries (non-destructive): $TARGET_FILE"
 
     # Ensure target exists
     if [[ ! -f "$TARGET_FILE" ]]; then
@@ -81,64 +80,27 @@ main() {
         exit 1
     fi
 
-    local need_auth=0 need_session=0 need_password=0
-    if ! grep -Eq '^[[:space:]]*auth[[:space:]]+.*pam_gnome_keyring\.so' "$TARGET_FILE"; then
-        need_auth=1
-    fi
-    if ! grep -Eq '^[[:space:]]*session[[:space:]]+.*pam_gnome_keyring\.so' "$TARGET_FILE"; then
-        need_session=1
-    fi
-    if ! grep -Eq '^[[:space:]]*password[[:space:]]+.*pam_gnome_keyring\.so' "$TARGET_FILE"; then
-        need_password=1
-    fi
-
-    if (( need_auth == 0 && need_session == 0 && need_password == 0 )); then
-        log_info "pam_gnome_keyring entries already present; nothing to do."
-        printf "${BOLD}Success!${RESET} GNOME Keyring PAM entries already configured.\n"
-        return 0
-    fi
-
     local tmp_file
     tmp_file="$(mktemp)"
 
-    awk \
-        -v need_auth="$need_auth" \
-        -v need_session="$need_session" \
-        -v need_password="$need_password" \
-        '
-        BEGIN { done_auth=0; done_session=0; done_password=0 }
-        {
-            print $0
-
-            if (need_auth == 1 && done_auth == 0 && $0 ~ /^[[:space:]]*auth[[:space:]]+include[[:space:]]+system-local-login/) {
-                print "auth       optional      pam_gnome_keyring.so"
-                done_auth=1
-            }
-
-            if (need_session == 1 && done_session == 0 && $0 ~ /^[[:space:]]*session[[:space:]]+include[[:space:]]+system-local-login/) {
-                print "session    optional      pam_gnome_keyring.so auto_start"
-                done_session=1
-            }
-
-            if (need_password == 1 && done_password == 0 && $0 ~ /^[[:space:]]*password[[:space:]]+include[[:space:]]+system-local-login/) {
-                print "password   optional      pam_gnome_keyring.so"
-                done_password=1
-            }
-        }
-        END {
-            if (need_auth == 1 && done_auth == 0) print "auth       optional      pam_gnome_keyring.so"
-            if (need_session == 1 && done_session == 0) print "session    optional      pam_gnome_keyring.so auto_start"
-            if (need_password == 1 && done_password == 0) print "password   optional      pam_gnome_keyring.so"
-        }
-        ' "$TARGET_FILE" > "$tmp_file"
+    # Drop any pam_gnome_keyring lines.
+    awk '!/pam_gnome_keyring\.so/' "$TARGET_FILE" > "$tmp_file"
 
     # Replace atomically
     cp "$tmp_file" "$TARGET_FILE"
     rm -f "$tmp_file"
 
-    log_info "PAM configuration updated successfully (non-destructive)."
-    printf "${BOLD}Success!${RESET} GNOME Keyring PAM entries have been added.\n"
-    printf "A reboot or re-login is required for the PAM changes to take effect.\n"
+    log_info "PAM configuration cleaned successfully (non-destructive)."
+
+    # 5. Remove GNOME Keyring packages if present.
+    log_info "Removing GNOME Keyring packages if installed: ${REMOVE_PACKAGES[*]}..."
+    if dnf -y remove "${REMOVE_PACKAGES[@]}"; then
+        log_info "GNOME Keyring removal processed."
+    else
+        log_warn "dnf remove returned a non-zero status; continuing (packages may already be absent)."
+    fi
+
+    printf "${BOLD}Success!${RESET} GNOME Keyring removed/disabled; KDE KWallet packages ensured.\n"
 }
 
 main "$@"

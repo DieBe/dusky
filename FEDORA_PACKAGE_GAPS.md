@@ -3,6 +3,10 @@
 The following Arch/AUR-era packages used by Dusky may be missing from default Fedora repositories.
 If a package is unavailable, use COPR or install from source.
 
+## Automation note
+
+The Fedora installer script attempts to install several common CLI tools from source automatically (via `cargo`, `go`, `npm`, or `pip`) when they are not available in enabled Fedora repos.
+
 | Package | Feature / usage in Dusky |
 |---|---|
 | hyprshade | Shader and color filtering for Hyprland |

@@ -71,6 +71,10 @@ normalize_package_name() {
   esac
 }
 
+log_info() { printf '[INFO] %s\n' "$*"; }
+log_warn() { printf '[WARN] %s\n' "$*" >&2; }
+log_err()  { printf '[ERR]  %s\n' "$*" >&2; }
+
 # Required commands used by active Fedora orchestrator scripts.
 ensure_required_commands() {
   local -a requirements=(
@@ -105,7 +109,7 @@ PACKAGES=(
   intel-media-driver mesa-vulkan-drivers mesa-dri-drivers vulkan-loader vulkan-tools
   sof-firmware linux-firmware
   hyprland uwsm xorg-x11-server-Xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
-  polkit xdg-utils socat inotify-tools libnotify file
+  polkit xdg-utils socat inotify-tools libnotify file xhost
   qt5-qtwayland qt6-qtwayland gtk3 gtk4 nwg-look qt5ct qt6ct qt6-qtsvg adw-gtk3-theme
   waybar swww hyprlock hypridle hyprsunset hyprpicker swaynotificationcenter rofi-wayland brightnessctl
   pipewire wireplumber pipewire-pulseaudio playerctl bluez bluez-tools blueman bluedevil pavucontrol canberra-gtk3 sox
@@ -113,16 +117,162 @@ PACKAGES=(
   unzip zip unrar p7zip cpio file-roller rsync
   dolphin ark kate okular gwenview kcalc kclock
   kwalletmanager5 pam-kwallet plasma-nm kde-connect kdeconnectd
-  nemo nemo-extensions file-roller gvfs gvfs-smb gvfs-mtp gvfs-gphoto2 gvfs-afc ffmpegthumbnailer
-  network-manager-applet iwd wget curl openssh-server firewalld vsftpd bmon ethtool httrack wavemon firefox
-  kitty foot zsh zsh-syntax-highlighting starship fastfetch bat eza fd-find yazi gum tree fzf less ripgrep
+  gvfs gvfs-smb gvfs-mtp gvfs-gphoto2 gvfs-afc ffmpegthumbnailer
+  iwd wget2-wget curl openssh-server firewalld vsftpd bmon ethtool httrack wavemon firefox
+  kitty foot zsh zsh-syntax-highlighting fastfetch bat fd-find gum tree fzf less ripgrep
   zsh-autosuggestions iperf3 qalculate moreutils
-  git git-delta meson cmake clang uv jq bc viu chafa ccache mold shellcheck shfmt prettier nano
+  git git-delta meson cmake clang uv jq bc chafa ccache mold ShellCheck shfmt nano
   ffmpeg mpv satty swayimg librsvg2-tools ImageMagick libheif ffmpegthumbnailer grim slurp wl-clipboard cliphist tesseract-langpack-eng
-  btop htop nvtop inxi sysstat sysbench logrotate acpid thermald powertop iotop iftop lshw wev gnome-keyring libsecret seahorse yad fwupd perl
-  zathura zathura-pdf-mupdf cava
+  btop htop nvtop inxi sysstat sysbench logrotate acpid thermald powertop iotop iftop lshw wev yad fwupd perl
+  cava
   matugen
 )
+
+# Tools that are frequently missing from Fedora repos; install from source if absent.
+SOURCE_TOOLS=(
+  starship
+  eza
+  yazi
+  lazygit
+  viu
+  stylua
+  prettier
+  hyprshade
+)
+
+ensure_dnf_package() {
+  local pkg="$1"
+  [[ -z "$pkg" ]] && return 0
+  if rpm -q "$pkg" >/dev/null 2>&1; then
+    return 0
+  fi
+  dnf -y install "$pkg"
+}
+
+ensure_rust_build_deps() {
+  ensure_dnf_package rust || return 1
+  ensure_dnf_package cargo || return 1
+  ensure_dnf_package gcc || return 1
+  ensure_dnf_package make || return 1
+  ensure_dnf_package pkgconf-pkg-config || return 1
+  ensure_dnf_package openssl-devel || return 1
+}
+
+cargo_install_locked_root() {
+  local crate="$1"
+  [[ -z "$crate" ]] && return 1
+  mkdir -p /usr/local/bin
+  cargo install --locked --root /usr/local "$crate"
+}
+
+ensure_go_build_deps() {
+  # Fedora's Go package name is 'golang'
+  ensure_dnf_package golang
+}
+
+go_install_to_usr_local_bin() {
+  local module="$1"
+  [[ -z "$module" ]] && return 1
+  mkdir -p /usr/local/bin
+  GOBIN=/usr/local/bin go install "${module}@latest"
+}
+
+ensure_node_build_deps() {
+  ensure_dnf_package nodejs
+  ensure_dnf_package npm
+}
+
+npm_install_global() {
+  local pkg="$1"
+  [[ -z "$pkg" ]] && return 1
+  npm install -g "$pkg"
+}
+
+ensure_python_pip() {
+  ensure_dnf_package python3-pip
+}
+
+pip_install_prefix_usr_local() {
+  local pkg="$1"
+  [[ -z "$pkg" ]] && return 1
+  python3 -m pip install --no-input --upgrade --prefix /usr/local --break-system-packages "$pkg"
+}
+
+install_source_tool_if_missing() {
+  local tool="$1"
+  [[ -z "$tool" ]] && return 0
+
+  case "$tool" in
+    prettier)
+      if command -v prettier >/dev/null 2>&1; then
+        return 0
+      fi
+      log_info "Installing prettier via npm..."
+      ensure_node_build_deps || return 1
+      npm_install_global prettier
+      ;;
+    lazygit)
+      if command -v lazygit >/dev/null 2>&1; then
+        return 0
+      fi
+      log_info "Installing lazygit from source via go install..."
+      ensure_go_build_deps || return 1
+      go_install_to_usr_local_bin github.com/jesseduffield/lazygit
+      ;;
+    hyprshade)
+      if command -v hyprshade >/dev/null 2>&1; then
+        return 0
+      fi
+      log_info "Installing hyprshade via pip..."
+      ensure_python_pip || return 1
+      pip_install_prefix_usr_local hyprshade
+      ;;
+    starship)
+      if command -v starship >/dev/null 2>&1; then
+        return 0
+      fi
+      log_info "Installing starship from source via cargo..."
+      ensure_rust_build_deps || return 1
+      cargo_install_locked_root starship
+      ;;
+    eza)
+      if command -v eza >/dev/null 2>&1; then
+        return 0
+      fi
+      log_info "Installing eza from source via cargo..."
+      ensure_rust_build_deps || return 1
+      cargo_install_locked_root eza
+      ;;
+    viu)
+      if command -v viu >/dev/null 2>&1; then
+        return 0
+      fi
+      log_info "Installing viu from source via cargo..."
+      ensure_rust_build_deps || return 1
+      cargo_install_locked_root viu
+      ;;
+    stylua)
+      if command -v stylua >/dev/null 2>&1; then
+        return 0
+      fi
+      log_info "Installing stylua from source via cargo..."
+      ensure_rust_build_deps || return 1
+      cargo_install_locked_root stylua
+      ;;
+    yazi)
+      if command -v yazi >/dev/null 2>&1; then
+        return 0
+      fi
+      log_info "Installing yazi from source via cargo (yazi-fm)..."
+      ensure_rust_build_deps || return 1
+      cargo_install_locked_root yazi-fm
+      ;;
+    *)
+      log_warn "No source installer defined for: $tool"
+      return 1
+      ;;
+  esac
+}
 
 collect_unavailable_packages_from_log() {
   local log_file="$1"
@@ -206,7 +356,31 @@ if ! bulk_install_packages "${NORMALIZED_PACKAGES[@]}"; then
   printf 'dnf returned a non-zero status during bulk install; continuing with required-command checks.\n' >&2
 fi
 
+# If rpmfusion is enabled and ffmpeg install failed due to conflicts, try a safe swap.
+if (( RPMFUSION_ENABLED == 1 )); then
+  if ! command -v ffmpeg >/dev/null 2>&1; then
+    if rpm -q ffmpeg-free >/dev/null 2>&1; then
+      log_info "Attempting ffmpeg-free -> ffmpeg swap (rpmfusion enabled)..."
+      dnf -y swap ffmpeg-free ffmpeg --allowerasing || record_failed "ffmpeg (swap failed)"
+    fi
+  fi
+fi
+
 ensure_required_commands
+
+# Install tools that Fedora repos commonly lack.
+for tool in "${SOURCE_TOOLS[@]}"; do
+  if ! install_source_tool_if_missing "$tool"; then
+    record_failed "$tool (source install failed)"
+  fi
+done
+
+# Final verification: fail hard if any requested source tool is still missing.
+for tool in "${SOURCE_TOOLS[@]}"; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    record_failed "$tool (command missing after install)"
+  fi
+done
 
 if (( ${#FAILED_PACKAGES[@]} > 0 )); then
   printf 'Some packages could not be installed with dnf: %s\n' "${FAILED_PACKAGES[*]}" >&2
@@ -218,4 +392,7 @@ if (( ${#FAILED_PACKAGES[@]} > 0 )); then
   else
     printf 'See FEDORA_PACKAGE_GAPS.md in the Dusky repository for Fedora alternatives/COPR guidance.\n' >&2
   fi
+
+  # Orchestrator requirement: treat unresolved packages as a hard failure.
+  exit 1
 fi

@@ -17,11 +17,20 @@ IFS=$' \t\n'
 # Official Repository Packages (sudo dnf)
 readonly -a REPO_TARGETS=(
   dunst
-  dolphin
   wofi
   polkit-kde
   power-profiles-daemon
   fluent-icon-theme
+    gnome-keyring
+    seahorse
+    gnome-text-editor
+    gnome-calculator
+    gnome-clocks
+    zathura
+    zathura-pdf-mupdf
+    nemo
+    nemo-extensions
+    network-manager-applet
 )
 
 # ==============================================================================
