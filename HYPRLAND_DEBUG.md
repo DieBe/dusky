@@ -47,3 +47,8 @@ Signs of this in logs:
 - `dbus-broker: Ignoring duplicate name 'org.freedesktop.Notifications' ...`
 
 If you want SwayNC to be the only notification daemon in Hyprland, stop Plasma services in the Hyprland session (ask Copilot to add a safe Hypr-only autostart stop-list).
+
+
+
+journalctl --user -b | grep -i waybar
+journalctl --user -b | grep -i matugen

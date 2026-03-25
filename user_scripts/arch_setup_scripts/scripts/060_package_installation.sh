@@ -68,6 +68,7 @@ normalize_package_name() {
     canberra-gtk3) printf '%s\n' "libcanberra-gtk3" ;;
     sof-firmware) printf '%s\n' "alsa-sof-firmware" ;;
     iotop) printf '%s\n' "iotop-c" ;;
+    xkbcommon-utils) printf '%s\n' "libxkbcommon-utils" ;;
     ffmpeg)
       if (( RPMFUSION_ENABLED == 1 )); then
         printf '%s\n' "ffmpeg"
@@ -110,6 +111,7 @@ ensure_required_commands() {
     "swww:swww"
     "swww-daemon:swww"
     "matugen:matugen"
+    "xkbcli:libxkbcommon-utils"
     "xdg-mime:xdg-utils"
   )
   local req command package fedora_package
@@ -134,6 +136,7 @@ PACKAGES=(
   intel-media-driver mesa-vulkan-drivers mesa-dri-drivers vulkan-loader vulkan-tools
   sof-firmware linux-firmware
   hyprland uwsm xorg-x11-server-Xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+  libxkbcommon-utils
   polkit xdg-utils socat inotify-tools libnotify file xhost
   qt5-qtwayland qt6-qtwayland gtk3 gtk4 nwg-look qt5ct qt6ct qt6-qtsvg adw-gtk3-theme
   waybar swww hyprlock hypridle hyprsunset hyprpicker swaynotificationcenter rofi-wayland brightnessctl

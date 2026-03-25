@@ -1,0 +1,255 @@
+Mär 25 15:29:41.841475 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:42.581937 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:43.321124 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:44.082250 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:44.813735 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:45.569551 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:46.281124 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:47.075165 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:47.822111 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:48.847301 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:49.878152 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:50.604388 fedora wireplumber[56868]: spa.bluez5: BlueZ system service is not available
+Mär 25 15:29:50.789158 fedora systemd[56769]: swaync.service - Swaync notification daemon skipped, unmet condition check ConditionEnvironment=WAYLAND_DISPLAY
+Mär 25 15:29:50.971326 fedora uwsm[112658]: Selected compositor ID: hyprland.desktop
+                                                       Command Line: Hyprland
+                                                   Plugin/binary ID: hyprland
+                                              Initial Desktop Names: Hyprland
+                                                               Name: Hyprland
+Mär 25 15:29:50.981373 fedora uwsm[112658]: Units unchanged.
+Mär 25 15:29:50.981428 fedora uwsm[112658]: Starting hyprland.desktop and waiting while it is running...
+Mär 25 15:29:51.063560 fedora systemd[56769]: Starting wayland-wm-env@hyprland.desktop.service - Environment preloader for Hyprland, An intelligent dynamic tiling Wayland compositor...
+Mär 25 15:29:51.228009 fedora uwsm_env-preloader[112715]: Preparing environment for Hyprland...
+Mär 25 15:29:51.228009 fedora uwsm_env-preloader[112715]: Got saved login session variables.
+Mär 25 15:29:51.286429 fedora uwsm_env-preloader[112715]: Loading plugin "/usr/share/uwsm/plugins/hyprland.sh".
+Mär 25 15:29:51.286429 fedora uwsm_env-preloader[112715]: Applying quirks for "hyprland".
+Mär 25 15:29:51.286429 fedora uwsm_env-preloader[112715]: Loading environment from "/home/fedora/.config/uwsm/env".
+Mär 25 15:29:51.286429 fedora uwsm_env-preloader[112715]: Loading environment from "/home/fedora/.config/uwsm/env-hyprland".
+Mär 25 15:29:51.286429 fedora uwsm_env-preloader[112715]: Updating XDG User Dirs
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]: Marking variables for later cleanup from systemd user manager on stop:
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   CLIPHIST_DB_PATH
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   CLUTTER_BACKEND
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   DEBUGINFOD_IMA_CERT_PATH
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   DEBUGINFOD_URLS
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   DESKTOP_SESSION
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   EDITOR
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   GDK_BACKEND
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   GPG_TTY
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   HISTCONTROL
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   HISTSIZE
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   HOSTNAME
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   HYPRCURSOR_SIZE
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   KDEDIRS
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   LESSOPEN
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   LIBVIRT_DEFAULT_URI
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   MAIL
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   MOZ_GMP_PATH
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   OLDPWD
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   OMP_NUM_THREADS
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   PAM_KWALLET5_LOGIN
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   PATH
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   QT_AUTO_SCREEN_SCALE_FACTOR
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   QT_QPA_PLATFORM
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   QT_QPA_PLATFORMTHEME
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   QT_QUICK_CONTROLS_STYLE
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   QT_WAYLAND_DISABLE_WINDOWDECORATION
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   SDL_VIDEODRIVER
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   SSH_ASKPASS
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   TERMINAL
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   UWSM_FINALIZE_VARNAMES
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   UWSM_WAIT_VARNAMES
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   VISUAL
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XCURSOR_SIZE
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XCURSOR_THEME
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_BACKEND
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_CACHE_HOME
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_CONFIG_DIRS
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_CONFIG_HOME
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_CURRENT_DESKTOP
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_DATA_DIRS
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_DATA_HOME
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_MENU_PREFIX
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_SEAT
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_SEAT_PATH
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_SESSION_CLASS
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_SESSION_DESKTOP
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_SESSION_ID
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_SESSION_PATH
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_SESSION_TYPE
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_STATE_HOME
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   XDG_VTNR
+Mär 25 15:29:51.287022 fedora uwsm_env-preloader[112715]:   _JAVA_AWT_WM_NONREPARENTING
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]: Exporting variables to systemd user manager:
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   CLIPHIST_DB_PATH
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   CLUTTER_BACKEND
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   DEBUGINFOD_IMA_CERT_PATH
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   DEBUGINFOD_URLS
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   DESKTOP_SESSION
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   EDITOR
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   GDK_BACKEND
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   GPG_TTY
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   HISTCONTROL
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   HISTSIZE
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   HOSTNAME
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   HYPRCURSOR_SIZE
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   KDEDIRS
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   LESSOPEN
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   LIBVIRT_DEFAULT_URI
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   MAIL
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   MOZ_GMP_PATH
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   OLDPWD
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   OMP_NUM_THREADS
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   PAM_KWALLET5_LOGIN
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   PATH (updating)
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   QT_AUTO_SCREEN_SCALE_FACTOR
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   QT_QPA_PLATFORM
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   QT_QPA_PLATFORMTHEME
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   QT_QUICK_CONTROLS_STYLE
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   QT_WAYLAND_DISABLE_WINDOWDECORATION
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   SDL_VIDEODRIVER
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   SSH_ASKPASS
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   TERMINAL
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   UWSM_FINALIZE_VARNAMES
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   UWSM_WAIT_VARNAMES
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   VISUAL
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XCURSOR_SIZE
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XCURSOR_THEME
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_BACKEND
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_CACHE_HOME
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_CONFIG_DIRS
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_CONFIG_HOME
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_CURRENT_DESKTOP
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_DATA_DIRS (updating)
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_DATA_HOME
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_MENU_PREFIX
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_SEAT
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_SEAT_PATH
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_SESSION_CLASS
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_SESSION_DESKTOP
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_SESSION_ID
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_SESSION_PATH
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_SESSION_TYPE
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_STATE_HOME
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   XDG_VTNR
+Mär 25 15:29:51.289039 fedora uwsm_env-preloader[112715]:   _JAVA_AWT_WM_NONREPARENTING
+Mär 25 15:29:51.322248 fedora systemd[56769]: Finished wayland-wm-env@hyprland.desktop.service - Environment preloader for Hyprland, An intelligent dynamic tiling Wayland compositor.
+Mär 25 15:29:51.327870 fedora systemd[56769]: Reached target wayland-session-pre@hyprland.desktop.target - Preparation for session of hyprland.desktop Wayland compositor.
+Mär 25 15:29:51.333260 fedora systemd[56769]: Starting wayland-wm@hyprland.desktop.service - Main service for Hyprland, An intelligent dynamic tiling Wayland compositor...
+Mär 25 15:29:51.453851 fedora uwsm_hyprland.desktop[112786]: Starting: Hyprland...
+Mär 25 15:29:51.456798 fedora uwsm_waitenv[112785]: Expecting variables to appear in activation environment:
+Mär 25 15:29:51.456798 fedora uwsm_waitenv[112785]:   WAYLAND_DISPLAY, HYPRLAND_INSTANCE_SIGNATURE
+Mär 25 15:29:51.484546 fedora uwsm_hyprland.desktop[112788]: Expecting variables to appear in activation environment:
+Mär 25 15:29:51.484546 fedora uwsm_hyprland.desktop[112788]:   HYPRLAND_INSTANCE_SIGNATURE, WAYLAND_DISPLAY
+Mär 25 15:29:51.547329 fedora uwsm[112712]: waitpid: Holding login session 23 open until PID 112786 exits
+Mär 25 15:29:51.845007 fedora uwsm_hyprland.desktop[112786]: libEGL warning: egl: failed to create dri2 screen
+Mär 25 15:29:51.848950 fedora uwsm_hyprland.desktop[112786]: libEGL warning: egl: failed to create dri2 screen
+Mär 25 15:29:51.850190 fedora uwsm_hyprland.desktop[112786]: libEGL warning: NEEDS EXTENSION: falling back to kms_swrast
+Mär 25 15:29:51.903189 fedora uwsm_hyprland.desktop[112786]: libEGL warning: egl: failed to create dri2 screen
+Mär 25 15:29:51.906733 fedora uwsm_hyprland.desktop[112786]: libEGL warning: egl: failed to create dri2 screen
+Mär 25 15:29:51.908119 fedora uwsm_hyprland.desktop[112786]: libEGL warning: NEEDS EXTENSION: falling back to kms_swrast
+Mär 25 15:29:52.413284 fedora systemd[56769]: Started wayland-wm@hyprland.desktop.service - Main service for Hyprland, An intelligent dynamic tiling Wayland compositor.
+Mär 25 15:29:52.466523 fedora uwsm_waitenv[112785]: All expected variables appeared in activation environment.
+Mär 25 15:29:52.490812 fedora uwsm_hyprland.desktop[112788]: All expected variables appeared in activation environment.
+Mär 25 15:29:52.607434 fedora uwsm_hyprland.desktop[112902]: Refusing to try glamor on llvmpipe
+Mär 25 15:29:52.611213 fedora uwsm_hyprland.desktop[112902]: XWAYLAND: Disabling GLAMOR support
+Mär 25 15:29:52.618554 fedora uwsm_hyprland.desktop[112902]: EGL setup failed, disabling glamor
+Mär 25 15:29:52.618554 fedora uwsm_hyprland.desktop[112902]: Failed to initialize glamor, falling back to sw
+Mär 25 15:29:52.701660 fedora uwsm_hyprland.desktop[112931]: The XKEYBOARD keymap compiler (xkbcomp) reports:
+Mär 25 15:29:52.704327 fedora uwsm_hyprland.desktop[112931]: > Warning:          Could not resolve keysym XF86RefreshRateToggle
+Mär 25 15:29:52.704327 fedora uwsm_hyprland.desktop[112931]: > Warning:          Could not resolve keysym XF86Accessibility
+Mär 25 15:29:52.704327 fedora uwsm_hyprland.desktop[112931]: > Warning:          Could not resolve keysym XF86DoNotDisturb
+Mär 25 15:29:52.706533 fedora uwsm_hyprland.desktop[112931]: Errors from xkbcomp are not fatal to the X server
+Mär 25 15:29:52.707497 fedora uwsm_hyprland.desktop[112788]: Exporting variables to systemd user manager:
+Mär 25 15:29:52.707497 fedora uwsm_hyprland.desktop[112788]:   DISPLAY (already set)
+Mär 25 15:29:52.707497 fedora uwsm_hyprland.desktop[112788]:   HYPRLAND_CMD (already set)
+Mär 25 15:29:52.707497 fedora uwsm_hyprland.desktop[112788]:   HYPRLAND_INSTANCE_SIGNATURE (already set)
+Mär 25 15:29:52.707497 fedora uwsm_hyprland.desktop[112788]:   MOZ_ENABLE_WAYLAND (already set)
+Mär 25 15:29:52.707497 fedora uwsm_hyprland.desktop[112788]:   SHLVL (already set)
+Mär 25 15:29:52.707497 fedora uwsm_hyprland.desktop[112788]:   WAYLAND_DISPLAY (already set)
+Mär 25 15:29:52.723803 fedora uwsm_hyprland.desktop[112788]: Marking variables for later cleanup from systemd user manager on stop:
+Mär 25 15:29:52.723803 fedora uwsm_hyprland.desktop[112788]:   HYPRLAND_CMD
+Mär 25 15:29:52.723803 fedora uwsm_hyprland.desktop[112788]:   HYPRLAND_INSTANCE_SIGNATURE
+Mär 25 15:29:52.723803 fedora uwsm_hyprland.desktop[112788]:   MOZ_ENABLE_WAYLAND
+Mär 25 15:29:52.723803 fedora uwsm_hyprland.desktop[112788]:   SHLVL
+Mär 25 15:29:52.726803 fedora uwsm_hyprland.desktop[112788]: Autoready: Unit for hyprland.desktop is already active, restricting notification access.
+Mär 25 15:29:52.751682 fedora systemd[56769]: Reached target wayland-session@hyprland.desktop.target - Session of hyprland.desktop Wayland compositor.
+Mär 25 15:29:52.763703 fedora systemd[56769]: Reached target wayland-session-xdg-autostart@hyprland.desktop.target - XDG Autostart for session of hyprland.desktop Wayland compositor.
+Mär 25 15:29:52.817822 fedora uwsm_hyprland.desktop[112936]: The XKEYBOARD keymap compiler (xkbcomp) reports:
+Mär 25 15:29:52.817822 fedora uwsm_hyprland.desktop[112936]: > Warning:          Unsupported maximum keycode 708, clipping.
+Mär 25 15:29:52.817822 fedora uwsm_hyprland.desktop[112936]: >                   X11 cannot support keycodes above 255.
+Mär 25 15:29:52.818602 fedora uwsm_hyprland.desktop[112936]: > Warning:          Virtual modifier ScrollLock multiply defined
+Mär 25 15:29:52.818602 fedora uwsm_hyprland.desktop[112936]: >                   Using 0, ignoring 0
+Mär 25 15:29:52.819877 fedora uwsm_hyprland.desktop[112936]: > Warning:          Could not resolve keysym XF86RefreshRateToggle
+Mär 25 15:29:52.820024 fedora uwsm_hyprland.desktop[112936]: > Warning:          Could not resolve keysym XF86Accessibility
+Mär 25 15:29:52.820060 fedora uwsm_hyprland.desktop[112936]: > Warning:          Could not resolve keysym XF86DoNotDisturb
+Mär 25 15:29:52.821245 fedora uwsm_hyprland.desktop[112936]: Errors from xkbcomp are not fatal to the X server
+Mär 25 15:29:53.040369 fedora systemd[56769]: Started hypridle.service - Hyprland's idle daemon.
+Mär 25 15:29:53.060059 fedora systemd[56769]: Started network_meter.service - Waybar network speed daemon (UWSM Linked).
+Mär 25 15:29:53.069810 fedora systemd[56769]: Starting swaync.service - Swaync notification daemon...
+Mär 25 15:29:53.144558 fedora hypridle[112976]: [LOG] Registered timeout rule for 140s:
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-timeout: brightnessctl -sd asus::kbd_backlight set 0
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-resume: brightnessctl -rd asus::kbd_backlight
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       ignore_inhibit: false
+Mär 25 15:29:53.144558 fedora hypridle[112976]: [LOG] Registered timeout rule for 150s:
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-timeout: brightnessctl -s set 1
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-resume: brightnessctl -r
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       ignore_inhibit: false
+Mär 25 15:29:53.144558 fedora hypridle[112976]: [LOG] Registered timeout rule for 300s:
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-timeout: loginctl lock-session
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-resume:
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       ignore_inhibit: false
+Mär 25 15:29:53.144558 fedora hypridle[112976]: [LOG] Registered timeout rule for 330s:
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-timeout: hyprctl dispatch dpms off
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-resume: hyprctl dispatch dpms on
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       ignore_inhibit: false
+Mär 25 15:29:53.144558 fedora hypridle[112976]: [LOG] Registered timeout rule for 600s:
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-timeout: pactl list sinks | grep -q "State: RUNNING" || systemctl suspend
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       on-resume:
+Mär 25 15:29:53.144558 fedora hypridle[112976]:       ignore_inhibit: false
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wl_seat v9
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]    > Bound to wl_seat v9
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wl_data_device_manager v3
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wl_compositor v6
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wl_subcompositor v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wl_shm v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wp_viewporter v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wp_tearing_control_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wp_fractional_scale_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zxdg_output_manager_v1 v3
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wp_cursor_shape_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_idle_inhibit_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_relative_pointer_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zxdg_decoration_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wp_alpha_modifier_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwlr_gamma_control_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: ext_foreign_toplevel_list_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_pointer_gestures_v1 v3
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwlr_foreign_toplevel_manager_v1 v3
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_keyboard_shortcuts_inhibit_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_text_input_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_text_input_manager_v3 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_pointer_constraints_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwlr_output_power_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: xdg_activation_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: ext_idle_notifier_v1 v2
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]    > Bound to ext_idle_notifier_v1 v2
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: hyprland_lock_notifier_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]    > Bound to hyprland_lock_notifier_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: ext_session_lock_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_input_method_manager_v2 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_virtual_keyboard_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwlr_virtual_pointer_manager_v1 v2
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwlr_output_manager_v1 v4
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: org_kde_kwin_server_decoration_manager v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: hyprland_focus_grab_manager_v1 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_tablet_manager_v2 v1
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwlr_layer_shell_v1 v5
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: wp_presentation v2
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: xdg_wm_base v7
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwlr_data_control_manager_v1 v2
+Mär 25 15:29:53.146229 fedora hypridle[112976]: [LOG]   | got iface: zwp_primary_selection_device_manager_v1 v1
+Mär 25 15:29:53.147726 fedora hypridle[112976]: [LOG]   | got iface: xwayland_shell_v1 v1
+Mär 25 15:29:53.147726 fedora hypridle[112976]: [LOG]   | got iface: zwlr_screencopy_manager_v1 v3
+Mär 25 15:29:53.147726 fedora hypridle[112976]: [LOG]   | got iface: hyprland_toplevel_export_manager_v1 v2
+Mär 25 15:29:53.147726 fedora hypridle[112976]: [LOG]   | got iface: hyprland_toplevel_mapping_manager_v1 v1
+Mär 25 15:29:53.147726 fedora hypridle[112976]: [LOG]   | got iface: hyprland_global_shortcuts_manager_v1 v1
