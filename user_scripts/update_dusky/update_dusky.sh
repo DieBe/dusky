@@ -2957,8 +2957,7 @@ main() {
     check_dependencies
 
     if [[ -t 0 && "$OPT_FORCE" != true && "$OPT_POST_SELF_UPDATE" != true ]]; then
-        printf '\n%sNote:%s Avoid interrupting the update while it'\''s running.\n' "${CLR_YLW}" "${CLR_RST}"
-        printf 'Interruptions during git operations can leave the repository in a broken state.\n\n'
+        printf '\n%sNote:%s Avoid interrupting the update while it'\''s running.\n\n' "${CLR_YLW}" "${CLR_RST}"
         local start_confirm=""
         read -r -p "Start the update? [y/N] " start_confirm
         if [[ ! "$start_confirm" =~ ^[Yy]$ ]]; then
@@ -2986,65 +2985,16 @@ main() {
     parse_update_sequence_manifest
     require_sudo_if_needed || exit 1
 
-    local self_hash_before=""
-    if [[ "$OPT_DRY_RUN" != true && "$OPT_POST_SELF_UPDATE" != true && -r "$SELF_PATH" ]]; then
-        self_hash_before="$(file_sha256 "$SELF_PATH" || true)"
-    fi
-
-    local cont="n"
-    local sync_rc=0
-
-    CURRENT_PHASE="sync"
-    if [[ "$OPT_SKIP_SYNC" != true && "$OPT_POST_SELF_UPDATE" != true ]]; then
-        if pull_updates; then
-            if [[ "$OPT_DRY_RUN" != true && -n "$self_hash_before" && -r "$SELF_PATH" ]]; then
-                local self_hash_after=""
-                self_hash_after="$(file_sha256 "$SELF_PATH" || true)"
-                if [[ -n "$self_hash_after" && "$self_hash_before" != "$self_hash_after" ]]; then
-                    log SECTION "Self-Update Detected"
-                    log OK "Reloading with updated script..."
-
-                    CURRENT_PHASE="self-reexec"
-                    SKIP_FINAL_SUMMARY=true
-                    stop_sudo
-                    release_lock
-
-                    local -a reexec_args=("--post-self-update")
-                    [[ "$OPT_DRY_RUN" == true ]] && reexec_args+=("--dry-run")
-                    [[ "$OPT_FORCE" == true ]] && reexec_args+=("--force")
-                    [[ "$OPT_SKIP_SYNC" == true ]] && reexec_args+=("--skip-sync")
-                    [[ "$OPT_SYNC_ONLY" == true ]] && reexec_args+=("--sync-only")
-                    [[ "$OPT_STOP_ON_FAIL" == true ]] && reexec_args+=("--stop-on-fail")
-                    [[ "$OPT_ALLOW_DIVERGED_RESET" == true ]] && reexec_args+=("--allow-diverged-reset")
-
-                    exec "$BASH_BIN" "$SELF_PATH" "${reexec_args[@]}"
-                fi
-            fi
-        else
-            sync_rc=$?
-            SYNC_FAILED=true
-            log WARN "Sync failed."
-
-            if [[ "$OPT_SYNC_ONLY" == true ]]; then
-                exit 1
-            fi
-
-            if ((sync_rc == SYNC_RC_RECOVERABLE)) && [[ -t 0 ]]; then
-                read -r -t "$PROMPT_TIMEOUT_SHORT" -p "Continue with local scripts? [y/N] " cont || cont="n"
-            else
-                cont="n"
-            fi
-
-            [[ "$cont" =~ ^[Yy]$ ]] || exit 1
-        fi
-    fi
-
+    # NOTE: Remote synchronization has been intentionally removed.
+    # This updater now runs only the local script sequence and never
+    # fetches/clones/checks out/resets from any remote.
     if [[ "$OPT_SYNC_ONLY" == true ]]; then
-        log OK "Sync-only mode — skipping script execution."
-    elif [[ "$SYNC_FAILED" != true || "$cont" =~ ^[Yy]$ ]]; then
-        CURRENT_PHASE="script execution"
-        execute_scripts || true
+        log ERROR "Sync-only mode is no longer supported (sync disabled)."
+        exit 2
     fi
+
+    CURRENT_PHASE="script execution"
+    execute_scripts || true
 
     CURRENT_PHASE="summary"
 }

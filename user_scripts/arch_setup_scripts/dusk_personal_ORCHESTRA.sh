@@ -15,8 +15,19 @@
 
 # --- USER CONFIGURATION AREA ---
 
+# Resolve paths relative to this file so Orchestra can be run directly from a
+# normal project checkout (no special $HOME/user_scripts placement required).
+SELF_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
 # Directories to search for scripts (in order — first match wins)
 SCRIPT_SEARCH_DIRS=(
+    # Repo-relative (preferred)
+    "${SELF_DIR}/scripts"
+    "${SELF_DIR}"
+    "${SELF_DIR}/../rofi"
+    "${SELF_DIR}/../theme_matugen"
+
+    # Backward-compatible layout
     "${HOME}/user_scripts/arch_setup_scripts/scripts"
     "${HOME}/user_scripts/arch_setup_scripts"
     "${HOME}/user_scripts/rofi"
