@@ -2,7 +2,7 @@
    WAYBAR PREMIUM THEME - Compact Edition (Refined)
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url("../../.config/matugen/generated/waybar-colors.css");
+@import url("../matugen/generated/waybar-colors.css");
 
 /* ─────────────────────────────────────────────────────────────────────────────
    RESET & FOUNDATIONS

@@ -2,7 +2,7 @@
  * Goes up two levels from ~/.config/waybar/style.css to ~/.config/
  * then down to matugen/generated/waybar-colors.css
  */
-@import url("../../.config/matugen/generated/waybar-colors.css");
+@import url("../matugen/generated/waybar-colors.css");
 
 /* * COLOR MAPPING 
  * Connecting Matugen variables to the theme's logic 

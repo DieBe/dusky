@@ -2,7 +2,7 @@
    WAYBAR NEO THEME - Glassy Edition
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url("../../.config/matugen/generated/waybar-colors.css");
+@import url("../matugen/generated/waybar-colors.css");
 
 /* ─────────────────────────────────────────────────────────────────────────────
    RESET & FOUNDATIONS

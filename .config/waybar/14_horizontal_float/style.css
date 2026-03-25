@@ -2,7 +2,7 @@
    Ghost Glaze
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url("../../.config/matugen/generated/waybar-colors.css");
+@import url("../matugen/generated/waybar-colors.css");
 
 * {
     border: none;

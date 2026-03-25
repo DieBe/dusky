@@ -67,6 +67,15 @@ launch_fallback() {
 (( EUID != 0 )) || { log_err "This script must NOT be run as root."; exit 1; }
 command -v "${APP_NAME}" >/dev/null 2>&1 || { log_err "${APP_NAME} binary not found."; exit 1; }
 
+# --- Matugen color include compatibility ---
+# Some themes import Matugen colors via a relative path. Depending on how GTK
+# resolves symlinks, imports may be relative to ~/.config/waybar/style.css or
+# the real theme file. Create a stable alias so either resolution works.
+MATUGEN_GEN_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/matugen/generated"
+WAYBAR_MATUGEN_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/waybar/matugen"
+mkdir -p -- "${MATUGEN_GEN_DIR}" "${WAYBAR_MATUGEN_DIR}" 2>/dev/null || true
+ln -nfs "${MATUGEN_GEN_DIR}" "${WAYBAR_MATUGEN_DIR}/generated" 2>/dev/null || true
+
 if [[ -z "${XDG_RUNTIME_DIR:-}" ]]; then
     # Try best-effort default for systemd user sessions.
     XDG_RUNTIME_DIR="/run/user/$(id -u)"
